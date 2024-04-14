@@ -90,6 +90,10 @@ app.get('/api/users', authenticateToken, (req, res) => {
     })
 })
 
+app.post('/api/createfal', authenticateToken, (req, res) => {
+    
+})
+
 
 app.listen(3000, () => {
     
