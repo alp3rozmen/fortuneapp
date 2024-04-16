@@ -8,7 +8,7 @@ exports.up = function(knex) {
       table.string('username').comment('Kullanıcı adı');
       table.string('email').comment('E-posta');
       table.string('password').comment('Sifre');
-      table.string('user_role').comment('role');
+      table.string('user_role').comment('role');  //1 normal kullanıcı 2 falcı 3 admin
       table.string('status').comment('status');
       table.string('balance').comment('balance');
       table.timestamps(true, true);
