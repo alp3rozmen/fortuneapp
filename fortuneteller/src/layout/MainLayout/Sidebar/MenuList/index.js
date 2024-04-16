@@ -1,14 +1,22 @@
-// material-ui
 import { Typography } from '@mui/material';
-
-// project imports
 import NavGroup from './NavGroup';
 import menuItem from 'menu-items';
-
-// ==============================|| SIDEBAR MENU LIST ||============================== //
+import { useLocation } from 'react-router';
+import { useEffect, useState } from 'react';
 
 const MenuList = () => {
-  const navItems = menuItem.items.map((item) => {
+  const location = useLocation();
+  const [menu, setMenu] = useState([]);
+
+  useEffect(() => {
+    if (location.pathname === '/admin') {
+      setMenu(menuItem.AdminmenuItems.items);
+    } else {
+      setMenu(menuItem.NormalmenuItems.items);
+    }
+  }, [location.pathname]);
+
+  const navItems = menu.map((item) => {
     switch (item.type) {
       case 'group':
         return <NavGroup key={item.id} item={item} />;

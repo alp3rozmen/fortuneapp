@@ -2,11 +2,18 @@ import dashboard from './dashboard';
 import pages from './pages';
 import utilities from './utilities';
 import other from './other';
-
+import ftelling from './fortunetelling';
 // ==============================|| MENU ITEMS ||============================== //
 
-const menuItems = {
+const AdminmenuItems = {
   items: [dashboard, pages, utilities, other]
 };
 
-export default menuItems;
+const NormalmenuItems = {
+  items: [ftelling, pages]
+};
+
+export default { AdminmenuItems, NormalmenuItems };
+
+
+

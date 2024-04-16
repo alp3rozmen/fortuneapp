@@ -73,7 +73,6 @@ function methods(app) {
         })
     })
 
-
     app.get('/api/users', authenticateToken, (req, res) => {
 
         if (!req.headers.authorization) {
