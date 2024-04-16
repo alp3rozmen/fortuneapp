@@ -4,7 +4,7 @@
 const FortuneTelling = () => {
   return (
     <div>
-      <h1>Falcilar Listele</h1>
+      <h1>Kahve Falı</h1>
     </div>
   );
 };

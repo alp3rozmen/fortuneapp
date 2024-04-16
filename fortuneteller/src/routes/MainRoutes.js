@@ -29,7 +29,7 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: '/fortuneTelling',
+      path: '/coffee',
       element: <FortuneTelling />
     },
     {

@@ -1,32 +1,68 @@
 // assets
-import { IconDashboard } from '@tabler/icons-react';
+import { IconDashboard , IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconSelect } from '@tabler/icons-react';
 
 // constant
-const icons = { IconDashboard };
+const icons = { IconSelect,IconDashboard, IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1  };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
 const ftelling = {
   id: 'fortunetelling',
-  title: 'Fal Baktır',
+  title: 'Bakımlar',
   type: 'group',
+  caption: 'Dilediğiniz bakımı yapın',
+  icon : icons.IconSelect,
   children: [
     {
-      id: 'kahveFali',
-      title: 'Kahve Falı',
-      type: 'item',
-      url: '/coffee',
-      icon: icons.IconDashboard,
-      breadcrumbs: false
+      id: 'Falls',
+      title: 'Bakımlar',
+      type: 'collapse',
+      icon: icons.IconSelect,
+      children: [
+        {
+          id: 'kahveFali',
+          title: 'Kahve Falı',
+          type: 'item',
+          url: '/coffee',
+          icon: icons.IconCoffee,
+          breadcrumbs: false
+        },
+        {
+          id: 'tarotFali',
+          title: 'Tarot Falı',
+          type: 'item',
+          url: '/tarot',
+          icon: icons.IconCards,
+          breadcrumbs: false
+        },
+        {
+          id: 'katinaFali',
+          title: 'Katina Falı',
+          type: 'item',
+          url: '/katina',
+          icon: icons.IconRings,
+          breadcrumbs: false
+        },
+        {
+          id: 'yildiznameFali',
+          title: 'Yıldızname',
+          type: 'item',
+          url: '/yildizname',
+          icon: icons.IconMoon,
+          breadcrumbs: false
+        },
+        {
+          id: 'suFali',
+          title: 'Su Falı',
+          type: 'item',
+          url: '/tarot',
+          icon: icons.IconWashTemperature1,
+          breadcrumbs: false
+        }    
+      ]
     },
-    {
-      id: 'tarotFali',
-      title: 'Tarot Falı',
-      type: 'item',
-      url: '/tarot',
-      icon: icons.IconDashboard,
-      breadcrumbs: false
-    }
+    
+    
   ]
 };
 

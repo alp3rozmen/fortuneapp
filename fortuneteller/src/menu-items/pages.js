@@ -1,5 +1,5 @@
 // assets
-import { IconKey } from '@tabler/icons-react';
+import { IconKey , IconLockAccess } from '@tabler/icons-react';
 
 // constant
 const icons = {
@@ -26,14 +26,16 @@ const pages = {
           title: 'Giriş Yap',
           type: 'item',
           url: '/pages/login/login3',
-          target: true
+          target: true,
+          icon: icons.IconKey
         },
         {
           id: 'register3',
           title: 'Kayıt Ol',
           type: 'item',
           url: '/pages/register/register3',
-          target: true
+          target: true,
+          icon: IconLockAccess
         }
       ]
     }
