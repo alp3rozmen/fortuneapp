@@ -23,7 +23,6 @@ const ftelling = {
           id: 'kahveFali',
           title: 'Kahve Falı',
           type: 'item',
-          url: '/coffee',
           icon: icons.IconCoffee,
           breadcrumbs: false
         },

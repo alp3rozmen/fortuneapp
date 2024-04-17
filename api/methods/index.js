@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from "path";
+import { error } from "console";
 function methods(app) {
 
     async function insertFals(user_id) {
@@ -22,27 +23,18 @@ function methods(app) {
     }
     
 
-    var response = {
-        status: '',
-        message: '',
-    }
-
     app.post('/api/login', (req, res) => {
 
         const { username, password } = req.body;
 
         if (username === '' || password === '') {
-            response.status = 'error';
-            response.message = 'Kullanıcı adı ve sifre gereklidir';
-            return res.status(400).json(response);
+            return res.status(400).json({ error: 'Kullanıcı adı ve sifre gereklidir', status: 'error' });
         }
 
-        connection.select().from('users').where('username', username).then((user) => {
+        connection.select().from('users').where('username', username).orWhere('email', username).then((user) => {
 
             if (user.length === 0) {
-                response.status = 'error';
-                response.message = 'Kullanıcı adı veya sifre hatalı';
-                return res.status(400).json(response);
+                return res.status(400).json({ error: 'Kullanıcı adı veya sifre hatalı', status: 'error' });
             }
 
 
@@ -51,21 +43,18 @@ function methods(app) {
 
                 if (err || !result) {
                     {
-                        response = {
-                            status: 'error',
-                            message: 'Kullanıcı adı veya sifre hatalı',
-                        }
-                        return res.status(400).json(response);
+                        return res.status(400).json({ error: 'Kullanıcı adı veya sifre hatalı', status: 'error' });
                     }
                 }
 
                 const token = jwt.sign({ username: username }, 'secret', { expiresIn: '24h' });
 
-                response = {
+                var response = {
                     status: 'success',
                     message: 'Giris basarili',
                     token: token,
-                    userid : user[0].id
+                    userid : user[0].id,
+                    userName : user[0].username
                 }
 
                 return res.status(200).json(response);

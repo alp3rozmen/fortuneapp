@@ -1,8 +1,14 @@
 import express from 'express';
 import methods from './methods/index.js';
+import cors from 'cors';
 const app = express();
 
-app.use(express.json() || express.urlencoded({ extended: true }));
+// CORS middleware
+app.use(cors({ origin: "*" }));
+
+// JSON ve URL-encoded veri ayrıştırma middleware'leri
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 methods(app);
 
