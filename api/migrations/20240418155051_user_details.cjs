@@ -11,7 +11,10 @@ exports.up = function(knex) {
         table.string('gender').comment('cinsiyet');
         table.string('age').comment('yas');
         table.string('bio').comment('bio');        
-        table.string('balance').comment('balance');
+        table.string('balance').comment('kazandıgı balance');
+        table.integer('fal_type').comment('baktigim fal tipi');
+        table.foreign('fal_type').references('fal_types.id');
+        table.string('cost').comment('ucreti');
         table.timestamps(true, true);
     });
 };
