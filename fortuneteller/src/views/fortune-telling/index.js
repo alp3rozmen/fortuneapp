@@ -1,5 +1,5 @@
 // material-ui
-import { Typography } from '@mui/material';
+import { Card, Typography, CardActionArea, CardContent , CardMedia, CardActions , Button, Box} from '@mui/material';
 import { useEffect } from 'react';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -22,13 +22,33 @@ const FortuneTelling = () => {
   },[]);
   
   return (
-    <MainCard title="Sample Card">
-    <Typography variant="body2">
-      Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif ad
-      minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in reprehended
-      in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin ocean cuspidate non president, sunk in culpa qui officiate
-      descent molls anim id est labours.
-    </Typography>
+    <MainCard title="Yorumcular">
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'start' }}>
+     {userDetails.map((userDetail) => (
+       <Card key={userDetail.id} sx={{ maxWidth: 345 , m: 2 , boxShadow: 3 }}>
+       <CardActionArea>
+         <CardMedia
+           component="img"
+           height="140"
+           image={ userDetail.profile_image }
+         />
+         <CardContent>
+           <Typography gutterBottom variant="h5" component="div">
+             {userDetail.username}
+           </Typography>
+           <Typography variant="body2" color="text.secondary">
+             {userDetail.bio}
+           </Typography>
+         </CardContent>
+         <CardActions>
+        <Button size="small" color="primary">
+          Fal baktır {userDetail.cost} ₺
+        </Button>
+      </CardActions>
+       </CardActionArea>
+     </Card>
+     ))}
+     </Box>
   </MainCard>
   );
 };
