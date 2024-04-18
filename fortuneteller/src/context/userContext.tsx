@@ -2,6 +2,8 @@ import React from "react"
 import { createContext } from "react"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 export const AuthContext = createContext(null as any)
 
@@ -37,12 +39,47 @@ export const AuthContextProvider = ({ children }: any) => {
                     localStorage.setItem('token', data.token)
                     localStorage.setItem('userid', data.userid)
                     localStorage.setItem('userName', data.userName)
+                
+                    toast.success(data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'light',
+                    })
+                
                 })
+                
             }
             else {
-                setIsLogin(false)
+                response.json().then((data) => {
+                    toast.error(data.error, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'light',
+                    })
+                    setIsLogin(false)
+                })
             }
         }).catch((error) => {
+            toast.error('Bir hata oluştu', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            })
             console.log(error)
             setIsLogin(false)
         })
