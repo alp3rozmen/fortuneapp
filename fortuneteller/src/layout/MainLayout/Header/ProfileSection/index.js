@@ -165,7 +165,7 @@ const ProfileSection = () => {
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
-                          onClick={(event) => handleListItemClick(event, 0, '#')}
+                          onClick={(event) => handleListItemClick(event, 0, '/account')}
                         >
                          
                           <ListItemText primary={<Typography variant="body2">Hesap Ayarları</Typography>} />

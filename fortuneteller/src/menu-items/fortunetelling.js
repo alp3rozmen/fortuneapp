@@ -18,6 +18,7 @@ const ftelling = {
       title: 'Bakımlar',
       type: 'collapse',
       icon: icons.IconSelect,
+      
       children: [
         {
           id: 'kahveFali',
@@ -25,13 +26,13 @@ const ftelling = {
           type: 'item',
           icon: icons.IconCoffee,
           breadcrumbs: false,
-          url : '/coffee'
+          url : '/fals/coffee'
         },
         {
           id: 'tarotFali',
           title: 'Tarot Falı',
           type: 'item',
-          url: '/tarot',
+          url: '/fals/tarot',
           icon: icons.IconCards,
           breadcrumbs: false
         },
@@ -39,7 +40,7 @@ const ftelling = {
           id: 'katinaFali',
           title: 'Katina Falı',
           type: 'item',
-          url: '/katina',
+          url: '/fals/katina',
           icon: icons.IconRings,
           breadcrumbs: false
         },
@@ -47,7 +48,7 @@ const ftelling = {
           id: 'yildiznameFali',
           title: 'Yıldızname',
           type: 'item',
-          url: '/yildizname',
+          url: '/fals/yildizname',
           icon: icons.IconMoon,
           breadcrumbs: false
         },
@@ -55,7 +56,7 @@ const ftelling = {
           id: 'suFali',
           title: 'Su Falı',
           type: 'item',
-          url: '/tarot',
+          url: '/fals/water',
           icon: icons.IconWashTemperature1,
           breadcrumbs: false
         }    

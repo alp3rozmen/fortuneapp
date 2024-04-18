@@ -14,7 +14,11 @@ const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
 const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
 const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 const FortuneTelling = Loadable(lazy(() => import('views/fortune-telling')));
-
+const AccountSettings = Loadable(lazy(() => import('views/account-settings')));
+const Tarot = Loadable(lazy(() => import('views/tarot')));
+const Yildizname = Loadable(lazy(() => import('views/yildizname')));
+const Katina = Loadable(lazy(() => import('views/katina')));
+const Water = Loadable(lazy(() => import('views/water')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
@@ -29,12 +33,32 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: '/coffee',
+      path: 'fals/coffee',
       element: <FortuneTelling />
+    },
+    {
+      path: 'fals/tarot',
+      element: <Tarot />
+    },
+    {
+      path: 'fals/katina',
+      element: <Katina />
+    },
+    {
+      path: 'fals/yildizname',
+      element: <Yildizname />
+    },
+    {
+      path: 'fals/water',
+      element: <Water />
     },
     {
       path: 'admin',
       element: <DashboardDefault />
+    },
+    {
+      path: 'account',
+      element: <AccountSettings />
     },
     {
       path: 'utils',
