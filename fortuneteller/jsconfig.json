@@ -3,7 +3,8 @@
     "jsx": "react",
     "target": "esnext",
     "module": "commonjs",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "allowArbitraryExtensions": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

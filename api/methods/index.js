@@ -62,28 +62,29 @@ function methods(app) {
         })
     })
 
-    app.get('/api/users', authenticateToken, (req, res) => {
-
-        if (!req.headers.authorization) {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
+    app.post('/api/users', (req, res) => {
 
         var user_role = req.body.user_role;
         var fortuner_type = req.body.fortuner_type;
 
-        if (user_role && !fortuner_type) {
+        if ((user_role === undefined && fortuner_type !== undefined) || (user_role === undefined && fortuner_type === undefined)) {
+            return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
+            
+        }
+
+
+        if (user_role === 0 && fortuner_type === 0) {
             connection.select().from('users').then((users) => {
                 return res.status(200).json(users);
             });
         }
-        else if (user_role && fortuner_type) {
-            connection.select('user_details.*').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
+        else if (user_role > 0 && fortuner_type > 0) {
+            
+            connection.select('user_details.*').select('users.username').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
                 return res.status(200).json(users);
             });
         }
-        else{
-            return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
-        }
+        
     })
 
     app.post('/api/createfal', authenticateToken, async (req, res) => {

@@ -33,7 +33,7 @@
   "parserOptions": {
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
-      "impliedStrict": true,
+      "impliedStrict": false,
       "jsx": true
     },
     "ecmaVersion": 12

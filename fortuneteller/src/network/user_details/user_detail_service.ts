@@ -1,0 +1,27 @@
+import { UserDetail } from "model/user_details.ts";
+import { baseService } from "network/BaseService.ts";
+
+export const userDetailService = {
+
+    getAll: async ()  => {
+        try {
+            var response = await baseService.post<UserDetail[]>("users", {user_role : 0});
+            return response;
+
+        } catch (error) {
+            console.log("/api/users - CategoryService getAll", error);
+            throw error;
+        }
+    },
+    getByRoleAndType: async (role : any, type : any) => {
+        try {
+            var response = await baseService.post<UserDetail>("users", {user_role : role, fortuner_type : type});
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
+}
+
