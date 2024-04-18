@@ -24,7 +24,8 @@ const ftelling = {
           title: 'Kahve Falı',
           type: 'item',
           icon: icons.IconCoffee,
-          breadcrumbs: false
+          breadcrumbs: false,
+          url : '/coffee'
         },
         {
           id: 'tarotFali',

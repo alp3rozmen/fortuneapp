@@ -8,10 +8,10 @@ export const AuthContext = createContext(null as any)
 export const AuthContextProvider = ({ children }: any) => {
 
     useEffect(() => {
-        const token = sessionStorage.getItem('token')
+        const token = localStorage.getItem('token')
         if (token) {
             setIsLogin(true)
-            setUserName(sessionStorage.getItem('userName'))
+            setUserName(localStorage.getItem('userName'))
             setToken(token)
         }
     })
@@ -34,9 +34,9 @@ export const AuthContextProvider = ({ children }: any) => {
                     setIsLogin(true)
                     setUserName(data.userName)
                     navigate('/')
-                    sessionStorage.setItem('token', data.token)
-                    sessionStorage.setItem('userid', data.userid)
-                    sessionStorage.setItem('userName', data.userName)
+                    localStorage.setItem('token', data.token)
+                    localStorage.setItem('userid', data.userid)
+                    localStorage.setItem('userName', data.userName)
                 })
             }
             else {
@@ -52,7 +52,7 @@ export const AuthContextProvider = ({ children }: any) => {
     const logout = () => {
         setIsLogin(false)
         navigate('/')
-        sessionStorage.clear()
+        localStorage.clear()
     }
 
     return (
