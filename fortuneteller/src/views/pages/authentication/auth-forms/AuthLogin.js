@@ -82,7 +82,7 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'example.com',
+          email: 'test@gmail.com',
           password: '123456',
           submit: null
         }}
