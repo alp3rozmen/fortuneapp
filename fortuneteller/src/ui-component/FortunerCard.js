@@ -20,7 +20,7 @@ const FortunersCard = ({ roles, types }) => {
 
   return (
     <MainCard sx={{ flexGrow: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Box sx={{ flexGrow: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'start', width: '100%' }}>
+      <Box  sx={{ flexGrow: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'start', width: '100%' }}>
         {loading ? (
           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
             <CircularProgress />
@@ -33,7 +33,7 @@ const FortunersCard = ({ roles, types }) => {
               </Box>
             ) : (
               userDetails.map((userDetail) => (
-                <Card key={userDetail.id} sx={{ display: 'flex', height: 340, m: 2, boxShadow: 3, maxWidth: 230 }}>
+                <Card onClick={() => window.location.href = `/user_detail/${userDetail.username}`}  key={userDetail.id} sx={{ display: 'flex', height: 340, m: 2, boxShadow: 3, maxWidth: 230 }}>
                   <CardActionArea>
                     <CardMedia
                       sx={{ width: 230, height: 140 }}
@@ -60,7 +60,7 @@ const FortunersCard = ({ roles, types }) => {
                         <StarIcon color='warning' fontSize='small' />
                         <StarIcon color='warning' fontSize='small' />(110)
                       </Box>
-                      <Button style={{ marginTop: 10, width: '100%', color: 'white', backgroundColor: 'green' }} variant='contained' size="small" color="primary">
+                      <Button onClick={() => window.location.href = `/user_detail/${userDetail.username}`} style={{ marginTop: 10, width: '100%', color: 'white', backgroundColor: 'green' }} variant='contained' size="small" color="primary">
                         Fal baktır
                       </Button>
                     </CardContent>

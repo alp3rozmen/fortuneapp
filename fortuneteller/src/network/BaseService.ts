@@ -36,6 +36,23 @@ export const baseService = {
             throw error;
         }
     },
+    getWithData: async <T>(url: string , data: any): Promise<ResponseType<T>> => {
+
+        try {
+            let response: ResponseType<T> = {}
+            const axiosResponse = await axiosInstance.get(url , {params: data});
+            response.data = axiosResponse.data;
+            response.success = true;
+            response.statusCode = axiosResponse.status;
+            response.errorMessage = "";
+
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
     getById: async  <T>(url: string, id: any): Promise<ResponseType<T>> => {
         try {
             let axiosResponse = await axiosInstance.get(`${url}/${id}`);

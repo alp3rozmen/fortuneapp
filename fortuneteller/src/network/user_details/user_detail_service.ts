@@ -23,5 +23,15 @@ export const userDetailService = {
             throw error;
         }
     },
+    getByUsername: async (username : any) => {
+        try {
+            var response = await baseService.getWithData<UserDetail>("users/:user_name", {user_name : username});
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 }
 

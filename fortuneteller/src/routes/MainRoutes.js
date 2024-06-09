@@ -19,6 +19,7 @@ const Tarot = Loadable(lazy(() => import('views/tarot')));
 const Yildizname = Loadable(lazy(() => import('views/yildizname')));
 const Katina = Loadable(lazy(() => import('views/katina')));
 const Water = Loadable(lazy(() => import('views/water')));
+const UserDetail = Loadable(lazy(() => import('views/user-detail')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
@@ -53,6 +54,10 @@ const MainRoutes = {
       element: <Water />
     },
     {
+      path: 'user_detail/:username',
+      element: <UserDetail />        
+    },
+    {
       path: 'admin',
       element: <DashboardDefault />
     },
@@ -60,6 +65,7 @@ const MainRoutes = {
       path: 'account',
       element: <AccountSettings />
     },
+
     {
       path: 'utils',
       children: [

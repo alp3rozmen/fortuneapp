@@ -14,14 +14,14 @@ function methods(app) {
                 created_at: new Date(),
                 updated_at: new Date()
             });
-    
+
             return fal_id;
         } catch (err) {
             console.error('Fal oluşturulurken hata oluştu:', err);
             return 0; // Hata durumunda 0 döndür
         }
     }
-    
+
 
     app.post('/api/login', (req, res) => {
 
@@ -53,13 +53,30 @@ function methods(app) {
                     status: 'success',
                     message: 'Giris basarili',
                     token: token,
-                    userid : user[0].id,
-                    userName : user[0].username
+                    userid: user[0].id,
+                    userName: user[0].username
                 }
 
                 return res.status(200).json(response);
             })
         })
+    })
+
+    app.get('/api/users/:user_name', (req, res) => {
+        var username = req.query.user_name;
+
+        if (username === undefined) {
+            return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
+        }
+        
+        connection.select('user_details.*').select('users.username').from('users').join('user_details', 'users.id', 'user_details.user_id').where('username', username).then((user) => {
+        if (user.length === 0) {
+            return res.status(400).json({ error: 'Kullanıcı bulunamadı', status: 'error' });
+        }
+        else {
+            return res.status(200).json(user);
+        }
+        });
     })
 
     app.post('/api/users', (req, res) => {
@@ -69,7 +86,7 @@ function methods(app) {
 
         if ((user_role === undefined && fortuner_type !== undefined) || (user_role === undefined && fortuner_type === undefined)) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
-            
+
         }
 
 
@@ -79,13 +96,14 @@ function methods(app) {
             });
         }
         else if (user_role > 0 && fortuner_type > 0) {
-            
+
             connection.select('user_details.*').select('users.username').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
                 return res.status(200).json(users);
             });
         }
-        
     })
+
+
 
     app.post('/api/createfal', authenticateToken, async (req, res) => {
 
@@ -115,7 +133,7 @@ function methods(app) {
 
 
                 fs.mkdirSync('./images/' + req.body.userid, { recursive: true });
-                fs.mkdirSync('./images/' + req.body.userid  + '/' + fal_id, { recursive: true });
+                fs.mkdirSync('./images/' + req.body.userid + '/' + fal_id, { recursive: true });
 
                 var newPath1 = path.join('./images/' + req.body.userid + '/' + fal_id, 'image1.jpg');
                 var newPath2 = path.join('./images/' + req.body.userid + '/' + fal_id, 'image2.jpg');
@@ -140,7 +158,7 @@ function methods(app) {
                 }).then((result) => {
 
                     if (result) {
-                        return res.status(200).json({ message: 'Fal kaydedildi!'  });
+                        return res.status(200).json({ message: 'Fal kaydedildi!' });
                     }
                     else {
                         return res.status(400).json({ message: 'Bir hata meydana geldi!' });
@@ -172,15 +190,15 @@ function methods(app) {
         var status = 1000;
         var user_type = 1;
         var balance = 0;
-    
+
         if (!username || !email || !password) {
             return res.status(400).json({ error: 'Lütfen zorunlu alanları doldurun!' });
         }
-    
+
         if (password.length < 6) {
             return res.status(400).json({ error: 'Şifre en az 6 karakter olmalıdır!' });
         }
-    
+
         connection.select().from('users').where('username', username).orWhere('email', email).then((users) => {
             if (users.length > 0) {
                 return res.status(400).json({ error: 'Kullanıcı adı ya da e-posta zaten kayıtlı!' });
@@ -206,6 +224,6 @@ function methods(app) {
     });
 
 }
-    
+
 
 export default methods;
