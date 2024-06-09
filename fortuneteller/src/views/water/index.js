@@ -1,11 +1,9 @@
-
+import FortunersCard from "ui-component/FortunerCard";
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Water = () => {
     return (
-      <div>
-        <h1>Su Falı Yorumcularımız</h1>
-      </div>
+        <FortunersCard roles={"2"} types={"5"} />
     );
   };
   

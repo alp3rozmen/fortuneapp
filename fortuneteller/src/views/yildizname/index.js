@@ -1,11 +1,9 @@
-
+import FortunersCard from "ui-component/FortunerCard";
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Yildizname = () => {
     return (
-      <div>
-        <h1>Yıldızname Falı Yorumcularımız</h1>
-      </div>
+      <FortunersCard roles={"2"} types={"4"} />
     );
   };
   
