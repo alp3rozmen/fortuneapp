@@ -45,7 +45,7 @@ const FortunersCard = ({ roles, types }) => {
                         {userDetail.username}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {userDetail.bio}
+                        {userDetail.bio.length > 100 ? userDetail.bio.slice(0, 20) + '...' : userDetail.bio}
                       </Typography>
                       <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <IconPhoneCall sx={{ color: 'green' }} />11
