@@ -54,7 +54,7 @@ const MainRoutes = {
       element: <Water />
     },
     {
-      path: 'user_detail/:username',
+      path: 'user/:username',
       element: <UserDetail />        
     },
     {

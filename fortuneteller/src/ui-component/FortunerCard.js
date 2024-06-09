@@ -33,7 +33,7 @@ const FortunersCard = ({ roles, types }) => {
               </Box>
             ) : (
               userDetails.map((userDetail) => (
-                <Card onClick={() => window.location.href = `/user_detail/${userDetail.username}`}  key={userDetail.id} sx={{ display: 'flex', height: 340, m: 2, boxShadow: 3, maxWidth: 230 }}>
+                <Card onClick={() => window.location.href = `/user/${userDetail.username}`}  key={userDetail.id} sx={{ display: 'flex', height: 340, m: 2, boxShadow: 3, maxWidth: 230 }}>
                   <CardActionArea>
                     <CardMedia
                       sx={{ width: 230, height: 140 }}
@@ -60,7 +60,7 @@ const FortunersCard = ({ roles, types }) => {
                         <StarIcon color='warning' fontSize='small' />
                         <StarIcon color='warning' fontSize='small' />(110)
                       </Box>
-                      <Button onClick={() => window.location.href = `/user_detail/${userDetail.username}`} style={{ marginTop: 10, width: '100%', color: 'white', backgroundColor: 'green' }} variant='contained' size="small" color="primary">
+                      <Button onClick={() => window.location.href = `/user/${userDetail.username}`} style={{ marginTop: 10, width: '100%', color: 'white', backgroundColor: 'green' }} variant='contained' size="small" color="primary">
                         Fal baktır
                       </Button>
                     </CardContent>
