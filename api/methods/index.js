@@ -69,7 +69,7 @@ function methods(app) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
         }
         
-        connection.select('user_details.*').select('users.username').from('users').join('user_details', 'users.id', 'user_details.user_id').where('username', username).then((user) => {
+        connection.select('user_details.*').select('users.*').from('users').join('user_details', 'users.id', 'user_details.user_id').where('username', username).then((user) => {
         if (user.length === 0) {
             return res.status(400).json({ error: 'Kullanıcı bulunamadı', status: 'error' });
         }
@@ -97,7 +97,7 @@ function methods(app) {
         }
         else if (user_role > 0 && fortuner_type > 0) {
 
-            connection.select('user_details.*').select('users.username').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
+            connection.select('users.*').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
                 return res.status(200).json(users);
             });
         }

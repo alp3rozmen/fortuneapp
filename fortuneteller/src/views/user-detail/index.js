@@ -14,6 +14,8 @@ import { falTypeAndCostService } from 'network/falTypeAndCost/falTypeAndCostServ
 import { CircleRounded } from '@mui/icons-material';
 import { IconCoin } from '@tabler/icons-react';
 import { CalendarMonth } from '@mui/icons-material';
+import dayjs from 'dayjs';
+import tr from 'dayjs/locale/tr';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const UserDetail = () => {
@@ -28,6 +30,7 @@ const UserDetail = () => {
       setUserDetail(response.data[0]);
       fetchUserTypes(response.data[0].user_id);
       fetchUserComments(response.data[0].user_id);
+      console.log(response.data[0]);
     };
 
     const fetchUserTypes = async (userid) => {
@@ -43,6 +46,9 @@ const UserDetail = () => {
     fetchUserDetails();
   }, []);
 
+  const renderStarts = (stars) => {
+    return Array(stars).fill(0).map((_, index) => <StarIcon color='warning' fontSize='small' key={index} />);
+  };
 
   return (
     <MainCard>
@@ -96,14 +102,16 @@ const UserDetail = () => {
                 comments.map((comment , index) => (
                   
                   <Card key={index} sx={{ display: 'flex', flexDirection: 'Column', p: 1, m: 1 , backgroundColor: '#f5f5f5' }}>
-                    <Box sx={{display: 'flex', flexDirection: 'row', p: 1, m: 1 }}>
+                    <Box sx={{display: 'flex', flex:1, alignItems: 'center', flexDirection: 'row' }}>
                       <CalendarMonth />
-                      <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="button" >{comment.created_at} </Typography>
+                      <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }}  variant="inherit" >{dayjs(comment.created_at).locale(tr).format('DD MMMM YYYY')}</Typography>
+                        
                     </Box>
                     <Box sx={{display: 'flex', flexDirection: 'row', p: 1, m: 1 }}>
-                      <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="button" >{comment.comment} </Typography>
-                      <StarIcon color='warning' fontSize='small' />
-                      <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="button" >{comment.comment_stars} </Typography>
+                      <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="inherit" >{comment.comment} </Typography>
+                    </Box>
+                    <Box sx={{display: 'flex', flexDirection: 'row' }}>
+                    {renderStarts(comment.comment_stars)}
                     </Box>
                   </Card>
                 ))
