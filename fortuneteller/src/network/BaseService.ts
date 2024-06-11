@@ -55,7 +55,7 @@ export const baseService = {
     },
     getById: async  <T>(url: string, id: any): Promise<ResponseType<T>> => {
         try {
-            let axiosResponse = await axiosInstance.get(`${url}/${id}`);
+            let axiosResponse = await axiosInstance.post(url, id);
 
             let response: ResponseType<T> = {
                 data: axiosResponse.data,

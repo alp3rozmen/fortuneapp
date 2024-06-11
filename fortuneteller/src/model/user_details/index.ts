@@ -1,6 +1,6 @@
-import { BaseModel } from "model/BaseModel";
+import BaseModel  from "model/BaseModel";
 
-export interface UserDetail extends BaseModel {
+export default interface UserDetailModel extends BaseModel {
     user_id?: number;
     profile_image?: string;
     gender?: string;
@@ -10,3 +10,12 @@ export interface UserDetail extends BaseModel {
     fal_type?: string;
     cost?: string;
 }
+
+interface UserCommentModel extends BaseModel {
+    comment?: number;
+    comment_stars?: number;
+    created_at?: string;
+}
+
+
+export  { UserDetailModel, UserCommentModel }

@@ -1,11 +1,11 @@
-import { UserDetail } from "model/user_details.ts";
+import { FalTypeAndCost } from "model/falTypeAndCost";
 import { baseService } from "network/BaseService.ts";
 
-export const userDetailService = {
+export const falTypeAndCostService = {
 
     getAll: async ()  => {
         try {
-            var response = await baseService.post<UserDetail[]>("users", {user_role : 0});
+            var response = await baseService.post<FalTypeAndCost[]>("users", {user_role : 0});
             return response;
 
         } catch (error) {
@@ -15,7 +15,7 @@ export const userDetailService = {
     },
     getByRoleAndType: async (role : any, type : any) => {
         try {
-            var response = await baseService.post<UserDetail>("users", {user_role : role, fortuner_type : type});
+            var response = await baseService.post<FalTypeAndCost>("users", {user_role : role, fortuner_type : type});
             return response;
 
         } catch (error) {
@@ -25,7 +25,7 @@ export const userDetailService = {
     },
     getByUsername: async (url ,username : any) => {
         try {
-            var response = await baseService.getWithData<UserDetail>(url, {user_name : username});
+            var response = await baseService.getWithData<FalTypeAndCost>(url, {user_name : username});
             return response;
 
         } catch (error) {
@@ -33,9 +33,9 @@ export const userDetailService = {
             throw error;
         }
     },
-    getByUserId: async (url ,userid, model : any) => {
+    getByUserId: async (url , id : any) => {
         try {
-            var response = await baseService.getById<typeof model>(url, {id : userid});
+            var response = await baseService.getById<FalTypeAndCost>(url, {id : id});
             return response;
 
         } catch (error) {
