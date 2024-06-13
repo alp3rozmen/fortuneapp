@@ -1,4 +1,4 @@
-import { Card, Typography, CardActionArea, CardContent, CardMedia, Button, Box, CircularProgress } from '@mui/material';
+import { Card, Typography, CardActionArea, CardContent, CardMedia, Box, CircularProgress} from '@mui/material';
 import { useEffect, useState } from 'react';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -6,6 +6,7 @@ import { userDetailService } from 'network/user_details/user_detail_service.ts';
 import { IconPhoneCall, IconCamera, IconMessage } from '@tabler/icons-react';
 import CircleIcon from '@mui/icons-material/Circle';
 import StarIcon from '@mui/icons-material/Star';
+import AppointmentDialog from './AppDialog/index.js';
 
 const FortunersCard = ({ roles, types }) => {
   const [userDetails, setUserDetails] = useState([]);
@@ -20,7 +21,9 @@ const FortunersCard = ({ roles, types }) => {
   }, [roles, types]);
 
   return (
-    <MainCard sx={{ flexGrow: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    
+    <MainCard sx={{borderRadius: '10px', border: '1px solid', borderColor: '#E0E0E0', mt: 2, flexGrow: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    
       <Box  sx={{ flexGrow: 1, display: 'flex', flexWrap: 'wrap', justifyContent: 'start', width: '100%' }}>
         {loading ? (
           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
@@ -34,15 +37,16 @@ const FortunersCard = ({ roles, types }) => {
               </Box>
             ) : (
               userDetails.map((userDetail) => (
-                <Card onClick={() => window.location.href = `/user/${userDetail.username}`}  key={userDetail.id} sx={{ display: 'flex', height: 340, m: 2, boxShadow: 3, maxWidth: 230 }}>
-                  <CardActionArea>
+               <Box key={userDetail.id}>
+                 <Card    key={userDetail.id} sx={{ display: 'flex', mr: 2, boxShadow: 3, maxWidth: 230 }}>
+                  <CardActionArea onClick={() => window.location.href = `/user/${userDetail.username}`} >
                     <CardMedia
                       sx={{ width: 230, height: 140 }}
                       component="img"
                       image={userDetail.profile_image}
                     />
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
+                      <Typography variant="h5" component="div">
                         {userDetail.username}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -61,12 +65,11 @@ const FortunersCard = ({ roles, types }) => {
                         <StarIcon color='warning' fontSize='small' />
                         <StarIcon color='warning' fontSize='small' />(110)
                       </Box>
-                      <Button onClick={() => window.location.href = `/user/${userDetail.username}`} style={{ marginTop: 10, width: '100%', color: 'white', backgroundColor: 'green' }} variant='contained' size="small" color="primary">
-                        Fal baktır
-                      </Button>
-                    </CardContent>
+                      </CardContent>
                   </CardActionArea>
                 </Card>
+                <AppointmentDialog btnStyle={{boxShadow: 3 ,borderRadius: 3,backgroundColor: 'white',color  : 'black', flex : 1 , mr: 2, mt: 0.2}} name={'Fal baktır'} open={true} />
+              </Box>
               ))
             )}
           </>

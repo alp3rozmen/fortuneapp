@@ -21,8 +21,8 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
   const drawer = (
-    <>
-      <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+    <Box sx={{ height: '100%', overflow: 'hidden' , borderRadius: '10px', border: '1px solid #E0E0E0',m : 1 }}>
+      <Box sx={{  display: { xs: 'block', md: 'none' } }}>
         <Box sx={{ display: 'flex', p: 2, mx: 'auto' }}>
           <LogoSection />
         </Box>
@@ -52,7 +52,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
           </Stack> */}
         </Box>
       </MobileView>
-    </>
+    </Box>
   );
 
   const container = window !== undefined ? () => window.document.body : undefined;
