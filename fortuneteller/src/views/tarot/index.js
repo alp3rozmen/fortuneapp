@@ -3,7 +3,7 @@ import FortunersCard from "ui-component/FortunerCard";
 
 const Tarot = () => {
     return (
-      <FortunersCard roles={"2"} types={"2"} />
+      <FortunersCard title={"Tarot Falı"} roles={"2"} types={"2"} />
     );
   };
   

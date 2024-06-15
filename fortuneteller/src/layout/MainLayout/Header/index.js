@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, ButtonBase } from '@mui/material';
+import { Avatar, Box, ButtonBase} from '@mui/material';
 
 // project imports
 import LogoSection from '../LogoSection';
@@ -13,7 +13,7 @@ import AuthContext from 'context/userContext.tsx';
 import { useContext } from 'react';
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
-
+import {Link} from 'react-router-dom';
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
@@ -21,20 +21,25 @@ const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
 
   return (
-    <>
+    <Box sx={{ alignContent: 'center', border: '1px solid #E0E0E0', borderRadius: '10px' ,backgroundColor: '#f5f5f5' ,width: '100%', display: 'flex', alignItems: 'center' ,justifyContent: 'space-between' }}>
       {/* logo & toggler button */}
+      
       <Box
         sx={{
+          justifyContent: 'space-evenly',
           width: 228,
+          height: 65,
           display: 'flex',
           [theme.breakpoints.down('md')]: {
             width: 'auto'
           }
         }}
       >
-        <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
+      
+        <Box component="span" sx={{display: { xs: 'none', md: 'flex' } }}>
           <LogoSection />
         </Box>
+        
         <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
           <Avatar
             variant="rounded"
@@ -52,22 +57,36 @@ const Header = ({ handleLeftDrawerToggle }) => {
             onClick={handleLeftDrawerToggle}
             color="inherit"
           >
-            <IconMenu2 stroke={1.5} size="1.3rem" />
+            <IconMenu2 stroke={1} size="1rem" />
           </Avatar>
         </ButtonBase>
       </Box>
 
       {/* header search */}
+      
       {/* <SearchSection /> */}
-      <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
+     
 
       {/* notification & profile */}
       
-      {isLogin&& <><NotificationSection />
-      <ProfileSection /></>}
+      <Box sx={{flex: 1,display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
+        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Yorumcular</Link>
+        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Burçlar</Link>
+        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Kredi Satın Al</Link>
+        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Nasıl Çalışır?</Link>
+        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Yorumcu Ol</Link>
+      </Box>
+
       
-    </>
+      <Box sx={{flex: 1,display: 'flex', justifyContent: 'end', gap: 2,p: 1, alignItems: 'center' }}>
+        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Giriş Yap</Link>
+        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Kayıt Ol</Link>
+      </Box>
+
+      {isLogin&& <Box sx={{ display: 'flex', alignItems: 'center' }}><NotificationSection />
+      <ProfileSection /></Box>}
+      
+    </Box>
   );
 };
 

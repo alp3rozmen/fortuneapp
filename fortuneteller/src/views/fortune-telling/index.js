@@ -7,7 +7,7 @@ import FortunersCard from "ui-component/FortunerCard";
 const FortuneTelling = () => {
 
   return (
-    <FortunersCard roles={"2"} types={"1"} />
+    <FortunersCard title={"Kahve Falı"} roles={"2"} types={"1"} />
   );
 };
 

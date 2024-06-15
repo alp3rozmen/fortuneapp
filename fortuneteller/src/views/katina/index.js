@@ -3,7 +3,7 @@ import FortunersCard from "ui-component/FortunerCard";
 
 const Katina = () => {
     return (
-      <FortunersCard roles={"2"} types={"3"} />
+      <FortunersCard title={"Katina Falı"} roles={"2"} types={"3"} />
     );
   };
   

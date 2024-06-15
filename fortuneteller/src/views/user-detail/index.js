@@ -51,7 +51,7 @@ const UserDetail = () => {
   };
 
   return (
-    <MainCard>
+    <MainCard sx ={{ mt: 2 }}>
 
       <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }}>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>

@@ -75,7 +75,7 @@ export default function AppointmentDialog({name , btnStyle}) {
 
   return (
     <Box sx ={{ display: 'flex', alignItems: 'flex-end' }}>
-      <Button variant="contained" onClick={handleClickOpen} sx={btnStyle}>
+      <Button variant="outlined" onClick={handleClickOpen} sx={btnStyle}>
         {name}
       </Button>
       <AppDialog

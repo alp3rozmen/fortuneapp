@@ -3,7 +3,7 @@ import FortunersCard from "ui-component/FortunerCard";
 
 const Yildizname = () => {
     return (
-      <FortunersCard roles={"2"} types={"4"} />
+      <FortunersCard title={"Yildizname Falı"} roles={"2"} types={"4"} />
     );
   };
   

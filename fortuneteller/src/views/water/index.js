@@ -3,7 +3,7 @@ import FortunersCard from "ui-component/FortunerCard";
 
 const Water = () => {
     return (
-        <FortunersCard roles={"2"} types={"5"} />
+        <FortunersCard title={"Su Falı"} roles={"2"} types={"5"} />
     );
   };
   

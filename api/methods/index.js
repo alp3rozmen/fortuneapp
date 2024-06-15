@@ -91,7 +91,7 @@ function methods(app) {
 
 
         if (user_role === 0 && fortuner_type === 0) {
-            connection.select().from('users').then((users) => {
+            connection.select('users.*').from('users').join('user_details', 'users.id', 'user_details.user_id').then((users) => {
                 return res.status(200).json(users);
             });
         }
