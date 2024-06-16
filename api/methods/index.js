@@ -7,7 +7,7 @@ import path from "path";
 import getUserFalAndCost from "./userdetails/index.js";
 import { error } from "console";
 function methods(app) {
-
+    
     async function insertFals(user_id) {
         try {
             const [fal_id] = await connection('fals').insert({
@@ -22,6 +22,7 @@ function methods(app) {
             return 0; // Hata durumunda 0 döndür
         }
     }
+
 
     app.post('/api/login', (req, res) => {
 
@@ -224,6 +225,33 @@ function methods(app) {
     });
 
     getUserFalAndCost(app, connection);
+
+
+    app.post('/api/getAppointment', (req, res) => {
+
+        const { userid, faltype } = req.body;
+        
+        if (!userid || !faltype) {
+            return res.status(400).json({ error: 'Lütfen zorunlu alanları doldurun!' });
+        }
+
+        connection.select('appointments.*')
+        .from('user_details')
+        .join('appointments', 'appointments.user_details_id', 'user_details.id')
+        .where('user_details.user_id' , userid)
+        .then((user) => {
+          if (user.length === 0) {
+            return res.status(400).json({ message: 'Randevu bulunamadı!' });
+          }
+          return res.status(200).json(user);
+        })
+        .catch((err) => {
+          console.error('Error:', err);
+          return res.status(500).json({ message: 'Sunucu hatası!' });
+        });
+            
+
+    });
 
 }
 

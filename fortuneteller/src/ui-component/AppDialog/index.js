@@ -10,7 +10,7 @@ import tr from 'dayjs/locale/tr';
 import dayjs from 'dayjs';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
-
+import { userDetailService } from '../../network/user_details/user_detail_service.ts';
 function AppDialog(props) {
   const [selectedDate , setSelectedDate] = useState('');
   const { onClose, selectedValue, open } = props;
@@ -19,6 +19,11 @@ function AppDialog(props) {
     onClose(selectedValue);
   };
 
+  const gApps = async (value) => {
+    const response = await userDetailService.getUserAppointments('getAppointment', 3, 2);
+    console.log(response);
+    setSelectedDate(dayjs(value).locale('tr').format('DD MMMM YYYY'))
+  }
 
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -26,7 +31,7 @@ function AppDialog(props) {
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={tr}>
       <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'column'  }}>
         <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'row'  }}>
-          <DateCalendar selected={selectedDate} onChange={(value) => setSelectedDate(dayjs(value).locale('tr').format('DD MMMM YYYY'))} minDate={dayjs()} viewDate={new Date()} />
+          <DateCalendar selected={selectedDate} onChange={(value) => gApps(value) }minDate={dayjs()} viewDate={new Date()} />
           <Typography variant="subtitle2" href="https://berrydashboard.io" target="_blank" underline="hover">{selectedDate}</Typography>
         </Box>
         <Button disabled variant="contained" onClick={handleClose} sx={{mt: 2}} >İleri</Button>

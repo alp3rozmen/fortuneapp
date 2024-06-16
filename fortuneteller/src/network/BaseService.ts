@@ -127,7 +127,24 @@ export const baseService = {
             console.log(error);
             
         }
-    }
+    },
+    postWithData: async <T>(url: string , data: any): Promise<ResponseType<T>> => {
+
+        try {
+            let response: ResponseType<T> = {}
+            const axiosResponse = await axiosInstance.post(url , data);
+            response.data = axiosResponse.data;
+            response.success = true;
+            response.statusCode = axiosResponse.status;
+            response.errorMessage = "";
+
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
 }
 
 
