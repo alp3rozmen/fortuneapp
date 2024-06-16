@@ -13,7 +13,7 @@ import AuthContext from 'context/userContext.tsx';
 import { useContext } from 'react';
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
@@ -69,19 +69,12 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       {/* notification & profile */}
       
-      <Box sx={{flex: 1,display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
-        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Yorumcular</Link>
-        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Burçlar</Link>
-        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Kredi Satın Al</Link>
-        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Nasıl Çalışır?</Link>
-        <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/pages/login/login3'}>Yorumcu Ol</Link>
-      </Box>
-
-      
+     
+{/*       
       <Box sx={{flex: 1,display: 'flex', justifyContent: 'end', gap: 2,p: 1, alignItems: 'center' }}>
         <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Giriş Yap</Link>
         <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Kayıt Ol</Link>
-      </Box>
+      </Box> */}
 
       {isLogin&& <Box sx={{ display: 'flex', alignItems: 'center' }}><NotificationSection />
       <ProfileSection /></Box>}

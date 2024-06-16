@@ -1,76 +1,49 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import { blue } from '@mui/material/colors';
 import { Box } from '@mui/system';
-
-const emails = ['username@gmail.com', 'user02@gmail.com'];
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateCalendar } from '@mui/x-date-pickers';
+import tr from 'dayjs/locale/tr';
+import dayjs from 'dayjs';
+import { Typography } from '@mui/material';
+import { useState } from 'react';
 
 function AppDialog(props) {
+  const [selectedDate , setSelectedDate] = useState('');
   const { onClose, selectedValue, open } = props;
-
+  
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem disableGutters key={email}>
-            <ListItemButton onClick={() => handleListItemClick(email)}>
-              <ListItemAvatar>
-                <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={email} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-        <ListItem disableGutters>
-          <ListItemButton
-            autoFocus
-            onClick={() => handleListItemClick('addAccount')}
-          >
-            <ListItemAvatar>
-              <Avatar>
-                <AddIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Add account" />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <DialogTitle>Randevu Al</DialogTitle>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={tr}>
+      <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'column'  }}>
+        <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'row'  }}>
+          <DateCalendar selected={selectedDate} onChange={(value) => setSelectedDate(dayjs(value).locale('tr').format('DD MMMM YYYY'))} minDate={dayjs()} viewDate={new Date()} />
+          <Typography variant="subtitle2" href="https://berrydashboard.io" target="_blank" underline="hover">{selectedDate}</Typography>
+        </Box>
+        <Button disabled variant="contained" onClick={handleClose} sx={{mt: 2}} >İleri</Button>
+      </Box>
+    </LocalizationProvider>
     </Dialog>
   );
 }
 
 export default function AppointmentDialog({name , btnStyle}) {
   const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = (value) => {
+  const handleClose = () => {
     setOpen(false);
-    setSelectedValue(value);
   };
 
   return (
@@ -79,7 +52,7 @@ export default function AppointmentDialog({name , btnStyle}) {
         {name}
       </Button>
       <AppDialog
-        selectedValue={selectedValue}
+        selectedValue={0}
         open={open}
         onClose={handleClose}
       />
