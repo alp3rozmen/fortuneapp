@@ -8,16 +8,20 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers';
 import tr from 'dayjs/locale/tr';
 import dayjs from 'dayjs';
-import { Typography } from '@mui/material';
+import { RadioGroup, Radio , Typography } from '@mui/material';
 import { useState } from 'react';
 import { userDetailService } from '../../network/user_details/user_detail_service.ts';
-import { useEffect } from 'react';
+import { useEffect , useRef } from 'react';
 import duration from 'dayjs/plugin/duration.js';
+
 function AppDialog(props) {
   dayjs.extend(duration); 
-  const [selectedDate , setSelectedDate] = useState('');
+  const [selectedDate , setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const { onClose, selectedValue, open , cardid } = props;
+  const [hoursList , setHoursList] = useState([]);
   const [appointmentDetails , setAppointmentDetails] = useState([]);
+  const calendarRef = useRef(null);
+
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -26,41 +30,42 @@ function AppDialog(props) {
     gApps();
   }, []);  
 
-  const gApps = async (value) => {
+  const gApps = async () => {
     const response = await userDetailService.getUserAppointments('getAppointment', cardid);
-    console.log(response.data[0]);
     setAppointmentDetails(response.data[0]);
   }
 
+
   function getAppointmentTimes(appSelectedDate) {
+    setSelectedDate(appSelectedDate); 
+   
+    if (appointmentDetails === undefined) {
+      console.log('Randevu Bulunamadı!');
+      return null;
+    }
+   
     const startDate = dayjs(appointmentDetails.app_start_date);
     const endDate = dayjs(appointmentDetails.app_end_date);
+    const startHour = appointmentDetails.start_hour;
+    const endHour = appointmentDetails.end_hour;
     const interval = appointmentDetails.interval_time;
     const selectedDate = dayjs(appSelectedDate);
-
-    if (selectedDate.isBefore(startDate) || selectedDate.isAfter(endDate)) {
-        console.log('Aralık dışı');
+    
+    if (dayjs(selectedDate).isAfter(endDate)) {
+        setHoursList([]);
         return null;
     }
   
-    let currentTime = dayjs(startDate).format('HH:mm');
+    let currentTime = dayjs(startDate).set('hour', startHour.split(':')[0]).set('minute', startHour.split(':')[1]).set('second', startHour.split(':')[2]);
+    let currentEndTime = dayjs(startDate).set('hour', endHour.split(':')[0]).set('minute', endHour.split(':')[1]).set('second', endHour.split(':')[2]);
 
-    console.log(currentTime);
-    
-    const hoursList = [];
+    const hoursL = [];
 
-    while (currentTime.isBefore(endDate)) {
-        hoursList.push(currentTime);
+    while (currentTime.isBefore(currentEndTime) || currentTime.isSame(currentEndTime)) {
+        hoursL.push(currentTime);
         currentTime = currentTime.add(interval, 'minutes');
     }
-
-    console.log(hoursList);
-
-    return (
-        <>
-          <Typography variant="subtitle2">Randevu Tarihleri</Typography>      
-        </>
-    );
+    setHoursList(hoursL);
 }
 
   return (
@@ -68,10 +73,30 @@ function AppDialog(props) {
       <DialogTitle>Randevu Al</DialogTitle>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={tr}>
       <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'column'  }}>
-        <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'row'  }}>
-          <DateCalendar selected={selectedDate} onChange={(newValue) => getAppointmentTimes(newValue)} minDate={dayjs()}  />
-          <Typography variant="subtitle2" href="https://berrydashboard.io" target="_blank" underline="hover">{selectedDate}</Typography>
+        <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'column'  }}>
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+
+            <DateCalendar selected={selectedDate} ref={calendarRef} onChange={(newValue) => getAppointmentTimes(dayjs(newValue).format('YYYY-MM-DD'))} minDate={dayjs()}  />
+              <Box sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}>
+                <Typography variant="subtitle2"  underline="hover">{calendarRef.current?.selected !== undefined ? dayjs(selectedDate).locale('tr').format('DD MMMM YYYY') : null}</Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column' , mt: 2 }}>
+                  {(hoursList.length === 0 && calendarRef.current?.selected !== undefined) ? <Typography variant="subtitle2"  underline="hover">Randevuya Kapalıdır.</Typography> : null}
+
+                    <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="female" name="radio-buttons-group">
+                    {hoursList.map((hour) => (
+                      <Box key={hour + 1} sx={{ display: 'flex', flexDirection: 'row' , justifyContent: 'center' }}>
+                        <Radio label="disabled" slot='label' value={hour.format('HH:mm')} sx={{ display: 'flex' }} key={hour.format('HH:mm')} >{hour.format('HH:mm')}</Radio>
+                        <Typography sx={{alignItems: 'center', display: 'flex', textAlign: 'center', justifyContent: 'center' }} variant="subtitle2"  underline="hover">{hour.format('HH:mm')}</Typography>
+                      </Box>
+                    ))}
+                    </RadioGroup>
+                    
+                  </Box>
+              </Box>
+            </Box>
+          
         </Box>
+        
         <Button disabled variant="contained" onClick={handleClose} sx={{mt: 2}} >İleri</Button>
       </Box>
     </LocalizationProvider>
