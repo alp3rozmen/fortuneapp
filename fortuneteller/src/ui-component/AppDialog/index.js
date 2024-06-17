@@ -24,6 +24,7 @@ function AppDialog(props) {
 
   const handleClose = () => {
     onClose(selectedValue);
+    setHoursList([]); 
   };
 
   useEffect(() => {
@@ -112,6 +113,7 @@ export default function AppointmentDialog({name , btnStyle ,carduserid}) {
 
   const handleClose = () => {
     setOpen(false);
+  
   };
 
   return (
