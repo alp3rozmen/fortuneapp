@@ -33,36 +33,35 @@ function AppDialog(props) {
   }
 
   function getAppointmentTimes(appSelectedDate) {
-    var startDate = dayjs(appointmentDetails.app_start_date).format('YYYY-MM-DD');
-    var endDate =  dayjs(appointmentDetails.app_end_date).format('YYYY-MM-DD')
-    var interval = appointmentDetails.interval_time;
-    var selectedDate = dayjs(appSelectedDate).format('YYYY-MM-DD');
-    
+    const startDate = dayjs(appointmentDetails.app_start_date);
+    const endDate = dayjs(appointmentDetails.app_end_date);
+    const interval = appointmentDetails.interval_time;
+    const selectedDate = dayjs(appSelectedDate);
 
-    const startDateDj = dayjs().startOf('day'); // Bugünün başlangıcı
-    const endDateDj = startDateDj.add(1, 'day'); // Yarının başlangıcı
-
-    if (selectedDate < startDate || selectedDate > endDate) {
-      console.log('Aralık dışı');
-      return;
+    if (selectedDate.isBefore(startDate) || selectedDate.isAfter(endDate)) {
+        console.log('Aralık dışı');
+        return null;
     }
   
-    let currentTime = startDateDj;
-    const hoursList = [];
+    let currentTime = dayjs(startDate).format('HH:mm');
+
+    console.log(currentTime);
     
-    while (currentTime.isBefore(endDateDj)) {
-      hoursList.push(currentTime.format('HH:mm'));
-      currentTime = currentTime.add(interval, 'minutes');
+    const hoursList = [];
+
+    while (currentTime.isBefore(endDate)) {
+        hoursList.push(currentTime);
+        currentTime = currentTime.add(interval, 'minutes');
     }
+
+    console.log(hoursList);
+
     return (
-      <>
-        <Typography variant="subtitle2">Randevu Tarihleri</Typography>
-        {hoursList.map((hour) => (
-          <Button key={hour} onClick={() => setSelectedDate(selectedDate + ' ' + hour)} variant="contained" sx={btnStyle}>{hour}</Button>
-        ))}
-      </>
+        <>
+          <Typography variant="subtitle2">Randevu Tarihleri</Typography>      
+        </>
     );
-  }
+}
 
   return (
     <Dialog onClose={handleClose} open={open}>
