@@ -39,7 +39,7 @@ const FortunersCard = ({ roles, types, title }) => {
               ) : (
                 userDetails.map((userDetail) => (
                 <Box sx={{  gridTemplateColumns: 'repeat(4, 1fr)', mt: 2, justifyContent: 'center'}} key={userDetail.id}>
-                  <Card key={userDetail.id} sx={{ display: 'flex', mr: 2, boxShadow: 3, maxWidth: 230 }}>
+                  <Card id={userDetail.id} key={userDetail.id} sx={{ display: 'flex', mr: 2, boxShadow: 3, maxWidth: 230 }}>
                     <CardActionArea onClick={() => window.location.href = `/user/${userDetail.username}`} >
                       <CardMedia
                         sx={{ width: 230, height: 140 }}
@@ -78,7 +78,7 @@ const FortunersCard = ({ roles, types, title }) => {
                                 color  : 'black',
                                 display: 'flex', 
                                 mr: 2, 
-                                mt: 0.5}} name={'Fal baktır'} open={true} />
+                                mt: 0.5}} name={'Fal baktır'} open={false} carduserid={userDetail.user_details_id} />
                 </Box>
                 ))
               )}

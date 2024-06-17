@@ -11,6 +11,8 @@ exports.up = function(knex) {
         table.foreign('app_taken_user_id').references('id').inTable('users');
         table.dateTime('app_date').comment('randevutarihi');
         table.dateTime('app_time').comment('alinansaat');
+        table.time('start_hour').comment('baslangic_saat');
+        table.time('end_hour').comment('bitis_saat');
         table.timestamps(true, true);
     });
 };

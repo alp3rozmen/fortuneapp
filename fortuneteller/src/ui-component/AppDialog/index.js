@@ -11,18 +11,57 @@ import dayjs from 'dayjs';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
 import { userDetailService } from '../../network/user_details/user_detail_service.ts';
+import { useEffect } from 'react';
+import duration from 'dayjs/plugin/duration.js';
 function AppDialog(props) {
+  dayjs.extend(duration); 
   const [selectedDate , setSelectedDate] = useState('');
-  const { onClose, selectedValue, open } = props;
-  
+  const { onClose, selectedValue, open , cardid } = props;
+  const [appointmentDetails , setAppointmentDetails] = useState([]);
   const handleClose = () => {
     onClose(selectedValue);
   };
 
+  useEffect(() => {
+    gApps();
+  }, []);  
+
   const gApps = async (value) => {
-    const response = await userDetailService.getUserAppointments('getAppointment', 3, 2);
-    console.log(response);
-    setSelectedDate(dayjs(value).locale('tr').format('DD MMMM YYYY'))
+    const response = await userDetailService.getUserAppointments('getAppointment', cardid);
+    console.log(response.data[0]);
+    setAppointmentDetails(response.data[0]);
+  }
+
+  function getAppointmentTimes(appSelectedDate) {
+    var startDate = dayjs(appointmentDetails.app_start_date).format('YYYY-MM-DD');
+    var endDate =  dayjs(appointmentDetails.app_end_date).format('YYYY-MM-DD')
+    var interval = appointmentDetails.interval_time;
+    var selectedDate = dayjs(appSelectedDate).format('YYYY-MM-DD');
+    
+
+    const startDateDj = dayjs().startOf('day'); // Bugünün başlangıcı
+    const endDateDj = startDateDj.add(1, 'day'); // Yarının başlangıcı
+
+    if (selectedDate < startDate || selectedDate > endDate) {
+      console.log('Aralık dışı');
+      return;
+    }
+  
+    let currentTime = startDateDj;
+    const hoursList = [];
+    
+    while (currentTime.isBefore(endDateDj)) {
+      hoursList.push(currentTime.format('HH:mm'));
+      currentTime = currentTime.add(interval, 'minutes');
+    }
+    return (
+      <>
+        <Typography variant="subtitle2">Randevu Tarihleri</Typography>
+        {hoursList.map((hour) => (
+          <Button key={hour} onClick={() => setSelectedDate(selectedDate + ' ' + hour)} variant="contained" sx={btnStyle}>{hour}</Button>
+        ))}
+      </>
+    );
   }
 
   return (
@@ -31,7 +70,7 @@ function AppDialog(props) {
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={tr}>
       <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'column'  }}>
         <Box sx={{ display: 'flex',p: 2, flex : 1, flexDirection: 'row'  }}>
-          <DateCalendar selected={selectedDate} onChange={(value) => gApps(value) }minDate={dayjs()} viewDate={new Date()} />
+          <DateCalendar selected={selectedDate} onChange={(newValue) => getAppointmentTimes(newValue)} minDate={dayjs()}  />
           <Typography variant="subtitle2" href="https://berrydashboard.io" target="_blank" underline="hover">{selectedDate}</Typography>
         </Box>
         <Button disabled variant="contained" onClick={handleClose} sx={{mt: 2}} >İleri</Button>
@@ -41,7 +80,7 @@ function AppDialog(props) {
   );
 }
 
-export default function AppointmentDialog({name , btnStyle}) {
+export default function AppointmentDialog({name , btnStyle ,carduserid}) {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,6 +99,7 @@ export default function AppointmentDialog({name , btnStyle}) {
         selectedValue={0}
         open={open}
         onClose={handleClose}
+        cardid={carduserid}
       />
     </Box>
   );

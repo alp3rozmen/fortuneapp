@@ -92,13 +92,13 @@ function methods(app) {
 
 
         if (user_role === 0 && fortuner_type === 0) {
-            connection.select('users.*').from('users').join('user_details', 'users.id', 'user_details.user_id').then((users) => {
+            connection.select('users.*').select('user_details.id as user_details_id').from('users').join('user_details', 'users.id', 'user_details.user_id').then((users) => {
                 return res.status(200).json(users);
             });
         }
         else if (user_role > 0 && fortuner_type > 0) {
 
-            connection.select('users.*').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
+            connection.select('users.*').select('user_details.id as user_details_id').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
                 return res.status(200).json(users);
             });
         }
@@ -228,29 +228,30 @@ function methods(app) {
 
 
     app.post('/api/getAppointment', (req, res) => {
-
-        const { userid, faltype } = req.body;
+        // userid userdetail tablosunun idsi
+        const { userid } = req.body;
         
-        if (!userid || !faltype) {
+        if (!userid) {
             return res.status(400).json({ error: 'Lütfen zorunlu alanları doldurun!' });
         }
 
-        connection.select('appointments.*')
-        .from('user_details')
-        .join('appointments', 'appointments.user_details_id', 'user_details.id')
-        .where('user_details.user_id' , userid)
-        .then((user) => {
-          if (user.length === 0) {
-            return res.status(400).json({ message: 'Randevu bulunamadı!' });
-          }
-          return res.status(200).json(user);
-        })
-        .catch((err) => {
-          console.error('Error:', err);
-          return res.status(500).json({ message: 'Sunucu hatası!' });
-        });
-            
-
+        
+            connection.select('appointments.*').select('user_details.*')
+            .from('user_details')
+            .join('appointments', 'appointments.user_details_id', 'user_details.id')
+            .where('user_details.id' , userid)
+            .then((user) => {
+                console.log(userid);
+            if (user.length === 0) {
+                return res.status(200).json({ message: 'Randevu bulunamadı!' , status : 'error' });
+            }
+            return res.status(200).json(user);
+            })
+            .catch((err) => {
+            console.error('Error:', err);
+            return res.status(500).json({ message: 'Sunucu hatası!' });
+            });
+        
     });
 
 }
