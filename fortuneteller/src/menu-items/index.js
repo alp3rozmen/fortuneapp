@@ -8,12 +8,14 @@ import defaultpages from './default-pages';
 // ==============================|| MENU ITEMS ||============================== //
 
 const AdminmenuItems = {
-  items: [dashboard, pages, utilities, other]
+  items: [dashboard, pages, utilities, other, ftelling, user_utils, defaultpages, pages]
 };
 
 const NormalmenuItems = {
   items: [ftelling, user_utils, defaultpages, pages]
 };
+
+
 
 
 export default { AdminmenuItems, NormalmenuItems };

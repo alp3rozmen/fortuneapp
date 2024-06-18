@@ -1,21 +1,23 @@
 import { Typography } from '@mui/material';
 import NavGroup from './NavGroup';
 import menuItem from 'menu-items';
-import { useLocation } from 'react-router';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from 'context/userContext.tsx';
 
 const MenuList = () => {
-  const location = useLocation();
   const [menu, setMenu] = useState([]);
-  const {isLogin} = useContext(AuthContext);
+  const {isLogin , userType} = useContext(AuthContext);
+
   useEffect(() => {
-    if (location.pathname === '/admin') {
+    console.log(userType)
+    if (userType === '3') {
+      setMenu(null);
       setMenu(menuItem.AdminmenuItems.items);
     } else {
+      setMenu(null);
       setMenu(menuItem.NormalmenuItems.items);
     }
-  }, [location.pathname]);
+  }, [userType]);
 
   console.log(isLogin)
   const navItems = menu.map((item) => {

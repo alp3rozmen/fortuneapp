@@ -55,7 +55,8 @@ function methods(app) {
                     message: 'Giris basarili',
                     token: token,
                     userid: user[0].id,
-                    userName: user[0].username
+                    userName: user[0].username,
+                    user_role: user[0].user_role
                 }
 
                 return res.status(200).json(response);

@@ -24,6 +24,7 @@ export const AuthContextProvider = ({ children }: any) => {
     const [userId, setUserId] = useState(0)
     const [token, setToken] = useState('')
     const [userName, setUserName] = useState('')
+    const [userType, setUserType] = useState(0)
 
     const login = (userName : String, password : String) => {
         
@@ -35,6 +36,8 @@ export const AuthContextProvider = ({ children }: any) => {
                     setUserId(data.userid)
                     setIsLogin(true)
                     setUserName(data.userName)
+                    setUserType(data.user_role)
+                    console.log(data)
                     navigate('/')
                     localStorage.setItem('token', data.token)
                     localStorage.setItem('userid', data.userid)
@@ -90,10 +93,11 @@ export const AuthContextProvider = ({ children }: any) => {
         setIsLogin(false)
         navigate('/')
         localStorage.clear()
+        setUserType(0)
     }
 
     return (
-        <AuthContext.Provider value={{token,userId, userName, isLogin, login, logout}}>
+        <AuthContext.Provider value={{token,userId, userName, isLogin, login, logout , userType}}>
             {children}
         </AuthContext.Provider>
     )
@@ -104,6 +108,7 @@ export const AuthContextProvider = ({ children }: any) => {
 export type AuthContextType = {
     isLogin: boolean,
     userName : string,
+    userType : string,
     login: (userName : String, password : String) => void,
     logout: () => void
 }
