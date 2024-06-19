@@ -6,7 +6,7 @@ const icons = { IconQuestionMark, IconPresentation, IconAlertCircle  };
 
 
 const defaultpages = {
-    id: 'fortunetelling',
+    id: 'default-pages',
     title: 'Hakkımızda',
     type: 'group',
     caption: 'Nasıl Çalışır Yorumcu Ol',

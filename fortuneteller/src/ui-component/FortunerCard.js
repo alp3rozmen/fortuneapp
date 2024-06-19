@@ -17,7 +17,6 @@ const FortunersCard = ({ roles, types, title }) => {
     userDetailService.getByRoleAndType(roles, types).then((response) => {
       setUserDetails(response);
       setLoading(false);
-      console.log(response);
     });
   }, [roles, types]);
 

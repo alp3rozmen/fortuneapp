@@ -9,7 +9,7 @@ const icons = {
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
 const pages = {
-  id: 'pages',
+  id: 'login',
   title: 'Kullanıcı İşlemleri',
   caption: 'Kullanıcı İşlemleri',
   type: 'group',

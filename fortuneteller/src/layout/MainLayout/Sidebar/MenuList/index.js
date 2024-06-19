@@ -6,24 +6,28 @@ import AuthContext from 'context/userContext.tsx';
 
 const MenuList = () => {
   const [menu, setMenu] = useState([]);
-  const {isLogin , userType} = useContext(AuthContext);
-
+  const {isLogin } = useContext(AuthContext);
+  let userType = localStorage.getItem("userType");
+  
   useEffect(() => {
-    console.log(userType)
-    if (userType === '3') {
-      setMenu(null);
+    
+    if (userType === "3") {
       setMenu(menuItem.AdminmenuItems.items);
-    } else {
-      setMenu(null);
+    }
+    else if (userType === "2") {
+      setMenu(menuItem.TellermenuItems.items);
+    }
+    else
+    {
       setMenu(menuItem.NormalmenuItems.items);
     }
-  }, [userType]);
 
-  console.log(isLogin)
+  }, [isLogin]);
+
   const navItems = menu.map((item) => {
     switch (item.type) {
       case 'group':
-        return isLogin && item.id === 'pages' ? <></> : <NavGroup key={item.id} item={item} />;
+        return isLogin && item.id === 'login' ? <></> : <NavGroup key={item.id} item={item} />;
       default:
         return (
           <Typography key={item.id} variant="h6" color="error" align="center">

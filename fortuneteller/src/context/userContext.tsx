@@ -24,8 +24,6 @@ export const AuthContextProvider = ({ children }: any) => {
     const [userId, setUserId] = useState(0)
     const [token, setToken] = useState('')
     const [userName, setUserName] = useState('')
-    const [userType, setUserType] = useState(0)
-
     const login = (userName : String, password : String) => {
         
         fetch('http://localhost:3000/api/login', {method: 'POST', headers: {'Accept': 'application/json', 'Content-Type': 'application/json', accessControlAllowOrigin: '*'}, 
@@ -36,13 +34,13 @@ export const AuthContextProvider = ({ children }: any) => {
                     setUserId(data.userid)
                     setIsLogin(true)
                     setUserName(data.userName)
-                    setUserType(data.user_role)
+                    
                     console.log(data)
                     navigate('/')
                     localStorage.setItem('token', data.token)
                     localStorage.setItem('userid', data.userid)
                     localStorage.setItem('userName', data.userName)
-                
+                    localStorage.setItem('userType', data.user_role)
                     toast.success(data.message, {
                         position: 'top-right',
                         autoClose: 5000,
@@ -93,11 +91,10 @@ export const AuthContextProvider = ({ children }: any) => {
         setIsLogin(false)
         navigate('/')
         localStorage.clear()
-        setUserType(0)
     }
 
     return (
-        <AuthContext.Provider value={{token,userId, userName, isLogin, login, logout , userType}}>
+        <AuthContext.Provider value={{token,userId, userName, isLogin, login, logout }}>
             {children}
         </AuthContext.Provider>
     )

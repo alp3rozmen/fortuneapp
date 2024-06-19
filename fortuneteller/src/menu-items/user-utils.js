@@ -7,7 +7,7 @@ const icons = { IconZodiacPisces,IconZodiacScorpio,IconZodiacCancer,IconZodiacAq
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
 const user_utils = {
-    id: 'user_utils',
+    id: 'user_daily_horoscopes',
     title: 'Burçlar',
     caption: 'Günlük Burç Yorumları',
     type: 'group',

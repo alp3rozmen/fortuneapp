@@ -1,14 +1,17 @@
-import dashboard from './dashboard';
+import adminUtils from './adminUtils';
+import tellermenuItems from './tellerUtils';
 import pages from './pages';
-import utilities from './utilities';
-import other from './other';
 import ftelling from './fortunetelling';
 import user_utils from './user-utils';
 import defaultpages from './default-pages';
 // ==============================|| MENU ITEMS ||============================== //
 
 const AdminmenuItems = {
-  items: [dashboard, pages, utilities, other, ftelling, user_utils, defaultpages, pages]
+  items: [adminUtils , ftelling, user_utils, defaultpages, pages]
+};
+
+const TellermenuItems = {
+  items: [tellermenuItems , user_utils, defaultpages, pages]
 };
 
 const NormalmenuItems = {
@@ -18,7 +21,7 @@ const NormalmenuItems = {
 
 
 
-export default { AdminmenuItems, NormalmenuItems };
+export default { AdminmenuItems, NormalmenuItems, TellermenuItems };
 
 
 
