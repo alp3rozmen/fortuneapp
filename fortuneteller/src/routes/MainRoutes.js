@@ -22,6 +22,7 @@ const Water = Loadable(lazy(() => import('views/water')));
 const UserDetail = Loadable(lazy(() => import('views/user-detail')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const UserEdit = Loadable(lazy(() => import('views/users-edit')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -64,6 +65,10 @@ const MainRoutes = {
     {
       path: 'account',
       element: <AccountSettings />
+    },
+    {
+      path : 'users/edit',
+      element : <UserEdit />
     },
 
     {

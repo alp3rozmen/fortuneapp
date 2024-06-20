@@ -5,7 +5,7 @@ export const userDetailService = {
 
     getAll: async ()  => {
         try {
-            var response = await baseService.post<UserDetail[]>("users", {user_role : 0});
+            var response = await baseService.post<UserDetail[]>("users", {user_role : 0 , fortuner_type : 0});
             return response;
 
         } catch (error) {

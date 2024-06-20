@@ -26,7 +26,7 @@ const adminUtils = {
           type: 'item',
           icon: icons.IconEdit,
           breadcrumbs: false,
-          url : '/fals/coffee'
+          url : '/users/edit'
         },
         {
           id: 'AppointmentSettings',
