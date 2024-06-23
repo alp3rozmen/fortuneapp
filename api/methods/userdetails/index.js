@@ -15,7 +15,7 @@ function getUserFalAndCost(app , connection) {
 
     app.post('/api/getUserComments', (req, res) => {
         var userid = req.body.id;
-        console.log(userid);
+        
         if (userid === undefined || userid === 0) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
         }
