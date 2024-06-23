@@ -318,7 +318,6 @@ function methods(app) {
             .join('appointments', 'appointments.user_details_id', 'user_details.id')
             .where('user_details.id' , userid)
             .then((user) => {
-                console.log(userid);
             if (user.length === 0) {
                 return res.status(200).json({ message: 'Randevu bulunamadı!' , status : 'error' });
             }
