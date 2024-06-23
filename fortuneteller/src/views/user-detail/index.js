@@ -29,7 +29,7 @@ const UserDetail = () => {
       const response = await userDetailService.getByUsername('users/:user_name', username,UserdetailModel );
       setUserDetail(response.data[0]);
       fetchUserTypes(response.data[0].user_id);
-      fetchUserComments(response.data[0].user_id);S
+      fetchUserComments(response.data[0].user_id);
     };
 
     const fetchUserTypes = async (userid) => {

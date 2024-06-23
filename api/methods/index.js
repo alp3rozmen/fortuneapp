@@ -66,18 +66,41 @@ function methods(app) {
 
     app.get('/api/users/:user_name', (req, res) => {
         var username = req.query.user_name;
+        var userResponse = [];
+        var profileImageData = null; 
+        var base64Image = null;
 
         if (username === undefined) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
         }
         
         connection.select('user_details.*').select('users.*').from('users').join('user_details', 'users.id', 'user_details.user_id').where('username', username).then((user) => {
-        if (user.length === 0) {
-            return res.status(400).json({ error: 'Kullanıcı bulunamadı', status: 'error' });
-        }
-        else {
-            return res.status(200).json(user);
-        }
+            if (user.length === 0) {
+                return res.status(400).json({ error: 'Kullanıcı bulunamadı', status: 'error' });
+            }
+            else {
+
+                profileImageData = user[0].profile_image; 
+                base64Image =  Buffer.from(profileImageData).toString('base64');
+                var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
+                
+                userResponse.push(
+                    {   user_id: user[0].id , 
+                        username: user[0].username, 
+                        email: user[0].email,
+                        password: user[0].password,
+                        gender: user[0].gender,
+                        age: user[0].age,
+                        bio: user[0].bio,
+                        profile_image: profileImageUrl,
+                        user_role: user[0].user_role,
+                        status: user[0].status,
+                        balance: user[0].balance
+                    }
+                );
+
+                return res.status(200).json(userResponse);
+            }
         });
     })
 
@@ -96,19 +119,15 @@ function methods(app) {
 
         }
 
-        
-        
-        // fs.writeFileSync('profile.jpg', blobData);
-
-
+    
         if (user_role === 0 && fortuner_type === 0) {
 
 
             connection.select('users.*').select('user_details.id as user_details_id').from('users').join('user_details', 'users.id', 'user_details.user_id').then((users) => {
                 users.map((user) => {
-                    profileImageData = user.profile_image;
-                    base64Image =  Buffer.from(profileImageData).toString('base64');
-                    var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
+                profileImageData = user.profile_image;
+                base64Image =  Buffer.from(profileImageData).toString('base64');
+                var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
 
                     userResponse.push({ id: user.id , 
                                         username: user.username, 
@@ -134,29 +153,30 @@ function methods(app) {
         else if (user_role > 0 && fortuner_type > 0) {
 
             connection.select('users.*').select('user_details.id as user_details_id').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
-                profileImageData = user.profile_image;
-                base64Image =  Buffer.from(profileImageData).toString('base64');
-                var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
-
-                    userResponse.push({ id: user.id , 
-                                        username: user.username, 
-                                        email: user.email,
-                                        password: user.password,
-                                        gender: user.gender,
-                                        age: user.age,
-                                        bio: user.bio,
-                                        profile_image: profileImageUrl,
-                                        user_role: user.user_role,
-                                        status: user.status,
-                                        balance: user.balance,
-                                        created_at: user.created_at,
-                                        updated_at: user.updated_at,
-                                        user_details_id: user.user_details_id})
-                });
-                
-                return res.status(200).json(
-                    userResponse
-                );
+                users.map((user) => {
+                    profileImageData = user.profile_image;
+                    base64Image =  Buffer.from(profileImageData).toString('base64');
+                    var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
+    
+                        userResponse.push({ id: user.id , 
+                                            username: user.username, 
+                                            email: user.email,
+                                            password: user.password,
+                                            gender: user.gender,
+                                            age: user.age,
+                                            bio: user.bio,
+                                            profile_image: profileImageUrl,
+                                            user_role: user.user_role,
+                                            status: user.status,
+                                            balance: user.balance,
+                                            created_at: user.created_at,
+                                            updated_at: user.updated_at,
+                                            user_details_id: user.user_details_id})
+                    });
+                    
+                    return res.status(200).json(
+                        userResponse
+                    );
             });
         }
     })
