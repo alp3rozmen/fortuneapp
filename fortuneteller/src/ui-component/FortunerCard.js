@@ -8,7 +8,6 @@ import CircleIcon from '@mui/icons-material/Circle';
 import StarIcon from '@mui/icons-material/Star';
 import AppointmentDialog from './AppDialog/index.js';
 
-
 const FortunersCard = ({ roles, types, title }) => {
   const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +16,8 @@ const FortunersCard = ({ roles, types, title }) => {
     userDetailService.getByRoleAndType(roles, types).then((response) => {
       setUserDetails(response);
       setLoading(false);
+
+      
     });
   }, [roles, types]);
 

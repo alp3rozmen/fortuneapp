@@ -85,22 +85,78 @@ function methods(app) {
 
         var user_role = req.body.user_role;
         var fortuner_type = req.body.fortuner_type;
+        var userResponse = [];
+        var profileImageData = null; 
+        var base64Image = null;
+        
+        // const blobData = result[0].blob_column;
 
         if ((user_role === undefined && fortuner_type !== undefined) || (user_role === undefined && fortuner_type === undefined)) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
 
         }
 
+        
+        
+        // fs.writeFileSync('profile.jpg', blobData);
+
 
         if (user_role === 0 && fortuner_type === 0) {
+
+
             connection.select('users.*').select('user_details.id as user_details_id').from('users').join('user_details', 'users.id', 'user_details.user_id').then((users) => {
-                return res.status(200).json(users);
+                users.map((user) => {
+                    profileImageData = user.profile_image;
+                    base64Image =  Buffer.from(profileImageData).toString('base64');
+                    var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
+
+                    userResponse.push({ id: user.id , 
+                                        username: user.username, 
+                                        email: user.email,
+                                        password: user.password,
+                                        gender: user.gender,
+                                        age: user.age,
+                                        bio: user.bio,
+                                        profile_image: profileImageUrl,
+                                        user_role: user.user_role,
+                                        status: user.status,
+                                        balance: user.balance,
+                                        created_at: user.created_at,
+                                        updated_at: user.updated_at,
+                                        user_details_id: user.user_details_id})
+                });
+                
+                return res.status(200).json(
+                    userResponse
+                );
             });
         }
         else if (user_role > 0 && fortuner_type > 0) {
 
             connection.select('users.*').select('user_details.id as user_details_id').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
-                return res.status(200).json(users);
+                profileImageData = user.profile_image;
+                base64Image =  Buffer.from(profileImageData).toString('base64');
+                var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
+
+                    userResponse.push({ id: user.id , 
+                                        username: user.username, 
+                                        email: user.email,
+                                        password: user.password,
+                                        gender: user.gender,
+                                        age: user.age,
+                                        bio: user.bio,
+                                        profile_image: profileImageUrl,
+                                        user_role: user.user_role,
+                                        status: user.status,
+                                        balance: user.balance,
+                                        created_at: user.created_at,
+                                        updated_at: user.updated_at,
+                                        user_details_id: user.user_details_id})
+                });
+                
+                return res.status(200).json(
+                    userResponse
+                );
             });
         }
     })

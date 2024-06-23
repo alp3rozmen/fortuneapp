@@ -1,10 +1,12 @@
 // material-ui
 
 // project imports
-import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
+import {Box,  FormControl, MenuItem, Select, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useState , useEffect} from 'react';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
+import { CheckBox } from '@mui/icons-material';
+
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const UserEdit = () => {
@@ -28,26 +30,30 @@ const UserEdit = () => {
   
   return(
   <MainCard>
-    <FormControl sx={{ width: 300 }}>
-        <InputLabel sx={{ mb: 1 }}>User</InputLabel>
-        <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
-          value={selectedValue}
-          onChange={(value) => setSelectedValue(value.target.value)}
-          input={<OutlinedInput label="User" />}
-        >
-            
-            {users.map((data) => (
-                <MenuItem
-                key={data.id}
-                value={data.username}
-                >
-                {data.username}
-                </MenuItem>
-            ))}
-        </Select>
+    <Box>
+      <FormControl sx={{ width: 300 }}>
+          <Typography variant="subtitle2">Kullanıcı</Typography>
+          <Select
+            id="selectUser"
+            value={selectedValue}
+            onChange={(value) => setSelectedValue(value.target.value)}
+          >
+              
+              {users.map((data) => (
+                  <MenuItem
+                  key={data.id}
+                  value={data.username}
+                  >
+                  {data.username}
+                  </MenuItem>
+              ))}
+          </Select>
       </FormControl>
+      <Box>
+        <Typography variant="subtitle2">Kullanıcı Durumu</Typography>
+        <CheckBox sx={{ ml: 1 }} color="primary" />
+      </Box>
+    </Box>
   </MainCard>
   )
 };
