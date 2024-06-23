@@ -14,9 +14,9 @@ exports.up = function(knex) {
     table.string('city').comment('sehir');
     table.string('country').comment('ulke');
     table.string('type').comment('bakmakistedigi tip 1 ask 2 is 3 her ikiside 4 digerler');
-    table.string('image1_url').comment('resim1');  //ilk fal resmi
-    table.string('image2_url').comment('resim2');  //ikinci fal resmi
-    table.string('image3_url').comment('resim3');  //ucuncu fal resmi
+    table.binary('image1_url').comment('resim1');  //ilk fal resmi
+    table.binary('image2_url').comment('resim2');  //ikinci fal resmi
+    table.binary('image3_url').comment('resim3');  //ucuncu fal resmi
     table.string('comment').comment('falyorumu');
     table.timestamps(true, true);
   });
