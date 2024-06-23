@@ -23,6 +23,7 @@ const UserDetail = () => {
   const [userDetail, setUserDetail] = useState({});
   const [types, setTypes] = useState([]);
   const [comments, setComments] = useState([]);
+  
 
   useEffect(() => {
     const fetchUserDetails = async () => {

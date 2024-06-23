@@ -123,7 +123,7 @@ function methods(app) {
         if (user_role === 0 && fortuner_type === 0) {
 
 
-            connection.select('users.*').select('user_details.id as user_details_id').from('users').join('user_details', 'users.id', 'user_details.user_id').then((users) => {
+            connection.select('users.*').select('user_details.id as user_details_id').from('users').join('user_details', 'users.id', 'user_details.user_id').groupBy('users.id').then((users) => {
                 users.map((user) => {
                 profileImageData = user.profile_image;
                 base64Image =  Buffer.from(profileImageData).toString('base64');

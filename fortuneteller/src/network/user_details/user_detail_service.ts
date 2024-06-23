@@ -52,6 +52,17 @@ export const userDetailService = {
             console.log(error);
             throw error;
         }
+    },
+
+    getUserFalTypesAndAppointments: async (url , username : any) => {
+        try {
+            var response = await baseService.postWithData(url, {username : username});
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 }
 
