@@ -8,6 +8,7 @@ import DataTable from 'ui-component/data-table';
 import CustomDialog from 'ui-component/CustomDialog';
 import { FalTypes } from 'network/FalTypes/FalTypes.ts';
 import { toast } from "react-toastify"
+
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const FaltypesEdit = () => {
@@ -84,8 +85,8 @@ const FaltypesEdit = () => {
 
     return (
         <MainCard>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <CustomDialog name={'Bakım Türü Ekle'} boxStyle={{ mr: 2 }} >
+            <Box sx={{width: '100%', display: 'flex', flexDirection: 'column' }}>
+                <CustomDialog name={'Bakım Türü Ekle'} boxStyle={{ mr: 2, mb : 1 }} >
                     <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                             <TextField
@@ -102,7 +103,7 @@ const FaltypesEdit = () => {
                 {
                     faltypes.length > 0 &&
 
-                    <DataTable title=""
+                    <DataTable title="Bakım Türleri"
                         rowHeaders={['ID', 'Bakım İsmi', 'Oluşturma Tarihi', 'Güncelleme Tarihi']}
                         rows={faltypes}
                         rowNames={['id', 'name', 'created_at', 'updated_at']}

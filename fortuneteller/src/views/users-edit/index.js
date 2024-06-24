@@ -1,7 +1,7 @@
 // material-ui
 
 // project imports
-import {Box,  FormControl, MenuItem, Select, Typography, Button, TextField } from '@mui/material';
+import {Box,  FormControl, MenuItem, Select, Typography, Button, TextField, InputLabel } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useState , useEffect} from 'react';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
@@ -59,10 +59,11 @@ const UserEdit = () => {
   
   return(
   <MainCard>
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      <FormControl sx={{ width: 300 }}>
-          <Typography variant="subtitle2">Kullanıcı</Typography>
+    <Box >
+      <FormControl  fullWidth>
+        <InputLabel id="demo-simple-select-label">Lütfen Kullanıcı Seçiniz</InputLabel>
           <Select
+            label="Lütfen Kullanıcı Seçiniz"
             id="selectUser"
             value={selectedValue}
             onChange={(value) => selectedOnChange(value.target.value)}
@@ -80,19 +81,20 @@ const UserEdit = () => {
       </FormControl>
       
       {showProperties &&
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography sx={{ mt: 2 }} variant="button">Kullanıcı Bilgileri</Typography>
-        <Typography sx={{ mt: 2 }} variant="button">Hesap Durumu : {selectedUser.status ? 'Aktif' : 'Pasif'}</Typography>
-        <Typography sx={{ mt: 2 }} variant="button">Balance : {selectedUser.balance}</Typography>
+      
+      <Box  sx={{ display: 'flex', flexDirection: 'column', gap: 1,mt: 2 , border: '1px solid cyan', p: 2, backgroundColor: '#cecece', borderRadius: '10px'}}>
+        <Typography variant="button">Kullanıcı Bilgileri</Typography>
+        <Typography variant="caption">Hesap Durumu : {selectedUser.status ? 'Aktif' : 'Pasif'}</Typography>
+        <Typography variant="caption">Bakiye : {selectedUser.balance}</Typography>
+        <Button variant='contained' disabled={!selectedUser.status} sx={{ mr: 2 }}>Hesabı Pasif Et</Button>
+        <Button variant='contained' disabled={selectedUser.status} sx={{ mr: 2 }}>Hesabı Aktif Et</Button>
       </Box>
       }
 
 
       {showProperties &&
       <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, alignContent: 'center', textAlign: 'center' }}>
-        <Button variant='contained' disabled={!selectedUser.status} sx={{ mr: 2 }}>Hesabı Pasif Et</Button>
-        <Button variant='contained' disabled={selectedUser.status} sx={{ mr: 2 }}>Hesabı Aktif Et</Button>
-        
+      
         <CustomDialog name={'Bakım Türü Ekle'} boxStyle={{ mr : 2 }} >
           <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <Select
@@ -153,13 +155,18 @@ const UserEdit = () => {
      }
       
       {userDetails.data &&
-      <Box sx={{ gap : 2,display: 'flex', flexDirection: 'row' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' , width: '100%' }}>
         
-        <Box sx={{display: 'flex', flexDirection: 'column', mt: 1, p: 5}}>
-          <DataTable deleteClick={deleteUserFalType} updateClick={editFalUserFalType} title="Bakımlar" rowHeaders={['ID', 'Bakım Adı']}  rowNames={['fal_id','name']} rows={userDetails.data} />
+        <Box sx={{ mt : 1 }}>
+          <DataTable 
+            deleteClick={deleteUserFalType} 
+            updateClick={editFalUserFalType} 
+            title="Bakımlar" 
+            rowHeaders={['ID', 'Bakım Adı','Oluşturma Tarihi', 'Güncelleme Tarihi']}  
+            rowNames={['fal_id','name','created_at', 'updated_at']} rows={userDetails.data} />
         </Box> 
         
-        <Box sx={{display: 'flex', flexDirection: 'column', mt: 1, p: 5 }}>
+        <Box >
           <DataTable title="Randevu Aralıkları" 
             rowHeaders={['ID','Fal Tipi', 'Başlangıç Tarihi', 'Bitis Tarihi','Başlangıç Saati','Bitiş Saati', 'Randevu Aralık(DK)']} 
             rows={userDetails.data}
