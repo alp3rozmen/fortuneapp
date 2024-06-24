@@ -15,24 +15,24 @@ const adminUtils = {
   children: [
     {
       id: 'AdminUsers',
-      title: 'Kullanıcı İşlemleri',
+      title: 'İşlemler',
       type: 'collapse',
       icon: icons.IconDashboard ,
       
       children: [
         {
           id: 'editUsers',
-          title: 'Kullanıcıları Düzenle',
+          title: 'Kullanıcılar',
           type: 'item',
           icon: icons.IconEdit,
           breadcrumbs: false,
           url : '/users/edit'
         },
         {
-          id: 'AppointmentSettings',
-          title: 'Randevu Ayarları',
+          id: 'falTypes',
+          title: 'Bakımlar',
           type: 'item',
-          url: '/fals/tarot',
+          url: '/faltypes/edit',
           icon: icons.IconClock,
           breadcrumbs: false
         }    

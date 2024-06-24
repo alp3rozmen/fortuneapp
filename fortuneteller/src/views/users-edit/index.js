@@ -1,11 +1,13 @@
 // material-ui
 
 // project imports
-import {Box,  FormControl, MenuItem, Select, Typography, Button } from '@mui/material';
+import {Box,  FormControl, MenuItem, Select, Typography, Button, TextField } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useState , useEffect} from 'react';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
 import DataTable from 'ui-component/data-table';
+import CustomDialog from 'ui-component/CustomDialog';
+
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -75,8 +77,47 @@ const UserEdit = () => {
       <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, alignContent: 'center', textAlign: 'center' }}>
         <Button variant='contained' disabled={!selectedUser.status} sx={{ mr: 2 }}>Hesabı Pasif Et</Button>
         <Button variant='contained' disabled={selectedUser.status} sx={{ mr: 2 }}>Hesabı Aktif Et</Button>
-        <Button variant='contained' sx={{ mr: 2 }}>Bakım Türü Ekle</Button>
-        <Button variant='contained' sx={{ mr: 2 }}>Randevu Aralığı Ekle</Button>
+        
+        <CustomDialog name={'Bakım Türü Ekle'} boxStyle={{ mr : 2 }} >
+          <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Select
+            sx={{ width: 300 }}
+            id="selectUser"
+            value={selectedValue}
+            onChange={(value) => selectedOnChange(value.target.value)}
+          >
+              
+              {userDetails.data.map((data) => (
+                  <MenuItem
+                  key={data.id}
+                  value={data.username}
+                  >
+                  {data.username}
+                  </MenuItem>
+              ))}
+          </Select>
+          </Box>
+            <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
+              <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
+              <Button id='cancelButton' sx={{ width: '50%' }} variant='contained' color='error'>İptal</Button>
+            </Box>
+        </CustomDialog>
+
+        <CustomDialog name={'Randevu Aralığı Ekle'} boxStyle={{ mr : 2 }} >
+        <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column' , gap: 2 }}>
+            <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Baslangıc Tarihi" variant="outlined"/>
+            <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Bitis Tarihi" variant="outlined" />
+            <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Baslangıc Saati" variant="outlined" />
+            <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Bitiş Saati" variant="outlined" />
+            <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='number' id="outlined-basic" label="Aralık" variant="outlined" />
+          </Box>
+          </Box>
+            <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
+              <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
+              <Button id='cancelButton' sx={{ width: '50%' }} variant='contained' color='error'>İptal</Button>
+            </Box>
+        </CustomDialog>
       </Box>
      }
       
@@ -85,8 +126,7 @@ const UserEdit = () => {
         
         <Box sx={{display: 'flex', flexDirection: 'column', mt: 1, p: 5}}>
           <DataTable title="Bakımlar" rowHeaders={['ID', 'Bakım Adı']}  rowNames={['fal_id','name']} rows={userDetails.data} />
-        </Box>
-        
+        </Box> 
         
         <Box sx={{display: 'flex', flexDirection: 'column', mt: 1, p: 5 }}>
           <DataTable title="Randevu Aralıkları" 

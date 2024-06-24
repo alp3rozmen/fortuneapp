@@ -23,6 +23,7 @@ const UserDetail = Loadable(lazy(() => import('views/user-detail')));
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const UserEdit = Loadable(lazy(() => import('views/users-edit')));
+const FaltypesEdit = Loadable(lazy(() => import('views/faltypes-edit')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -69,6 +70,10 @@ const MainRoutes = {
     {
       path : 'users/edit',
       element : <UserEdit />
+    },
+    {
+      path: 'faltypes/edit',
+      element: <FaltypesEdit />
     },
 
     {
