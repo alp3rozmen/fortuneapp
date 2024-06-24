@@ -39,7 +39,22 @@ const UserEdit = () => {
         setShowProperties(true);
       }
     })
+  };
 
+  const deleteUserFalType = async (id) => {
+    console.log(id);
+  };
+
+  const editFalUserFalType = async (id) => {
+    console.log(id);
+  };
+  
+  const deleteAppointment = async (id) => {
+    console.log(id);
+  };
+
+  const editAppointment = async (id) => {
+    console.log(id);
   };
   
   return(
@@ -141,7 +156,7 @@ const UserEdit = () => {
       <Box sx={{ gap : 2,display: 'flex', flexDirection: 'row' }}>
         
         <Box sx={{display: 'flex', flexDirection: 'column', mt: 1, p: 5}}>
-          <DataTable title="Bakımlar" rowHeaders={['ID', 'Bakım Adı']}  rowNames={['fal_id','name']} rows={userDetails.data} />
+          <DataTable deleteClick={deleteUserFalType} updateClick={editFalUserFalType} title="Bakımlar" rowHeaders={['ID', 'Bakım Adı']}  rowNames={['fal_id','name']} rows={userDetails.data} />
         </Box> 
         
         <Box sx={{display: 'flex', flexDirection: 'column', mt: 1, p: 5 }}>
@@ -149,6 +164,8 @@ const UserEdit = () => {
             rowHeaders={['ID','Fal Tipi', 'Başlangıç Tarihi', 'Bitis Tarihi','Başlangıç Saati','Bitiş Saati', 'Randevu Aralık(DK)']} 
             rows={userDetails.data}
             rowNames={['appointment_id','name','app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
+            deleteClick={deleteAppointment}
+            updateClick={editAppointment}
           />
         </Box>
         

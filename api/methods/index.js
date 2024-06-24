@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from "path";
 import getUserFalAndCost from "./userdetails/index.js";
+import FalEndPoints from "./fals/index.js";
 import { error } from "console";
 function methods(app) {
     
@@ -329,6 +330,8 @@ function methods(app) {
             });
         
     });
+
+    FalEndPoints(app , connection);
 
 }
 
