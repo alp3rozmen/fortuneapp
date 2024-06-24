@@ -19,7 +19,7 @@ export default function DataTable({title, rowHeaders , rowNames, rows}) {
     return (
         <TableContainer fullWidth component={Paper}>
             <Typography sx={{ mt: 1 }} variant="button">{title}</Typography>
-            <Table color='primary' size="medium" aria-label="a dense table">
+            <Table  color='primary' size="medium" aria-label="a dense table">
                 <TableHead>
                     <TableRow>
                         {rowHeaders.map((name) => (
@@ -42,15 +42,14 @@ export default function DataTable({title, rowHeaders , rowNames, rows}) {
                             
                             {/* id null ise çoklu render ediyordu */}
                             
-                            {row[rowNames[0]] &&
                             <TableCell align="right">
                               <Button size='small' color='error' sx={{ mt: 1 }} variant="contained">Sil</Button>
-                            </TableCell>}
+                            </TableCell>
 
-                            {row[rowNames[0]] &&
+                           
                             <TableCell align="right">
                               <Button size='small' color='warning' sx={{ mt: 1 }} variant="contained">Güncelle</Button>
-                            </TableCell>}
+                            </TableCell>
 
                         </TableRow>
                     ))}
