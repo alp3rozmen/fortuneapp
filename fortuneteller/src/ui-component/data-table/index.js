@@ -32,7 +32,7 @@ export default function DataTable({title, rowHeaders , rowNames, rows}) {
                 <TableBody>
 
                     {rows.map((row , index) => (
-                        
+                        row[rowNames[0]] &&
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                             {rowNames.map((name , index) => (
                                 dayjs(row[name]).isValid() && index !== 0 ? <TableCell key={name} align="right">{dayjs(row[name]).format('DD MM YYYY')}</TableCell> :

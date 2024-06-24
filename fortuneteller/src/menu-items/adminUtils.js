@@ -30,7 +30,7 @@ const adminUtils = {
         },
         {
           id: 'falTypes',
-          title: 'Bakımlar',
+          title: 'Bakım Tipleri',
           type: 'item',
           url: '/faltypes/edit',
           icon: icons.IconClock,

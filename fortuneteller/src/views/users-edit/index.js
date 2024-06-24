@@ -106,6 +106,22 @@ const UserEdit = () => {
         <CustomDialog name={'Randevu Aralığı Ekle'} boxStyle={{ mr : 2 }} >
         <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' , gap: 2 }}>
+            <Select
+              sx={{ width: 300 }}
+              id="falType"
+              value={selectedValue}
+              onChange={(value) => selectedOnChange(value.target.value)}
+            >
+                
+                {userDetails.data.map((data) => (
+                    <MenuItem
+                    key={data.id}
+                    value={data.username}
+                    >
+                    {data.username}
+                    </MenuItem>
+                ))}
+            </Select>
             <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Baslangıc Tarihi" variant="outlined"/>
             <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Bitis Tarihi" variant="outlined" />
             <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Baslangıc Saati" variant="outlined" />
@@ -130,9 +146,9 @@ const UserEdit = () => {
         
         <Box sx={{display: 'flex', flexDirection: 'column', mt: 1, p: 5 }}>
           <DataTable title="Randevu Aralıkları" 
-            rowHeaders={['ID', 'Başlangıç Tarihi', 'Bitis Tarihi','Başlangıç Saati','Bitiş Saati', 'Randevu Aralık(DK)']} 
+            rowHeaders={['ID','Fal Tipi', 'Başlangıç Tarihi', 'Bitis Tarihi','Başlangıç Saati','Bitiş Saati', 'Randevu Aralık(DK)']} 
             rows={userDetails.data}
-            rowNames={['appointment_id', 'app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
+            rowNames={['appointment_id','name','app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
           />
         </Box>
         
