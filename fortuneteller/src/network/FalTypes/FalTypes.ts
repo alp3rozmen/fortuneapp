@@ -23,6 +23,16 @@ export const FalTypes = {
             throw error;
         }
     },
+    DelFalType : async (id : any) => {
+        try {
+            var response = await baseService.post<any[]>("DeleteFalType", {fal_id : id});
+            return response;
+        }
+        catch (error) {
+            console.log("/api/DeleteFalType - FalTypes DelFalType", error); 
+            throw error;
+        }
+    },
     getByRoleAndType: async (role : any, type : any) => {
         try {
             var response = await baseService.post<FalTypeAndCost>("users", {user_role : role, fortuner_type : type});

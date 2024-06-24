@@ -53,7 +53,29 @@ const FaltypesEdit = () => {
     }, []);
 
     const deleteFaltype = async (id) => {
-        console.log(id);
+        var isAdded = false;
+        await FalTypes.DelFalType(id)
+        .then((response) => {
+            if  (response.status === '200') {
+                toast.success(response.message);
+                isAdded = true;
+            }
+            else {
+                toast.error(response.message);
+            }
+        })
+        .catch((error) => {
+            console.log(error.response.data.message);
+        })
+        .finally(() => {
+            if (isAdded) {
+                isAdded = false;
+                setFaltypes([]);
+                fetchFaltypes().then((response) => {
+                    setFaltypes(response.data);
+                });
+            }    
+        }) 
     };
 
     const editFaltype = async (id) => {

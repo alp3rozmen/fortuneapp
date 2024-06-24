@@ -34,6 +34,29 @@ function FalEndPoints(app , connection) {
         });
     })
 
+    app.post('/api/DeleteFalType', authenticateToken, (req, res) => {
+        var fal_id = req.body.fal_id;
+        
+        if (fal_id === undefined || fal_id === 0) {
+            return res.status(200).json({ message: 'Bakım türü id gereklidir', status: 'error' });
+        }
+        
+        connection.select('user_details.*' ).from('user_details').where('fal_type', fal_id).then((faltypes) => {
+            if (faltypes.length > 0) {
+                return res.status(200).json({ message: 'Bakım türü kullanan kullanıcı var!', status: '400' });
+            }
+            else
+            {
+                connection.delete().from('fal_types').where('id', fal_id).then((faltypes) => {
+                    return res.status(200).json({
+                        status: '200',
+                        message: 'Fal tipi silindi'
+                    });
+                });
+            }
+        });
+    })
+
 }
 
 export default FalEndPoints;
