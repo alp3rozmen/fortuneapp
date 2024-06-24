@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {Box, Typography, Button, TablePagination, styled } from '@mui/material';
+import { Box, Typography, Button, TablePagination, styled } from '@mui/material';
 import dayjs from 'dayjs';
 
 const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$/;
@@ -41,7 +41,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, deleteCli
                 <Typography sx={{ mt: 0 }} variant="button">
                     {title} &nbsp; <br />
 
-                    <Box sx={{ mt: 2 , display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                    <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <Typography variant="button">
                             Veri Bulunamadı
                         </Typography>
@@ -55,7 +55,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, deleteCli
         <>
             <StyledTableContainer component={Paper}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#cecece' }}>
-                  <StyledTypography variant="button">{title}</StyledTypography>
+                    <StyledTypography variant="button">{title}</StyledTypography>
                 </Box>
                 <Table size="medium">
                     <TableHead>
@@ -64,7 +64,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, deleteCli
                                 <TableCell key={name} align="center">{name}</TableCell>
                             ))}
                             <TableCell width={'175'} align="center">İşlemler</TableCell>
-                           
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -79,7 +79,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, deleteCli
                                     <StyledButton sx={{ mr: 1 }} onClick={() => deleteClick(row[rowNames[0]])} size='small' color='error' variant="contained">Sil</StyledButton>
                                     <StyledButton onClick={() => updateClick(row[rowNames[0]])} size='small' color='warning' variant="contained">Güncelle</StyledButton>
                                 </TableCell>
-                                
+
                             </TableRow>
                         ))}
                     </TableBody>
@@ -94,7 +94,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, deleteCli
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 labelRowsPerPage="Satır:"
-                labelDisplayedRows={({count }) => `Toplam: ${count}`}
+                labelDisplayedRows={({ count }) => `Toplam: ${count}`}
             />
         </>
     );
