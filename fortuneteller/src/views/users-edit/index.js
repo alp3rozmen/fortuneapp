@@ -95,7 +95,13 @@ const UserEdit = () => {
       {showProperties &&
       <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, alignContent: 'center', textAlign: 'center' }}>
       
-        <CustomDialog name={'Bakım Türü Ekle'} boxStyle={{ mr : 2 }} >
+        <CustomDialog 
+          buttons={
+            <>
+               <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
+            </>
+          }
+          name={'Bakım Türü Ekle'} boxStyle={{ mr : 2 }} >
           <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <Select
             sx={{ width: 300 }}
@@ -114,13 +120,17 @@ const UserEdit = () => {
               ))}
           </Select>
           </Box>
-            <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
-              <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
-              <Button id='cancelButton' sx={{ width: '50%' }} variant='contained' color='error'>İptal</Button>
-            </Box>
         </CustomDialog>
 
-        <CustomDialog name={'Randevu Aralığı Ekle'} boxStyle={{ mr : 2 }} >
+        <CustomDialog 
+          buttons={
+
+              <>
+                 <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
+              </>
+          }
+        
+          name={'Randevu Aralığı Ekle'} boxStyle={{ mr : 2 }} >
         <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' , gap: 2 }}>
             <Select
@@ -146,10 +156,6 @@ const UserEdit = () => {
             <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='number' id="outlined-basic" label="Aralık" variant="outlined" />
           </Box>
           </Box>
-            <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
-              <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
-              <Button id='cancelButton' sx={{ width: '50%' }} variant='contained' color='error'>İptal</Button>
-            </Box>
         </CustomDialog>
       </Box>
      }

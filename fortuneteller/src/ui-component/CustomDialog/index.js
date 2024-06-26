@@ -6,6 +6,7 @@ import { Box } from '@mui/system';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import tr from 'dayjs/locale/tr';
+import { useEffect } from 'react';
 
 function MainDialog({ title, children, open , onClose}) {
   const handleClose = () => {
@@ -23,10 +24,12 @@ function MainDialog({ title, children, open , onClose}) {
   );
 }
 
-export default function CustomDialog({ name, children, boxStyle  }) {
+export default function CustomDialog({buttons ,params, name, children, boxStyle , handleClickOpenOut = () => {}}) {
   const [open, setOpen] = React.useState(false);
   
   const handleClickOpen = () => {
+    handleClickOpenOut(params);
+    console.log(params);
     setOpen(true);
   };
 
@@ -34,43 +37,24 @@ export default function CustomDialog({ name, children, boxStyle  }) {
     setOpen(false);
   };
 
-  const enhancedChildren = React.Children.map(children, child =>
-    React.cloneElement(child, {
-      onClick: (e) => {
-        if (child.props.onClick) {
-          child.props.onClick(e);
-        }
-
-        //COKLU BUTON
-        if (child.props.children.length > 1) {
-          child.props.children.map((item) => {
-            if (item.props.id === 'cancelButton' || item.props.id === 'okButton') {
-              setOpen(false);
-            }  
-          })
-        }
-        else{
-          if (child.props.id === 'cancelButton' || child.props.id === 'okButton') {
-            setOpen(false);
-          }
-        }
-        
-      }
-    })
-  );
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' , ...boxStyle}}>
-      <Button variant="outlined" onClick={handleClickOpen} >
+      <Button variant="outlined" onClick={handleClickOpen}  >
         {name}
       </Button>
       <MainDialog
         title={name}
         open={open}
-        onClose={handleClose}
+        onClose={handleClose} 
       >
-        {enhancedChildren}
-        
+        <>
+          {children}
+          <Box sx={{p : 2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
+            {buttons}
+            <Button onClick={handleClose} id='cancelButton' sx={{ width: '50%' }} variant='contained' color='error'>İptal</Button>
+          </Box>
+        </>
       </MainDialog>
     </Box>
   );

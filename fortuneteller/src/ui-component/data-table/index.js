@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, Typography, Button, TablePagination, styled } from '@mui/material';
 import dayjs from 'dayjs';
+import CustomDialog from 'ui-component/CustomDialog';
 
 const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$/;
 
@@ -19,11 +20,8 @@ const StyledTypography = styled(Typography)({
     marginTop: '8px',
 });
 
-const StyledButton = styled(Button)({
-    marginTop: '8px',
-});
 
-export default function DataTable({ title, rowHeaders, rowNames, rows, deleteClick, updateClick }) {
+export default function DataTable({title, rowHeaders, rowNames, rows, deleteClick, updateChildren, handleUpdateClick, dialogButtons }) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -33,6 +31,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, deleteCli
         setPage(0);
     };
 
+  
     const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     if (!rows.length || !rows[0][rowNames[0]]) {
@@ -75,9 +74,12 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, deleteCli
                                         {iso8601Regex.test(row[name]) && dayjs(row[name]).isValid() && i !== 0 ? dayjs(row[name]).locale('tr').format('DD MMMM YYYY') : row[name]}
                                     </TableCell>
                                 ))}
-                                <TableCell width={'175'} align="center">
-                                    <StyledButton sx={{ mr: 1 }} onClick={() => deleteClick(row[rowNames[0]])} size='small' color='error' variant="contained">Sil</StyledButton>
-                                    <StyledButton onClick={() => updateClick(row[rowNames[0]])} size='small' color='warning' variant="contained">Güncelle</StyledButton>
+                                <TableCell width={'175'} align="center" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                    <Button sx={{ mr: 1  }} onClick={() => deleteClick(row[rowNames[0]])} color='error' variant="outlined">Sil</Button>
+
+                                    <CustomDialog buttons={dialogButtons} handleClickOpenOut={handleUpdateClick} params={{ ...row }} name={'Güncelle'}>
+                                        {updateChildren}
+                                    </CustomDialog>
                                 </TableCell>
 
                             </TableRow>

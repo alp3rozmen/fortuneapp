@@ -14,6 +14,7 @@ import 'assets/scss/style.scss';
 import config from './config';
 import { AuthContextProvider } from './context/userContext.tsx';
 import { ToastContainer } from 'react-toastify';
+
 // ==============================|| REACT DOM RENDER  ||============================== //
 
 const container = document.getElementById('root');
