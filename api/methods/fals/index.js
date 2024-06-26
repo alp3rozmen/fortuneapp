@@ -57,6 +57,45 @@ function FalEndPoints(app , connection) {
         });
     })
 
+    app.delete('/api/DeleteFalType', authenticateToken, (req, res) => {
+        var fal_type_id = req.body.fal_id;
+        
+        if (fal_type_id === undefined || fal_type_id === 0) {
+            return res.status(200).json({ message: 'Bakım türü id gereklidir', status: 'error' });
+        }
+        
+        connection.delete().from('fal_types').where('id', fal_type_id).then((faltypes) => {
+            return res.status(200).json({
+                status: '200',
+                message: 'Fal tipi silindi'
+            });
+        });
+    })
+
+    app.put('/api/UpdateFalType', authenticateToken, (req, res) => {
+        var fal_id = req.body.fal_id;
+        var fal_name = req.body.fal_name;
+        
+        if (fal_id === undefined || fal_id === 0) {
+            return res.status(200).json({ message: 'Bakım türü id gereklidir', status: 'error' });
+        }
+        else if (fal_name === undefined || fal_name === 0 || fal_name === '') {
+            return res.status(200).json({ message: 'Bakım türü adı gereklidir', status: 'error' });
+        }
+        else
+        {
+            connection.update({ 
+                name: fal_name,
+                updated_at : new Date()
+            }).from('fal_types').where('id', fal_id).then((faltypes) => {
+                return res.status(200).json({
+                    status: '200',
+                    message: 'Fal tipi güncellendi'
+                });
+            });
+        }
+    })
+
 }
 
 export default FalEndPoints;

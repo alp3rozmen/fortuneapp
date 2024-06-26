@@ -26,10 +26,9 @@ function MainDialog({ title, children, open , onClose}) {
 
 export default function CustomDialog({buttons ,params, name, children, boxStyle , handleClickOpenOut = () => {}}) {
   const [open, setOpen] = React.useState(false);
-  
+  var newButtons = [];
   const handleClickOpen = () => {
     handleClickOpenOut(params);
-    console.log(params);
     setOpen(true);
   };
 
@@ -37,7 +36,7 @@ export default function CustomDialog({buttons ,params, name, children, boxStyle 
     setOpen(false);
   };
 
-
+ 
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' , ...boxStyle}}>
       <Button variant="outlined" onClick={handleClickOpen}  >

@@ -1,3 +1,4 @@
+import { update } from "immutable";
 import { FalTypeAndCost } from "model/falTypeAndCost";
 import { baseService } from "network/BaseService.ts";
 
@@ -59,6 +60,16 @@ export const FalTypes = {
             return response;
 
         } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
+    updateById: async (url , id : any) => {
+        try {
+            var response = await baseService.update(url , id);
+            return response;
+        }   
+        catch (error) {
             console.log(error);
             throw error;
         }

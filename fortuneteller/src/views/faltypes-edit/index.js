@@ -14,11 +14,31 @@ const FaltypesEdit = () => {
     const [faltypes, setFaltypes] = useState([]);
     const [name, setName] = useState('');
     const [dialogParameters, setDialogParameters] = useState({});
+    const [updateText , setUpdateText] = useState('');
    
     const fetchFaltypes = async () => {
         const response = await FalTypes.getAll();
         return response;
     };
+
+    const fetchUpdateFalType = async (id , name) => {
+        const response = await FalTypes.updateById('/UpdateFalType', {fal_id : id, fal_name : name});
+        if (response.status === '200') {
+            toast.success(response.message);
+            fetchFaltypes().then((response) => {
+                setFaltypes(response.data);
+            })
+        }
+        else {
+            toast.error(response.message);
+        }
+        return response;
+    };
+
+    const SetUpdateTextFromParam = (param) => {
+        setDialogParameters(param);
+        setUpdateText(param.name);
+    } 
 
     const AddFaltype = async () => {
         var isAdded = false;
@@ -104,14 +124,14 @@ const FaltypesEdit = () => {
                         rows={faltypes}
                         rowNames={['id', 'name', 'created_at', 'updated_at']}
                         deleteClick={deleteFaltype}
-                        handleUpdateClick={(params) => setDialogParameters(params)}
+                        handleUpdateClick={(params) => SetUpdateTextFromParam(params)}
                         updateChildren={
                             <>
                                 <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                         <TextField
-                                        value={dialogParameters.name}
-                                            onChange={(e) => setName(dialogParameters.name)}
+                                            value={updateText}
+                                            onChange={(e) => setUpdateText(e.target.value)}
                                             sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='text' id="outlined-basic" label="Bakım İsmi" variant="outlined" />
                                     </Box>
                                 </Box>
@@ -119,7 +139,7 @@ const FaltypesEdit = () => {
                         }
                         dialogButtons={
                             <>
-                            <Button onClick={() => AddFaltype()} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
+                            <Button onClick={() => fetchUpdateFalType(dialogParameters.id , updateText)} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Güncelle</Button>
                             </>
                         }
                     />
