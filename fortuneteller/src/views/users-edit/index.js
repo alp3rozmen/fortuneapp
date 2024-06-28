@@ -146,7 +146,16 @@ const UserEdit = () => {
                 onClick: () => {
                   console.log('Ekle');
                 }
-              }]
+              },
+              {
+                id: 'cancelButton',
+                name: 'Kapat',
+                color: 'error',
+                onClick: () => {
+                  console.log('Kapat');
+                }
+              }
+            ]
               // <>
               //    <Button onClick={() => 
               //           {console.log('clicked')}} 

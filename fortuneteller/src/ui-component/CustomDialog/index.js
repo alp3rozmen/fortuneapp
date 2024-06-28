@@ -52,7 +52,7 @@ export default function CustomDialog({buttons ,params, name, children, boxStyle 
             {children}
             <Box sx={{p : 2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
               {
-                buttons.map((button,index) => <Button key={index} onClick={() => handleClickOk(button.onClick)} sx={{ width: '50%' }} variant='contained' color='success'>{button.name}</Button>)
+                buttons.map((button,index) => <Button key={index} onClick={() => handleClickOk(button.onClick)} sx={{ width: '50%' }} variant='contained' color={button.color}>{button.name}</Button>)
               }
             </Box>
           </>
