@@ -6,12 +6,10 @@ import { Box } from '@mui/system';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import tr from 'dayjs/locale/tr';
-import { useEffect } from 'react';
-
 function MainDialog({ title, children, open , onClose}) {
+  
   const handleClose = () => {
-    onClose();
-    console.log('closed');        
+    onClose();      
   };
 
   return (
@@ -25,36 +23,41 @@ function MainDialog({ title, children, open , onClose}) {
 }
 
 export default function CustomDialog({buttons ,params, name, children, boxStyle , handleClickOpenOut = () => {}}) {
+  
   const [open, setOpen] = React.useState(false);
-  var newButtons = [];
+  
   const handleClickOpen = () => {
     handleClickOpenOut(params);
     setOpen(true);
   };
-
-  const handleClose = () => {
+  
+  const handleClickOk = (comingOnClick) => {
     setOpen(false);
+    comingOnClick();
   };
 
- 
   return (
+ 
     <Box sx={{ display: 'flex', alignItems: 'flex-end' , ...boxStyle}}>
       <Button variant="outlined" onClick={handleClickOpen}  >
         {name}
       </Button>
-      <MainDialog
-        title={name}
-        open={open}
-        onClose={handleClose} 
-      >
-        <>
-          {children}
-          <Box sx={{p : 2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
-            {buttons}
-            <Button onClick={handleClose} id='cancelButton' sx={{ width: '50%' }} variant='contained' color='error'>İptal</Button>
-          </Box>
-        </>
-      </MainDialog>
+      
+        <MainDialog
+          title={name}
+          open={open}
+          onClose={() => setOpen(false)} 
+        >
+          <>
+            {children}
+            <Box sx={{p : 2,display: 'flex', flexDirection: 'row', justifyContent: 'center' , gap: 2 }}>
+              {
+                buttons.map((button,index) => <Button key={index} onClick={() => handleClickOk(button.onClick)} sx={{ width: '50%' }} variant='contained' color='success'>{button.name}</Button>)
+              }
+            </Box>
+          </>
+        </MainDialog>   
     </Box>
+  
   );
 }

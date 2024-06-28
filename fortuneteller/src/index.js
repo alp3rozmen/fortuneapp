@@ -15,6 +15,7 @@ import config from './config';
 import { AuthContextProvider } from './context/userContext.tsx';
 import { ToastContainer } from 'react-toastify';
 
+
 // ==============================|| REACT DOM RENDER  ||============================== //
 
 const container = document.getElementById('root');
@@ -23,7 +24,7 @@ root.render(
   <Provider store={store}>
     <BrowserRouter basename={config.basename}>
       <AuthContextProvider>
-        <App />
+          <App />
       </AuthContextProvider>
       <ToastContainer position="top-right" />
     </BrowserRouter>

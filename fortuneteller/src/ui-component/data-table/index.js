@@ -21,7 +21,7 @@ const StyledTypography = styled(Typography)({
 });
 
 
-export default function DataTable({title, rowHeaders, rowNames, rows, deleteClick, updateChildren, handleUpdateClick, dialogButtons }) {
+export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChildrens , dialogButtons, deleteClick, handleUpdateClick }) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -31,7 +31,6 @@ export default function DataTable({title, rowHeaders, rowNames, rows, deleteClic
         setPage(0);
     };
 
-  
     const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     if (!rows.length || !rows[0][rowNames[0]]) {
@@ -78,7 +77,7 @@ export default function DataTable({title, rowHeaders, rowNames, rows, deleteClic
                                     <Button sx={{ mr: 1  }} onClick={() => deleteClick(row[rowNames[0]])} color='error' variant="outlined">Sil</Button>
 
                                     <CustomDialog buttons={dialogButtons} handleClickOpenOut={handleUpdateClick} params={{ ...row }} name={'Güncelle'}>
-                                        {updateChildren}
+                                        {dialogChildrens}
                                     </CustomDialog>
                                 </TableCell>
 

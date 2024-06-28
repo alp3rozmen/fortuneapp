@@ -17,6 +17,8 @@ const UserEdit = () => {
   const [userDetails, setUserDetails] = useState([]);
   const [selectedUser , setSelectedUser] = useState([]);
   const [showProperties , setShowProperties] = useState(false);
+  const [dialogParameters, setDialogParameters] = useState({});
+  
   useEffect(() => {
     const fetchUsers = async () => {
         const response = await userDetailService.getAll('users');
@@ -42,19 +44,19 @@ const UserEdit = () => {
   };
 
   const deleteUserFalType = async (id) => {
-    console.log(id);
+    console.log(id + ' deleted');
   };
 
-  const editFalUserFalType = async (id) => {
-    console.log(id);
+  const editFalUserFalType = async (params) => {
+    console.log(params);  
   };
   
   const deleteAppointment = async (id) => {
-    console.log(id);
+     console.log(id + ' deletedAppointment');
   };
 
-  const editAppointment = async (id) => {
-    console.log(id);
+  const editAppointment = async (params) => {
+    console.log(params);
   };
   
   return(
@@ -97,9 +99,22 @@ const UserEdit = () => {
       
         <CustomDialog 
           buttons={
-            <>
-               <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
-            </>
+            [{
+              id: 'okButton',
+              name: 'Ekle',
+              color: 'success',
+              onClick: () => {
+                console.log('clicked');
+              }
+            }]
+            // <>
+            //    <Button 
+            //     onClick={() => 
+            //     {console.log('clicked')}} 
+            //     id='okButton' 
+            //     sx={{ width: '50%' }} 
+            //     variant='contained' color='success'>Ekle</Button>
+            // </>
           }
           name={'Bakım Türü Ekle'} boxStyle={{ mr : 2 }} >
           <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
@@ -124,10 +139,22 @@ const UserEdit = () => {
 
         <CustomDialog 
           buttons={
-
-              <>
-                 <Button onClick={() => {console.log('clicked')}} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
-              </>
+              [{
+                id: 'okButton',
+                name: 'Ekle',
+                color: 'success',
+                onClick: () => {
+                  console.log('Ekle');
+                }
+              }]
+              // <>
+              //    <Button onClick={() => 
+              //           {console.log('clicked')}} 
+              //           id='okButton' 
+              //           sx={{ width: '50%' }} 
+              //           variant='contained' 
+              //           color='success'>Ekle</Button>
+              // </>
           }
         
           name={'Randevu Aralığı Ekle'} boxStyle={{ mr : 2 }} >
@@ -165,11 +192,30 @@ const UserEdit = () => {
         
         <Box sx={{ mt : 1 }}>
           <DataTable 
-            deleteClick={deleteUserFalType} 
-            updateClick={editFalUserFalType} 
+            deleteClick={(id) => deleteUserFalType(id)}
+            handleUpdateClick={(params) => setDialogParameters(params)}
             title="Bakımlar" 
             rowHeaders={['ID', 'Bakım Adı','Oluşturma Tarihi', 'Güncelleme Tarihi']}  
-            rowNames={['fal_id','name','created_at', 'updated_at']} rows={userDetails.data} />
+            rowNames={['fal_id','name','created_at', 'updated_at']} rows={userDetails.data}
+            dialogButtons={
+              [{
+                id: 'okButton',
+                name: 'Kaydet',
+                color: 'success',
+                onClick: () => {
+                  editFalUserFalType(dialogParameters);
+                },
+              },
+              {
+                id: 'cancelButton',
+                name: 'İptal',
+                color: 'error',
+                onClick: () => {
+                  console.log('Kapatildi');
+                },
+              }]
+            }
+            />
         </Box> 
         
         <Box >
@@ -178,7 +224,25 @@ const UserEdit = () => {
             rows={userDetails.data}
             rowNames={['appointment_id','name','app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
             deleteClick={deleteAppointment}
-            updateClick={editAppointment}
+            handleUpdateClick={(params) => setDialogParameters(params)}
+            dialogButtons={
+              [{
+                id: 'okButton',
+                name: 'Kaydet',
+                color: 'success',
+                onClick: () => {
+                  editAppointment(dialogParameters);
+                },
+              },
+              {
+                id: 'cancelButton',
+                name: 'İptal',
+                color: 'error',
+                onClick: () => {
+                  console.log('Kapatildi');
+                },
+              }]
+            }
           />
         </Box>
         
