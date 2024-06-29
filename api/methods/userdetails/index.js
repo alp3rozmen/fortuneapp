@@ -79,13 +79,22 @@ function userDetails(app , connection) {
         if (id === undefined || id === 0) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
         }
-
-        connection.delete().from('user_details').where('id', id).then((faltypes) => {
-            return res.status(200).json({
-                status: '200',
-                message: 'Fal tipi silindi'
-            });
+        
+        connection.select('appointments.*' ).from('appointments').where('user_details_id', id).then((faltypes) => {
+            if (faltypes.length > 0) {
+                return res.status(200).json({ message: 'Bakım türü kullanan randevu tanımı var!', status: '400' });
+            }
+            else
+            {
+                connection.delete().from('user_details').where('id', id).then((faltypes) => {
+                    return res.status(200).json({
+                        status: '200',
+                        message: 'Fal tipi silindi'
+                    });
+                });
+            }
         });
+
     })
 
 
