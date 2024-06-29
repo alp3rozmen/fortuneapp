@@ -63,6 +63,17 @@ export const userDetailService = {
             console.log(error);
             throw error;
         }
+    },
+    // KULLANICIDA OLMAYAN FALTIPLERI
+    getUserNotHaveTypes : async (url , userid : any) => {
+        try {
+            var response = await baseService.postWithData(url, {id : userid});
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 }
 

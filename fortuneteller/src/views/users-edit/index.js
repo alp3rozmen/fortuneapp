@@ -1,7 +1,7 @@
 // material-ui
 
 // project imports
-import {Box,  FormControl, MenuItem, Select, Typography, Button, TextField, InputLabel } from '@mui/material';
+import {Box,  FormControl, MenuItem, Select, Typography, Button, TextField, InputLabel} from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useState , useEffect} from 'react';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
@@ -13,12 +13,22 @@ import CustomDialog from 'ui-component/CustomDialog';
 
 const UserEdit = () => {
   const [selectedValue , setSelectedValue] = useState('');
+  const [selectedChangeFt , setSelectedChangeFt] = useState('');
+  const [selectedChangePrice , setSelectedChangePrice] = useState('');
   const [users, setUsers] = useState([]);
   const [userDetails, setUserDetails] = useState([]);
   const [selectedUser , setSelectedUser] = useState([]);
   const [showProperties , setShowProperties] = useState(false);
   const [dialogParameters, setDialogParameters] = useState({});
-  
+  const [userNotHaveFalTypes, setUserNotHaveFalTypes] = useState([]);
+  const [appointmentDetails , setAppointmentDetails] = useState([]);
+
+  const fetchUserNotHaveFalTypes = async (id) => {
+    const response = await userDetailService.getUserNotHaveTypes('getUserNotHaveTypes' , id);
+    setUserNotHaveFalTypes(response.data);
+    return response;
+  };
+
   useEffect(() => {
     const fetchUsers = async () => {
         const response = await userDetailService.getAll('users');
@@ -34,6 +44,13 @@ const UserEdit = () => {
   const selectedOnChange = async (value) => {
     const response = await userDetailService.getUserFalTypesAndAppointments('getUserFalAndAppointments', value);
     setUserDetails(response);
+
+    var filteredData = response.data.filter((data) => {
+      return data.appointment_id > 0;
+    });
+
+    setAppointmentDetails(filteredData);
+
     setSelectedValue(value);
     users.find((data) => {
       if(data.username === value){
@@ -98,6 +115,7 @@ const UserEdit = () => {
       <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, alignContent: 'center', textAlign: 'center' }}>
       
         <CustomDialog 
+          handleClickOpenOut={() => fetchUserNotHaveFalTypes(selectedUser.id)}
           buttons={
             [{
               id: 'okButton',
@@ -106,7 +124,17 @@ const UserEdit = () => {
               onClick: () => {
                 console.log('clicked');
               }
-            }]
+            },
+            {
+              id: 'cancelButton',
+              name: 'Vazgeç',
+              color: 'error',
+              onClick: () => {
+                console.log('clicked');
+              }
+            }
+          ]
+            
             // <>
             //    <Button 
             //     onClick={() => 
@@ -117,24 +145,37 @@ const UserEdit = () => {
             // </>
           }
           name={'Bakım Türü Ekle'} boxStyle={{ mr : 2 }} >
-          <Box sx={{ p:2,display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-          <Select
-            sx={{ width: 300 }}
-            id="selectUser"
-            value={selectedValue}
-            onChange={(value) => selectedOnChange(value.target.value)}
-          >
-              
-              {userDetails.data.map((data) => (
-                  <MenuItem
-                  key={data.id}
-                  value={data.username}
-                  >
-                  {data.username}
-                  </MenuItem>
-              ))}
-          </Select>
-          </Box>
+          <Box sx={{ p:2,display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <FormControl  fullWidth>
+            <InputLabel id="demo-simple-select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
+              <Select
+                label="Lütfen Bakım Türü Seçiniz"
+                sx={{ width: 300 }}
+                id="selectFalType"
+                value={selectedChangeFt}
+                onChange={(value) => setSelectedChangeFt(value.target.value)}
+              >
+                    
+                  {userNotHaveFalTypes.length > 0 && userNotHaveFalTypes.map((data) => (
+                      <MenuItem
+                      key={data.id}
+                      value={data.name}
+                      >
+                      {data.name}
+                      </MenuItem>
+                  ))}
+              </Select>
+
+              <TextField type='number' 
+                         value={selectedChangePrice}
+                         onChange={(e) => setSelectedChangePrice(e.target.value)} 
+                         sx={{ width: 300 , mt: 2}} 
+                         id="outlined-basic" 
+                         label="Ücreti" 
+                         variant="outlined" />
+            </FormControl>
+           </Box>
+           
         </CustomDialog>
 
         <CustomDialog 
@@ -204,8 +245,8 @@ const UserEdit = () => {
             deleteClick={(id) => deleteUserFalType(id)}
             handleUpdateClick={(params) => setDialogParameters(params)}
             title="Bakımlar" 
-            rowHeaders={['ID', 'Bakım Adı','Oluşturma Tarihi', 'Güncelleme Tarihi']}  
-            rowNames={['fal_id','name','created_at', 'updated_at']} rows={userDetails.data}
+            rowHeaders={['ID', 'Bakım Adı', 'Ücreti', 'Oluşturma Tarihi', 'Güncelleme Tarihi']}  
+            rowNames={['fal_id','fal_name','cost' ,'fal_created_at', 'fal_updated_at']} rows={userDetails.data}
             dialogButtons={
               [{
                 id: 'okButton',
@@ -230,8 +271,8 @@ const UserEdit = () => {
         <Box >
           <DataTable title="Randevu Aralıkları" 
             rowHeaders={['ID','Fal Tipi', 'Başlangıç Tarihi', 'Bitis Tarihi','Başlangıç Saati','Bitiş Saati', 'Randevu Aralık(DK)']} 
-            rows={userDetails.data}
-            rowNames={['appointment_id','name','app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
+            rows={appointmentDetails}
+            rowNames={['appointment_id','fal_name','app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
             deleteClick={deleteAppointment}
             handleUpdateClick={(params) => setDialogParameters(params)}
             dialogButtons={

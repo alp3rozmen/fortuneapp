@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from "path";
-import getUserFalAndCost from "./userdetails/index.js";
+import userDetails from "./userdetails/index.js";
 import FalEndPoints from "./fals/index.js";
 import { error } from "console";
 function methods(app) {
@@ -302,7 +302,7 @@ function methods(app) {
         });
     });
 
-    getUserFalAndCost(app, connection);
+    userDetails(app, connection);
 
 
     app.post('/api/getAppointment', (req, res) => {

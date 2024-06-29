@@ -31,6 +31,13 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChi
         setPage(0);
     };
 
+    const isHaveId = (row) => {
+        if (row[rowNames[0]]) {
+            return true;
+        }
+        return false;
+    }
+
     const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     if (!rows.length || !rows[0][rowNames[0]]) {
@@ -66,7 +73,8 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChi
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {paginatedRows.map((row, index) => (
+
+                        {isHaveId(rows[0]) && paginatedRows.map((row, index) => (
                             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 {rowNames.map((name, i) => (
                                     <TableCell key={name} align="center">
