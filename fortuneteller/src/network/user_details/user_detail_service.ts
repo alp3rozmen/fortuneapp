@@ -94,6 +94,16 @@ export const userDetailService = {
             console.log(error);
             throw error;
         }
+    },
+    UpdateFalTypeToUser : async (data : any) => {
+        try {
+            var response = await baseService.update('updateUserFalType', data);
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
     }
 }
 

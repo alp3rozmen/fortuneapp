@@ -18,7 +18,8 @@ const UserEdit = () => {
   const [userDetails, setUserDetails] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
   const [showProperties, setShowProperties] = useState(false);
-  const [dialogParameters, setDialogParameters] = useState({});
+  const [FaldialogParameters, setFalDialogParameters] = useState({});
+  const [AppdialogParameters, setAppDialogParameters] = useState({});
   const [userNotHaveFalTypes, setUserNotHaveFalTypes] = useState([]);
   const [appointmentDetails, setAppointmentDetails] = useState([]);
 
@@ -38,6 +39,7 @@ const UserEdit = () => {
       setUsers(response);
     });
 
+
   }, []);
 
   const fetchAddUserFalType = async () => {
@@ -48,6 +50,12 @@ const UserEdit = () => {
         userid: selectedUser.id
       });
     return response;
+  };
+
+  const userFalTypesTbUpdHandle = (params) => {
+    setFalDialogParameters(params)
+    fetchUserNotHaveFalTypes(selectedUser.id);
+
   };
 
 
@@ -72,20 +80,32 @@ const UserEdit = () => {
   };
 
   const deleteUserFalType = async (id) => {
-     userDetailService.DeleteFalTypeToUser('DeleteUserFalType', id).then((response) => {
-       if (response.status === '200') {
-         toast.success(response.message);
-       }
-       else {
-         toast.error(response.message);
-       }
+    userDetailService.DeleteFalTypeToUser('DeleteUserFalType', id).then((response) => {
+      if (response.status === '200') {
+        toast.success(response.message);
+      }
+      else {
+        toast.error(response.message);
+      }
 
-       selectedOnChange(selectedValue);
-     })
+      selectedOnChange(selectedValue);
+    })
   };
 
   const editFalUserFalType = async (params) => {
-    console.log(params);
+    userDetailService.UpdateFalTypeToUser({
+      id: params.id,
+      faltype_id: selectedChangeFt,
+      cost: selectedChangePrice
+    }).then((response) => {
+      if (response.status === '200') {
+        toast.success(response.message);
+        selectedOnChange(selectedValue);
+      }
+      else {
+        toast.error(response.message);
+      }
+    })
   };
 
   const deleteAppointment = async (id) => {
@@ -160,7 +180,7 @@ const UserEdit = () => {
                   },
                   {
                     id: 'cancelButton',
-                    name: 'Vazgeç',
+                    name: 'İptal',
                     color: 'error',
                     onClick: () => {
                       console.log('clicked');
@@ -280,7 +300,7 @@ const UserEdit = () => {
             <Box sx={{ mt: 1 }}>
               <DataTable
                 deleteClick={(id) => deleteUserFalType(id)}
-                handleUpdateClick={(params) => setDialogParameters(params)}
+                handleUpdateClick={(params) => userFalTypesTbUpdHandle(params)}
                 title="Bakımlar"
                 rowHeaders={['ID', 'Bakım Adı', 'Ücreti', 'Oluşturma Tarihi', 'Güncelleme Tarihi']}
                 rowNames={['id', 'fal_name', 'cost', 'fal_created_at', 'fal_updated_at']} rows={userDetails.data}
@@ -290,7 +310,7 @@ const UserEdit = () => {
                     name: 'Kaydet',
                     color: 'success',
                     onClick: () => {
-                      editFalUserFalType(dialogParameters);
+                      editFalUserFalType(FaldialogParameters);
                     },
                   },
                   {
@@ -302,6 +322,40 @@ const UserEdit = () => {
                     },
                   }]
                 }
+                dialogChildrens={
+                  userNotHaveFalTypes.length === 0 ? <Typography variant="caption">Kullanıcıya Tüm Bakım Türleri Eklidir</Typography> :
+                    <Box>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
+                        <Select
+                          label="Lütfen Bakım Türü Seçiniz"
+                          sx={{ width: 300 }}
+                          id="selectFalType"
+                          value={selectedChangeFt}
+                          onChange={(value) => setSelectedChangeFt(value.target.value)}
+                        >
+
+                          {userNotHaveFalTypes.length > 0 && userNotHaveFalTypes.map((data) => (
+                            <MenuItem
+                              key={data.id}
+                              value={data.id}
+                            >
+                              {data.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+
+                        <TextField type='number'
+                          value={selectedChangePrice}
+                          onChange={(e) => setSelectedChangePrice(e.target.value)}
+                          sx={{ width: 300, mt: 2 }}
+                          id="outlined-basic"
+                          label="Ücreti"
+                          variant="outlined" />
+                      </FormControl>
+                    </Box>
+                }
+
               />
             </Box>
 
@@ -311,14 +365,14 @@ const UserEdit = () => {
                 rows={appointmentDetails}
                 rowNames={['appointment_id', 'fal_name', 'app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
                 deleteClick={deleteAppointment}
-                handleUpdateClick={(params) => setDialogParameters(params)}
+                handleUpdateClick={(params) => setAppDialogParameters(params)}
                 dialogButtons={
                   [{
                     id: 'okButton',
                     name: 'Kaydet',
                     color: 'success',
                     onClick: () => {
-                      editAppointment(dialogParameters);
+                      editAppointment(AppdialogParameters);
                     },
                   },
                   {

@@ -123,7 +123,7 @@ function userDetails(app , connection) {
 
             }
             else{
-
+                //simdiki fal idisi haric olanları getiricek
                 const falids = users.map(user => user.id);
     
                 const falTypes = await connection
@@ -183,6 +183,27 @@ function userDetails(app , connection) {
                     
                     return res.status(200).json(users);
             });
+    })
+
+    app.put('/api/updateUserFalType', (req, res) => {
+        var id = req.body.id;
+        var req_fal_id = req.body.faltype_id;
+        var req_cost = req.body.cost;
+
+        if (id === undefined || id === 0) {
+            return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
+        }   
+
+        connection.update({ 
+            fal_type: req_fal_id,
+            cost: req_cost,
+            updated_at: new Date()
+         }).from('user_details').where('id', id).then((faltypes) => {
+            return res.status(200).json({
+                status: '200',
+                message: 'Fal Güncellendi!'
+            }); 
+        });
     })
 }
 
