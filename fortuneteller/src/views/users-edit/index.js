@@ -44,7 +44,8 @@ const UserEdit = () => {
   const selectedOnChange = async (value) => {
     const response = await userDetailService.getUserFalTypesAndAppointments('getUserFalAndAppointments', value);
     setUserDetails(response);
-
+    
+    //LEFT JOIN LE BAGLANDIGINDAN BOS DATA GELIYOR DATATABLE 2 TANE RENDER EDIYOR OYUZDEN RANDEVULARI FILTRELEYIP AYRI GOSTERIYORUZ
     var filteredData = response.data.filter((data) => {
       return data.appointment_id > 0;
     });
