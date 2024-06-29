@@ -13,7 +13,7 @@ const FortunersCard = ({ roles, types, title }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    userDetailService.getByRoleAndType(roles, types).then((response) => {
+    userDetailService.getByRoleAndType(roles, types ,0).then((response) => {
       setUserDetails(response);
       setLoading(false);
 

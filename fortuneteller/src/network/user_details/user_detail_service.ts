@@ -5,7 +5,7 @@ export const userDetailService = {
 
     getAll: async ()  => {
         try {
-            var response = await baseService.post<UserDetail[]>("users", {user_role : 0 , fortuner_type : 0});
+            var response = await baseService.post<UserDetail[]>("users", {user_role : 0 , fortuner_type : 0 , isAdmin : 1});
             return response;
 
         } catch (error) {
@@ -13,9 +13,9 @@ export const userDetailService = {
             throw error;
         }
     },
-    getByRoleAndType: async (role : any, type : any) => {
+    getByRoleAndType: async (role : any, type : any , adminReq : any) => {
         try {
-            var response = await baseService.post<UserDetail>("users", {user_role : role, fortuner_type : type});
+            var response = await baseService.post<UserDetail>("users", {user_role : role, fortuner_type : type , isAdmin : adminReq});
             return response;
 
         } catch (error) {
@@ -68,6 +68,26 @@ export const userDetailService = {
     getUserNotHaveTypes : async (url , userid : any) => {
         try {
             var response = await baseService.postWithData(url, {id : userid});
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
+    InsertFalTypeToUser : async (data : any) => {
+        try {
+            var response = await baseService.postWithData('insertToUserFalType', {faltype_id : data.faltype_id, cost : data.cost,  userid : data.userid});
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
+    DeleteFalTypeToUser : async (url,id : any) => {
+        try {
+            var response = await baseService.delete(url, id);
             return response;
 
         } catch (error) {

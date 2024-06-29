@@ -45,7 +45,7 @@ function userDetails(app , connection) {
         var userid = req.body.userid;
        
         if (faltype_id === undefined || faltype_id === 0 || cost === undefined || cost === 0 || userid === undefined || userid === 0) {
-            return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
+            return res.status(200).json({ message: 'Lütfen parametreleri kontrol edin', status: '200' });
         }
         
 
@@ -72,6 +72,22 @@ function userDetails(app , connection) {
         });
     })
 
+    app.delete('/api/DeleteUserFalType/:id', (req, res) => {
+        
+        const id = req.params.id;
+
+        if (id === undefined || id === 0) {
+            return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
+        }
+
+        connection.delete().from('user_details').where('id', id).then((faltypes) => {
+            return res.status(200).json({
+                status: '200',
+                message: 'Fal tipi silindi'
+            });
+        });
+    })
+
 
     app.post('/api/getUserNotHaveTypes', async (req, res) => {
         try {
@@ -90,17 +106,25 @@ function userDetails(app , connection) {
                 .where('users.id', userid);
     
             if (users.length === 0) {
-                return res.status(200).json({ error: 'Bu kullanıcıya ait fal tipi bulunamadı', status: 'error' });
+                
+                const falTypes = await connection
+                    .select('fal_types.*')
+                    .from('fal_types');
+                return res.status(200).json(falTypes);
+
             }
+            else{
+
+                const falids = users.map(user => user.id);
     
-            const falids = users.map(user => user.id);
-    
-            const falTypes = await connection
-                .select('fal_types.*')
-                .from('fal_types')
-                .whereNotIn('fal_types.id', falids);
-    
-            return res.status(200).json(falTypes);
+                const falTypes = await connection
+                    .select('fal_types.*')
+                    .from('fal_types')
+                    .whereNotIn('fal_types.id', falids);
+        
+                return res.status(200).json(falTypes);
+            }
+            
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: 'Bir hata oluştu', status: 'error' });
