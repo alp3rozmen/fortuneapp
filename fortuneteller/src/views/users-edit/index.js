@@ -8,6 +8,7 @@ import { userDetailService } from 'network/user_details/user_detail_service.ts';
 import DataTable from 'ui-component/data-table';
 import CustomDialog from 'ui-component/CustomDialog';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const UserEdit = () => {
@@ -95,12 +96,7 @@ const UserEdit = () => {
   }, []);
 
   const fetchAddUserFalType = async () => {
-    const response = await userDetailService.InsertFalTypeToUser
-      ({
-        faltype_id: selectedChangeFt,
-        cost: selectedChangePrice,
-        userid: selectedUser.id
-      });
+    const response = await userDetailService.InsertFalTypeToUser({faltype_id: selectedChangeFt, cost: selectedChangePrice, userid: selectedUser.id});
     return response;
   };
 
@@ -176,23 +172,21 @@ const UserEdit = () => {
     })
   };
 
-  const editAppointment = async (params) => {
+  const editAppointment = async () => {
     try {
       fetchUpdateAppointment().then((response) => {
         if (response.status === '200') {
           toast.success(response.message);
-          selectedOnChange(selectedValue);
         }
         else {
           toast.error(response.message);
         }
       })
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
       selectedOnChange(selectedValue);
       emptyAllStates();
-    }
+    } catch (error) {
+      toast.error(error.message);
+    } 
 
 
   };
@@ -319,7 +313,7 @@ const UserEdit = () => {
                       if (response.data.status === '200') {
                         toast.success(response.data.message);
                         selectedOnChange(selectedValue);
-
+                        emptyAllStates();
                       }
                       else {
                         toast.error(response.data.message);
@@ -416,7 +410,7 @@ const UserEdit = () => {
                   }]
                 }
                 dialogChildrens={
-                  <Box>
+                  <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
                       <Select
@@ -483,7 +477,7 @@ const UserEdit = () => {
                         sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Baslangıc Tarihi" variant="outlined" />
                       <TextField
                         value={appEnddate}
-                        onChange={(e) => setAppEnddate(e.target.value)}
+                        onChange={(e) => {setAppEnddate(e.target.value)}}
                         sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Bitis Tarihi" variant="outlined" />
                       <TextField
                         value={appStarttime}
@@ -508,9 +502,12 @@ const UserEdit = () => {
                 handleUpdateClick={(params) => {
                   setAppDialogParameters(params)
                   fetchUserHaveFalTypes(selectedUser.id);
-                  setSelectedAppFal(params.id);    
-                  console.log(params)                      
-                  
+                  setSelectedAppFal(params.id); 
+                  setAppEndtime(params.end_hour);
+                  setAppStarttime(params.start_hour);
+                  setAppStartdate(dayjs(params.app_start_date).format('YYYY-MM-DD'));
+                  setAppEnddate(dayjs(params.app_end_date).format('YYYY-MM-DD'));
+                  setAppInterval(params.interval_time);          
                 }}
                 dialogButtons={
                   [{
@@ -519,6 +516,7 @@ const UserEdit = () => {
                     color: 'success',
                     onClick: () => {
                       editAppointment();
+
                     },
                   },
                   {
