@@ -98,15 +98,37 @@ function userDetails(app , connection) {
     })
 
 
-    app.post('/api/getUserNotHaveTypes', async (req, res) => {
+    app.post('/api/getUserFalTypes', async (req, res) => {
         try {
             const userid = req.body.id;
-    
-            if (userid === undefined || userid === 0) {
+            //tanımlı fallar mı değişkeni
+            var isAddedfals = req.body.isAddedfals;
+            
+            if (userid === undefined || userid === 0 || isAddedfals === undefined) {
                 return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
             }
-    
-            const users = await connection
+        
+            //tüm fallar
+            if (isAddedfals === 1) {
+                const users = await connection
+                .select('fal_types.*')
+                .from('fal_types')
+                return res.status(200).json(users);
+            }
+            else if (isAddedfals === 2) {
+            //tanımlı fallar
+                const users = await connection
+                .select('fal_types.name')
+                .select('user_details.id')
+                .from('user_details')
+                .join('fal_types', 'fal_types.id', 'user_details.fal_type')
+                .where('user_details.user_id', userid);
+
+                return res.status(200).json(users);
+            }
+            else{
+            //tanımsız fallar
+                const users = await connection
                 .select('fal_types.*')
                 .select('user_details.cost')
                 .from('users')
@@ -114,24 +136,25 @@ function userDetails(app , connection) {
                 .join('fal_types', 'fal_types.id', 'user_details.fal_type')
                 .where('users.id', userid);
     
-            if (users.length === 0) {
-                
-                const falTypes = await connection
-                    .select('fal_types.*')
-                    .from('fal_types');
-                return res.status(200).json(falTypes);
+                if (users.length === 0) {
+                    
+                    const falTypes = await connection
+                        .select('fal_types.*')
+                        .from('fal_types');
+                    return res.status(200).json(falTypes);
 
-            }
-            else{
-                //simdiki fal idisi haric olanları getiricek
-                const falids = users.map(user => user.id);
-    
-                const falTypes = await connection
-                    .select('fal_types.*')
-                    .from('fal_types')
-                    .whereNotIn('fal_types.id', falids);
+                }
+                else{
+                    //simdiki fal idisi haric olanları getiricek
+                    const falids = users.map(user => user.id);
         
-                return res.status(200).json(falTypes);
+                    const falTypes = await connection
+                        .select('fal_types.*')
+                        .from('fal_types')
+                        .whereNotIn('fal_types.id', falids);
+            
+                    return res.status(200).json(falTypes);
+                }
             }
             
         } catch (error) {
@@ -205,6 +228,107 @@ function userDetails(app , connection) {
             }); 
         });
     })
-}
 
+
+    app.post('/api/addUserAppointment', (req, res) => {
+        
+        var user_details_id = req.body.user_details_id;
+        var app_start_date = req.body.app_start_date;
+        var app_end_date = req.body.app_end_date;
+        var start_hour = req.body.start_hour;
+        var end_hour = req.body.end_hour;
+        var interval_time = req.body.interval_time;
+        
+        connection.select('*').from('appointments').where('user_details_id', user_details_id).then((users) => {
+            if (users.length === 0) {
+                connection('appointments').insert({ 
+                    user_details_id: user_details_id,
+                    app_start_date: app_start_date,
+                    app_end_date: app_end_date,
+                    start_hour: start_hour,
+                    end_hour: end_hour,
+                    interval_time: interval_time,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                }).then((faltypes) => {
+                    return res.status(200).json({
+                        status: '200',
+                        message: 'Randevu Eklendi!'
+                    }); 
+                });
+            }
+            else {
+                return res.status(200).json({
+                    status: '400',
+                    message: 'Randevu zaten var!'
+                }); 
+            }
+        });
+    })
+
+
+    app.put('/api/updateUserAppointment', (req, res) => {
+        
+        var user_details_id = req.body.user_details_id;
+        var app_start_date = req.body.app_start_date;
+        var app_end_date = req.body.app_end_date;
+        var start_hour = req.body.start_hour;
+        var end_hour = req.body.end_hour;
+        var interval_time = req.body.interval_time;
+        var new_user_details_id = req.body.new_user_details_id;
+
+        if (user_details_id === undefined || user_details_id === 0) {
+            return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
+        }
+
+        connection.update({ 
+            app_start_date: app_start_date,
+            app_end_date: app_end_date,
+            start_hour: start_hour,
+            end_hour: end_hour,
+            interval_time: interval_time,
+            user_details_id: new_user_details_id,
+            updated_at: new Date()
+         }).from('appointments').where('user_details_id', user_details_id).then((faltypes) => {
+            return res.status(200).json({
+                status: '200',
+                message: 'Randevu Güncellendi!'
+            }); 
+        });
+    })
+
+    app.delete('/api/DeleteUserAppointment/:id', (req, res) => {
+        const id = req.params.id;
+
+        if (id === undefined || id === 0) {
+                return res.status(200).json({ message: 'Lütfen parametreleri kontrol edin', status: '404' });
+        }
+            
+        connection.delete().from('appointments').where('appointments.id', id).then((faltypes) => {
+            return res.status(200).json({
+                status: '200',
+                message: 'Randevu Tanımı Silindi'
+            });
+        });
+    }) 
+
+
+    app.post('/api/getUserDetails', (req, res) => {
+        var user_id = req.body.user_id;
+
+        if (user_id === undefined || user_id === 0) {
+            return res.status(200).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
+        }
+
+        connection.select('*').from('user_details').join('fal_types', 'fal_types.id', 'user_details.fal_type').where('user_id', user_id).then((users) => {
+            if (users.length === 0) {
+                return res.status(200).json({ message: 'Kullanıcıya ait bakım türü bulunamadı', status: '404' });
+            }
+            
+            return res.status(200).json(users);
+        });
+    
+    });
+}
+    
 export default userDetails;

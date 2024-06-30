@@ -65,9 +65,9 @@ export const userDetailService = {
         }
     },
     // KULLANICIDA OLMAYAN FALTIPLERI
-    getUserNotHaveTypes : async (url , userid : any) => {
+    getUserFalTypes : async (url , userid : any, isAddedfals : any) => {
         try {
-            var response = await baseService.postWithData(url, {id : userid});
+            var response = await baseService.postWithData(url, {id : userid , isAddedfals : isAddedfals});
             return response;
 
         } catch (error) {
@@ -97,12 +97,44 @@ export const userDetailService = {
     },
     UpdateFalTypeToUser : async (data : any) => {
         try {
-            var response = await baseService.update('updateUserFalType', data);
+            var response = await baseService.update('addUserAppointment', data);
             return response;
 
         } catch (error) {
             console.log(error);
             throw error;
+        }
+    },
+    AddAppointmentUser : async (data : any) => {
+        try {
+            var response = await baseService.postWithData('addUserAppointment', data);
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
+    
+    DeleteAppointmentToUser : async (url,id : any) => {
+        try {
+            var response = await baseService.delete(url, id);
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    },
+
+    UpdateUserAppointment : async (data : any) => {
+        try {
+            var response = await baseService.update('updateUserAppointment', data);
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;    
         }
     }
 }

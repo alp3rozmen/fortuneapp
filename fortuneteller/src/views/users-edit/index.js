@@ -14,6 +14,7 @@ const UserEdit = () => {
   const [selectedValue, setSelectedValue] = useState('');
   const [selectedChangeFt, setSelectedChangeFt] = useState('');
   const [selectedChangePrice, setSelectedChangePrice] = useState('');
+  const [selectedAppFal, setSelectedAppFal] = useState(() => { });
   const [users, setUsers] = useState([]);
   const [userDetails, setUserDetails] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
@@ -21,11 +22,62 @@ const UserEdit = () => {
   const [FaldialogParameters, setFalDialogParameters] = useState({});
   const [AppdialogParameters, setAppDialogParameters] = useState({});
   const [userNotHaveFalTypes, setUserNotHaveFalTypes] = useState([]);
+  const [allFalTypes, setAllFalTypes] = useState([]);
   const [appointmentDetails, setAppointmentDetails] = useState([]);
+  const [userHaveFalTypes, setUserHaveFalTypes] = useState([]);
+  const [appStartdate, setAppStartdate] = useState('');
+  const [appEnddate, setAppEnddate] = useState('');
+  const [appStarttime, setAppStarttime] = useState('');
+  const [appEndtime, setAppEndtime] = useState('');
+  const [appInterval, setAppInterval] = useState('');
+
+  const fetchAddAppointment = async () => {
+    const response = await userDetailService.AddAppointmentUser({
+      user_details_id: selectedAppFal,
+      app_start_date: appStartdate,
+      app_end_date: appEnddate,
+      start_hour: appStarttime,
+      end_hour: appEndtime,
+      interval_time: appInterval
+    });
+    return response;
+  };
+
+  const emptyAllStates = () => {
+    setAppStartdate('');
+    setAppEnddate('');
+    setAppStarttime('');
+    setAppEndtime('');
+    setAppInterval('');
+  };
+
+  const fetchUpdateAppointment = async () => {
+    const response = await userDetailService.UpdateUserAppointment({
+      user_details_id: AppdialogParameters.user_details_id,
+      app_start_date: appStartdate,
+      app_end_date: appEnddate,
+      start_hour: appStarttime,
+      end_hour: appEndtime,
+      interval_time: appInterval,
+      new_user_details_id: selectedAppFal
+    });
+    return response;
+  };
+
+  const fetchUserHaveFalTypes = async (id) => {
+    const response = await userDetailService.getUserFalTypes('getUserFalTypes', id, 2);
+    setUserHaveFalTypes(response.data);
+    return response;
+  };
 
   const fetchUserNotHaveFalTypes = async (id) => {
-    const response = await userDetailService.getUserNotHaveTypes('getUserNotHaveTypes', id);
+    const response = await userDetailService.getUserFalTypes('getUserFalTypes', id, 0);
     setUserNotHaveFalTypes(response.data);
+    return response;
+  };
+
+  const fetchAllFalTypes = async (id) => {
+    const response = await userDetailService.getUserFalTypes('getUserFalTypes', id, 1);
     return response;
   };
 
@@ -54,7 +106,10 @@ const UserEdit = () => {
 
   const userFalTypesTbUpdHandle = (params) => {
     setFalDialogParameters(params)
-    fetchUserNotHaveFalTypes(selectedUser.id);
+
+    fetchAllFalTypes(selectedUser.id).then((response) => {
+      setAllFalTypes(response.data);
+    })
 
   };
 
@@ -109,11 +164,37 @@ const UserEdit = () => {
   };
 
   const deleteAppointment = async (id) => {
-    console.log(id + ' deletedAppointment');
+    userDetailService.DeleteAppointmentToUser('DeleteUserAppointment', id).then((response) => {
+      if (response.status === '200') {
+        toast.success(response.message);
+      }
+      else {
+        toast.error(response.message);
+      }
+
+      selectedOnChange(selectedValue);
+    })
   };
 
   const editAppointment = async (params) => {
-    console.log(params);
+    try {
+      fetchUpdateAppointment().then((response) => {
+        if (response.status === '200') {
+          toast.success(response.message);
+          selectedOnChange(selectedValue);
+        }
+        else {
+          toast.error(response.message);
+        }
+      })
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      selectedOnChange(selectedValue);
+      emptyAllStates();
+    }
+
+
   };
 
   return (
@@ -187,15 +268,6 @@ const UserEdit = () => {
                     }
                   }
                   ]
-
-                // <>
-                //    <Button 
-                //     onClick={() => 
-                //     {console.log('clicked')}} 
-                //     id='okButton' 
-                //     sx={{ width: '50%' }} 
-                //     variant='contained' color='success'>Ekle</Button>
-                // </>
               }
               name={'Bakım Türü Ekle'} boxStyle={{ mr: 2 }} >
               <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -236,58 +308,79 @@ const UserEdit = () => {
             </CustomDialog>
 
             <CustomDialog
+              handleClickOpenOut={() => fetchUserHaveFalTypes(selectedUser.id)}
               buttons={
                 [{
                   id: 'okButton',
                   name: 'Ekle',
                   color: 'success',
                   onClick: () => {
-                    console.log('Ekle');
+                    fetchAddAppointment().then((response) => {
+                      if (response.data.status === '200') {
+                        toast.success(response.data.message);
+                        selectedOnChange(selectedValue);
+
+                      }
+                      else {
+                        toast.error(response.data.message);
+                      }
+                    })
                   }
                 },
                 {
                   id: 'cancelButton',
-                  name: 'Kapat',
+                  name: 'İptal',
                   color: 'error',
                   onClick: () => {
-                    console.log('Kapat');
+                    console.log('clicked');
                   }
                 }
                 ]
-                // <>
-                //    <Button onClick={() => 
-                //           {console.log('clicked')}} 
-                //           id='okButton' 
-                //           sx={{ width: '50%' }} 
-                //           variant='contained' 
-                //           color='success'>Ekle</Button>
-                // </>
               }
 
               name={'Randevu Aralığı Ekle'} boxStyle={{ mr: 2 }} >
               <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Select
-                    sx={{ width: 300 }}
-                    id="falType"
-                    value={selectedValue}
-                    onChange={(value) => selectedOnChange(value.target.value)}
-                  >
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
+                    <Select
+                      sx={{ width: 300 }}
+                      id="falType"
+                      label="Lütfen Bakım Türü Seçiniz"
+                      value={selectedAppFal}
+                      onChange={(value) => setSelectedAppFal(value.target.value)}
+                    >
 
-                    {userDetails.data.map((data) => (
-                      <MenuItem
-                        key={data.id}
-                        value={data.username}
-                      >
-                        {data.username}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Baslangıc Tarihi" variant="outlined" />
-                  <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Bitis Tarihi" variant="outlined" />
-                  <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Baslangıc Saati" variant="outlined" />
-                  <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Bitiş Saati" variant="outlined" />
-                  <TextField sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='number' id="outlined-basic" label="Aralık" variant="outlined" />
+                      {userHaveFalTypes.length > 0 ? userHaveFalTypes.map((data) => (
+                        <MenuItem
+                          key={data.id}
+                          value={data.id}
+                        >
+                          {data.name}
+                        </MenuItem>
+                      )) : null}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    value={appStartdate}
+                    onChange={(e) => setAppStartdate(e.target.value)}
+                    sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Baslangıc Tarihi" variant="outlined" />
+                  <TextField
+                    value={appEnddate}
+                    onChange={(e) => setAppEnddate(e.target.value)}
+                    sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Bitis Tarihi" variant="outlined" />
+                  <TextField
+                    value={appStarttime}
+                    onChange={(e) => setAppStarttime(e.target.value)}
+                    sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Baslangıc Saati" variant="outlined" />
+                  <TextField
+                    value={appEndtime}
+                    onChange={(e) => setAppEndtime(e.target.value)}
+                    sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Bitiş Saati" variant="outlined" />
+                  <TextField
+                    value={appInterval}
+                    onChange={(e) => setAppInterval(e.target.value)}
+                    sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='number' id="outlined-basic" label="Aralık" variant="outlined" />
                 </Box>
               </Box>
             </CustomDialog>
@@ -318,42 +411,41 @@ const UserEdit = () => {
                     name: 'İptal',
                     color: 'error',
                     onClick: () => {
-                      console.log('Kapatildi');
+                    
                     },
                   }]
                 }
                 dialogChildrens={
-                  userNotHaveFalTypes.length === 0 ? <Typography variant="caption">Kullanıcıya Tüm Bakım Türleri Eklidir</Typography> :
-                    <Box>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
-                        <Select
-                          label="Lütfen Bakım Türü Seçiniz"
-                          sx={{ width: 300 }}
-                          id="selectFalType"
-                          value={selectedChangeFt}
-                          onChange={(value) => setSelectedChangeFt(value.target.value)}
-                        >
+                  <Box>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
+                      <Select
+                        label="Lütfen Bakım Türü Seçiniz"
+                        sx={{ width: 300 }}
+                        id="selectFalType"
+                        value={selectedChangeFt}
+                        onChange={(value) => setSelectedChangeFt(value.target.value)}
+                      >
 
-                          {userNotHaveFalTypes.length > 0 && userNotHaveFalTypes.map((data) => (
-                            <MenuItem
-                              key={data.id}
-                              value={data.id}
-                            >
-                              {data.name}
-                            </MenuItem>
-                          ))}
-                        </Select>
+                        {allFalTypes.length > 0 && allFalTypes.map((data) => (
+                          <MenuItem
+                            key={data.id}
+                            value={data.id}
+                          >
+                            {data.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
 
-                        <TextField type='number'
-                          value={selectedChangePrice}
-                          onChange={(e) => setSelectedChangePrice(e.target.value)}
-                          sx={{ width: 300, mt: 2 }}
-                          id="outlined-basic"
-                          label="Ücreti"
-                          variant="outlined" />
-                      </FormControl>
-                    </Box>
+                      <TextField type='number'
+                        value={selectedChangePrice}
+                        onChange={(e) => setSelectedChangePrice(e.target.value)}
+                        sx={{ width: 300, mt: 2 }}
+                        id="outlined-basic"
+                        label="Ücreti"
+                        variant="outlined" />
+                    </FormControl>
+                  </Box>
                 }
 
               />
@@ -361,18 +453,72 @@ const UserEdit = () => {
 
             <Box >
               <DataTable title="Randevu Aralıkları"
+                dialogChildrens={
+                  <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
+                        <Select
+                          sx={{ width: 300 }}
+                          id="falType"
+                          label="Lütfen Bakım Türü Seçiniz"
+                          value={selectedAppFal}
+                          defaultValue={selectedAppFal}
+                          onChange={(value) => {setSelectedAppFal(value.target.value)}}
+                        >
+
+                          {userHaveFalTypes.length > 0 ? userHaveFalTypes.map((data) => (
+                            <MenuItem
+                              key={data.id}
+                              value={data.id}
+                            >
+                              {data.name}
+                            </MenuItem>
+                          )) : null}
+                        </Select>
+                      </FormControl>
+                      <TextField
+                        value={appStartdate}
+                        onChange={(e) => setAppStartdate(e.target.value)}
+                        sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Baslangıc Tarihi" variant="outlined" />
+                      <TextField
+                        value={appEnddate}
+                        onChange={(e) => setAppEnddate(e.target.value)}
+                        sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Bitis Tarihi" variant="outlined" />
+                      <TextField
+                        value={appStarttime}
+                        onChange={(e) => setAppStarttime(e.target.value)}
+                        sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Baslangıc Saati" variant="outlined" />
+                      <TextField
+                        value={appEndtime}
+                        onChange={(e) => setAppEndtime(e.target.value)}
+                        sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='time' id="outlined-basic" label="Bitiş Saati" variant="outlined" />
+                      <TextField
+                        value={appInterval}
+                        onChange={(e) => setAppInterval(e.target.value)}
+                        sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='number' id="outlined-basic" label="Aralık" variant="outlined" />
+                    </Box>
+                  </Box>
+
+                }
                 rowHeaders={['ID', 'Fal Tipi', 'Başlangıç Tarihi', 'Bitis Tarihi', 'Başlangıç Saati', 'Bitiş Saati', 'Randevu Aralık(DK)']}
                 rows={appointmentDetails}
                 rowNames={['appointment_id', 'fal_name', 'app_start_date', 'app_end_date', 'start_hour', 'end_hour', 'interval_time']}
-                deleteClick={deleteAppointment}
-                handleUpdateClick={(params) => setAppDialogParameters(params)}
+                deleteClick={(id) => deleteAppointment(id)}
+                handleUpdateClick={(params) => {
+                  setAppDialogParameters(params)
+                  fetchUserHaveFalTypes(selectedUser.id);
+                  setSelectedAppFal(params.id);    
+                  console.log(params)                      
+                  
+                }}
                 dialogButtons={
                   [{
                     id: 'okButton',
                     name: 'Kaydet',
                     color: 'success',
                     onClick: () => {
-                      editAppointment(AppdialogParameters);
+                      editAppointment();
                     },
                   },
                   {
@@ -380,7 +526,7 @@ const UserEdit = () => {
                     name: 'İptal',
                     color: 'error',
                     onClick: () => {
-                      console.log('Kapatildi');
+                      emptyAllStates();
                     },
                   }]
                 }
