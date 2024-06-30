@@ -136,6 +136,16 @@ export const userDetailService = {
             console.log(error);
             throw error;    
         }
+    },
+    UpdateUserStatus : async (data : any) => {
+        try {
+            var response = await baseService.update('updateUserStatus', data);
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;    
+        }
     }
 }
 

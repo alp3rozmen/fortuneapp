@@ -329,6 +329,26 @@ function userDetails(app , connection) {
         });
     
     });
+
+
+    app.put('/api/updateUserStatus', (req, res) => {
+        var user_id = req.body.user_id;
+        var status = req.body.status;
+
+        if (user_id === undefined || user_id === 0) {
+            return res.status(400).json({ message: 'Lütfen parametreleri kontrol edin', status: '404' });
+        }
+
+        connection.update({ 
+            status: status
+         }).from('users').where('id', user_id).then((faltypes) => {
+            return res.status(200).json({
+                status: '200',
+                message: 'Kullanıcı Durumu Güncellendi'
+            }); 
+        });
+    });
+
 }
     
 export default userDetails;

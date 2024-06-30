@@ -12,6 +12,8 @@ import dayjs from 'dayjs';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const UserEdit = () => {
+
+  
   const [selectedValue, setSelectedValue] = useState('');
   const [selectedChangeFt, setSelectedChangeFt] = useState('');
   const [selectedChangePrice, setSelectedChangePrice] = useState('');
@@ -31,6 +33,18 @@ const UserEdit = () => {
   const [appStarttime, setAppStarttime] = useState('');
   const [appEndtime, setAppEndtime] = useState('');
   const [appInterval, setAppInterval] = useState('');
+  
+  useEffect(() => {
+    fetchUsers().then((response) => {
+      if (response) {
+        var users = response;
+        setUsers(users);
+      }
+      
+    });
+
+  }, [users.status]);
+
 
   const fetchAddAppointment = async () => {
     const response = await userDetailService.AddAppointmentUser({
@@ -51,6 +65,18 @@ const UserEdit = () => {
     setAppEndtime('');
     setAppInterval('');
   };
+
+  const fetchUpdateUserStatus = async (pstatus) => {
+    const response = await userDetailService.UpdateUserStatus({ user_id: selectedUser.id, status: pstatus })
+    if (response.status === '200') {
+      toast.success(response.message);
+      selectedOnChange(selectedValue);
+    }
+    else {
+      toast.error(response.message);
+    }
+    return response;
+  }
 
   const fetchUpdateAppointment = async () => {
     const response = await userDetailService.UpdateUserAppointment({
@@ -82,21 +108,16 @@ const UserEdit = () => {
     return response;
   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await userDetailService.getAll('users');
-      return response;
-    };
+  const fetchUsers = async () => {
+    const response = await userDetailService.getAll('users');
+    return response;
+  };
 
-    fetchUsers().then((response) => {
-      setUsers(response);
-    });
+ 
 
-
-  }, []);
 
   const fetchAddUserFalType = async () => {
-    const response = await userDetailService.InsertFalTypeToUser({faltype_id: selectedChangeFt, cost: selectedChangePrice, userid: selectedUser.id});
+    const response = await userDetailService.InsertFalTypeToUser({ faltype_id: selectedChangeFt, cost: selectedChangePrice, userid: selectedUser.id });
     return response;
   };
 
@@ -122,12 +143,16 @@ const UserEdit = () => {
     setAppointmentDetails(filteredData);
 
     setSelectedValue(value);
-    users.find((data) => {
-      if (data.username === value) {
-        setSelectedUser(data);
-        setShowProperties(true);
-      }
-    })
+    
+      users.find((data) => {
+        if (data.username === value) {
+          setSelectedUser(data);
+          setShowProperties(true);
+        }
+      })  
+    
+    setAppointmentDetails(filteredData);
+    setSelectedValue(value);
   };
 
   const deleteUserFalType = async (id) => {
@@ -186,7 +211,7 @@ const UserEdit = () => {
       emptyAllStates();
     } catch (error) {
       toast.error(error.message);
-    } 
+    }
 
 
   };
@@ -218,10 +243,18 @@ const UserEdit = () => {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2, border: '1px solid cyan', p: 2, backgroundColor: '#cecece', borderRadius: '10px' }}>
             <Typography variant="button">Kullanıcı Bilgileri</Typography>
-            <Typography variant="caption">Hesap Durumu : {selectedUser.status ? 'Aktif' : 'Pasif'}</Typography>
+            <Typography variant="caption">Hesap Durumu : {selectedUser.status == 1 ? 'Aktif' : 'Pasif'}</Typography>
             <Typography variant="caption">Bakiye : {selectedUser.balance}</Typography>
-            <Button variant='contained' disabled={!selectedUser.status} sx={{ mr: 2 }}>Hesabı Pasif Et</Button>
-            <Button variant='contained' disabled={selectedUser.status} sx={{ mr: 2 }}>Hesabı Aktif Et</Button>
+            <Button variant='contained'
+              onClick={() => {
+                fetchUpdateUserStatus(0);
+              }}
+              disabled={selectedUser.status == 0} sx={{ mr: 2 }}>Hesabı Pasif Et</Button>
+            <Button
+              onClick={() => {
+                fetchUpdateUserStatus(1);
+              }}
+              variant='contained' disabled={selectedUser.status == 1} sx={{ mr: 2 }}>Hesabı Aktif Et</Button>
           </Box>
         }
 
@@ -405,7 +438,7 @@ const UserEdit = () => {
                     name: 'İptal',
                     color: 'error',
                     onClick: () => {
-                    
+
                     },
                   }]
                 }
@@ -458,7 +491,7 @@ const UserEdit = () => {
                           label="Lütfen Bakım Türü Seçiniz"
                           value={selectedAppFal}
                           defaultValue={selectedAppFal}
-                          onChange={(value) => {setSelectedAppFal(value.target.value)}}
+                          onChange={(value) => { setSelectedAppFal(value.target.value) }}
                         >
 
                           {userHaveFalTypes.length > 0 ? userHaveFalTypes.map((data) => (
@@ -477,7 +510,7 @@ const UserEdit = () => {
                         sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Baslangıc Tarihi" variant="outlined" />
                       <TextField
                         value={appEnddate}
-                        onChange={(e) => {setAppEnddate(e.target.value)}}
+                        onChange={(e) => { setAppEnddate(e.target.value) }}
                         sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='date' id="outlined-basic" label="Bitis Tarihi" variant="outlined" />
                       <TextField
                         value={appStarttime}
@@ -502,12 +535,12 @@ const UserEdit = () => {
                 handleUpdateClick={(params) => {
                   setAppDialogParameters(params)
                   fetchUserHaveFalTypes(selectedUser.id);
-                  setSelectedAppFal(params.id); 
+                  setSelectedAppFal(params.id);
                   setAppEndtime(params.end_hour);
                   setAppStarttime(params.start_hour);
                   setAppStartdate(dayjs(params.app_start_date).format('YYYY-MM-DD'));
                   setAppEnddate(dayjs(params.app_end_date).format('YYYY-MM-DD'));
-                  setAppInterval(params.interval_time);          
+                  setAppInterval(params.interval_time);
                 }}
                 dialogButtons={
                   [{
