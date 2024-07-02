@@ -43,7 +43,7 @@ const UserEdit = () => {
       
     });
 
-  }, [users.status]);
+  }, []);
 
 
   const fetchAddAppointment = async () => {
@@ -69,6 +69,9 @@ const UserEdit = () => {
   const fetchUpdateUserStatus = async (pstatus) => {
     const response = await userDetailService.UpdateUserStatus({ user_id: selectedUser.id, status: pstatus })
     if (response.status === '200') {
+      var newUser = users;
+      newUser.find(user => user.id === selectedUser.id).status = pstatus;
+      setUsers(newUser);
       toast.success(response.message);
       selectedOnChange(selectedValue);
     }
