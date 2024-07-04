@@ -4,6 +4,7 @@ import AuthContext from "context/userContext.tsx";
 import { useContext } from "react";
 const AccountSettings = () => {
   const {userName, email , role, balance} = useContext(AuthContext);
+  console.log(role);
   return (
     <MainCard title="Hesap Ayarları">
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1  }}>
@@ -40,7 +41,7 @@ const AccountSettings = () => {
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', gap: 1 }}>
             {[
               { label: 'Kullanıcı Adı', value: userName },
-              { label: 'Rolü',   value: role === 1 ? 'User' : role === 2 ? 'Yorumcu' : 'Admin'},
+              { label: 'Rolü',   value: role === '1' ? 'User' : role === '2' ? 'Yorumcu' : 'Admin'},
               { label: 'Email Adresi', value: email  },
               { label: 'Bakiye', value: balance },
             ].map((info, index) => (
