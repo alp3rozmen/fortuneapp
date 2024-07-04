@@ -50,6 +50,10 @@ function methods(app) {
                 }
 
                 const token = jwt.sign({ username: username }, 'secret', { expiresIn: '24h' });
+                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
+                var base64ProfileImage = Buffer.from(user[0].profile_image, 'binary').toString('base64');
+                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
+               
 
                 var response = {
                     status: 'success',
@@ -57,7 +61,10 @@ function methods(app) {
                     token: token,
                     userid: user[0].id,
                     userName: user[0].username,
-                    user_role: user[0].user_role
+                    user_role: user[0].user_role,
+                    profile_image: base64ImageWithPrefix,
+                    email : user[0].email,
+                    balance : user[0].balance
                 }
 
                 return res.status(200).json(response);

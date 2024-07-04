@@ -1,3 +1,4 @@
+
 import React from "react"
 import { createContext } from "react"
 import { useState, useEffect } from "react"
@@ -24,6 +25,10 @@ export const AuthContextProvider = ({ children }: any) => {
     const [userId, setUserId] = useState(0)
     const [token, setToken] = useState('')
     const [userName, setUserName] = useState('')
+    const [email, setEmail] = useState('')
+    const [balance , setBalance] = useState(0)
+    const [role , setRole] = useState('')
+
     const login = (userName : String, password : String) => {
         
         fetch('http://localhost:3000/api/login', {method: 'POST', headers: {'Accept': 'application/json', 'Content-Type': 'application/json', accessControlAllowOrigin: '*'}, 
@@ -34,13 +39,17 @@ export const AuthContextProvider = ({ children }: any) => {
                     setUserId(data.userid)
                     setIsLogin(true)
                     setUserName(data.userName)
-                    
+                    setRole(data.user_role)
+                    setEmail(data.email)
+                    setBalance(data.balance)
+
                     console.log(data)
                     navigate('/')
                     localStorage.setItem('token', data.token)
                     localStorage.setItem('userid', data.userid)
                     localStorage.setItem('userName', data.userName)
                     localStorage.setItem('userType', data.user_role)
+                    localStorage.setItem('profile_picture', data.profile_image)
                     toast.success(data.message, {
                         position: 'top-right',
                         autoClose: 5000,
@@ -94,7 +103,7 @@ export const AuthContextProvider = ({ children }: any) => {
     }
 
     return (
-        <AuthContext.Provider value={{token,userId, userName, isLogin, login, logout }}>
+        <AuthContext.Provider value={{token,userId, userName, isLogin, email , role, balance, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
@@ -106,6 +115,9 @@ export type AuthContextType = {
     isLogin: boolean,
     userName : string,
     userType : string,
+    email : string,
+    balance : number,
+    role : string,
     login: (userName : String, password : String) => void,
     logout: () => void
 }

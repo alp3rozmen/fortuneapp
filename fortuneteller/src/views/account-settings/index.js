@@ -1,7 +1,9 @@
 import { Avatar, Button, Box, Typography } from "@mui/material";
 import MainCard from "ui-component/cards/MainCard";
-
+import AuthContext from "context/userContext.tsx";
+import { useContext } from "react";
 const AccountSettings = () => {
+  const {userName, email , role, balance} = useContext(AuthContext);
   return (
     <MainCard title="Hesap Ayarları">
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1  }}>
@@ -17,7 +19,7 @@ const AccountSettings = () => {
           }}
         >
           <Typography textAlign={'center'} variant="caption">Profil Resmi</Typography>
-          <Avatar sx={{ width: 100, height: 100 }} src="" />
+          <Avatar  sx={{ width: 100, height: 100 }} src={localStorage.getItem('profile_picture')} />
           <Button variant="outlined">Değiştir</Button>
         </Box>
 
@@ -37,11 +39,10 @@ const AccountSettings = () => {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', gap: 1 }}>
             {[
-              { label: 'Kullanıcı Adı', value: 'Alper' },
-              { label: 'Rolü', value: 'Admin' },
-              { label: 'Email Adresi', value: 'alper@example.com' },
-              { label: 'Bakiye', value: '+90 123 456 7890' },
-              { label: 'Biyografi', value: 'Ankara, Türkiye' }
+              { label: 'Kullanıcı Adı', value: userName },
+              { label: 'Rolü',   value: role === 1 ? 'User' : role === 2 ? 'Yorumcu' : 'Admin'},
+              { label: 'Email Adresi', value: email  },
+              { label: 'Bakiye', value: balance },
             ].map((info, index) => (
               <Box
                 key={index}
@@ -59,8 +60,6 @@ const AccountSettings = () => {
                 <Typography sx={{ flex: 2, fontWeight: 'bold' }} variant="overline">{info.value}</Typography>
               </Box>
             ))}
-
-            <Button variant="outlined">Kullanıcı Bilgilerini Düzenle</Button>
           </Box>
         </Box>
       </Box>

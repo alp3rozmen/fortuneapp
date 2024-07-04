@@ -25,7 +25,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
-import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons-react';
@@ -40,6 +39,7 @@ const ProfileSection = () => {
   
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
+  
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
@@ -100,7 +100,7 @@ const ProfileSection = () => {
         }}
         icon={
           <Avatar
-            src={User1}
+            src={localStorage.getItem('profile_picture')}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: '8px 0 8px 8px !important',
