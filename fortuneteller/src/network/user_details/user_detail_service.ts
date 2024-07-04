@@ -146,6 +146,16 @@ export const userDetailService = {
             console.log(error);
             throw error;    
         }
+    },
+    UpdateUserProfilePicture : async (data : any) => {
+        try {
+            var response = await baseService.update('updateUserProfilePicture', data);
+            return response;
+
+        } catch (error) {
+            console.log(error);
+            throw error;    
+        }
     }
 }
 

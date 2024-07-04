@@ -349,6 +349,27 @@ function userDetails(app , connection) {
         });
     });
 
+    app.put('/api/updateUserProfilePicture', (req, res) => {
+        
+        var fileBase64 = req.body.fileBase64;
+        var user_id = req.body.user_id;
+        var binaryFile = Buffer.from(fileBase64, 'base64');
+
+        if (user_id === undefined || user_id === 0) {
+            return res.status(400).json({ message: 'Lütfen parametreleri kontrol edin', status: '404' });
+        }
+
+        connection.update({ 
+            profile_image: binaryFile
+         }).from('user_details').where('user_id', user_id).then((faltypes) => {
+            return res.status(200).json({
+                status: '200',
+                message: 'Kullanıcı Resmi Güncellendi'
+            }); 
+        });
+        
+    })
+
 }
     
 export default userDetails;
