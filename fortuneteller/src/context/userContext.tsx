@@ -34,6 +34,7 @@ export const AuthContextProvider = ({ children }: any) => {
     const [email, setEmail] = useState('')
     const [balance , setBalance] = useState(0)
     const [role , setRole] = useState('')
+    const [userProfilePicture, setUserProfilePicture] = useState('')
 
     const getUserInfo = () => {
             fetch('http://localhost:3000/api/getUserInfo', 
@@ -49,11 +50,10 @@ export const AuthContextProvider = ({ children }: any) => {
                         setRole(data.user_role)
                         setEmail(data.email)
                         setBalance(data.balance)
+                        setUserProfilePicture(data.profile_image)
                         localStorage.setItem('userid', data.userid)
                         localStorage.setItem('userName', data.userName)
                         localStorage.setItem('userType', data.user_role)
-                        localStorage.setItem('profile_picture', data.profile_image)
-
                     })
                     
                 }
@@ -73,7 +73,6 @@ export const AuthContextProvider = ({ children }: any) => {
                         localStorage.removeItem('userid');
                         localStorage.removeItem('userName')
                         localStorage.removeItem('userType')
-                        localStorage.removeItem('profile_picture')
                         navigate('/')   
                     })
                 }
@@ -91,7 +90,6 @@ export const AuthContextProvider = ({ children }: any) => {
                 localStorage.removeItem('userid');
                 localStorage.removeItem('userName')
                 localStorage.removeItem('userType')
-                localStorage.removeItem('profile_picture')
                 navigate('/') 
                 console.log(error)
             })
@@ -117,7 +115,7 @@ export const AuthContextProvider = ({ children }: any) => {
                     localStorage.setItem('userid', data.userid)
                     localStorage.setItem('userName', data.userName)
                     localStorage.setItem('userType', data.user_role)
-                    localStorage.setItem('profile_picture', data.profile_image)
+                    setUserProfilePicture(data.profile_image);
                     toast.success(data.message, {
                         position: 'top-right',
                         autoClose: 5000,
@@ -171,7 +169,7 @@ export const AuthContextProvider = ({ children }: any) => {
     }
 
     return (
-        <AuthContext.Provider value={{token,userId, userName, isLogin, email , role, balance, login, logout }}>
+        <AuthContext.Provider value={{token,userId, userName, isLogin, email , role, balance, login, logout, getUserInfo, userProfilePicture }}>
             {children}
         </AuthContext.Provider>
     )
@@ -186,8 +184,10 @@ export type AuthContextType = {
     email : string,
     balance : number,
     role : string,
+    userProfilePicture : string,
     login: (userName : String, password : String) => void,
-    logout: () => void
+    logout: () => void,
+    getUserInfo : () => void
 }
 
 

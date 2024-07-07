@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { userDetailService } from "network/user_details/user_detail_service.ts";
 
 const AccountSettings = () => {
-  const { userName, email, role, balance, userId } = useContext(AuthContext);
+  const { userName, email, role, balance, userId, getUserInfo, userProfilePicture } = useContext(AuthContext);
   
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -38,7 +38,7 @@ const AccountSettings = () => {
         console.log(response);
         if (response.status === '200') {
           toast.success('Profil resmi değiştirildi');
-          localStorage.setItem('profile_picture', response.profile_picture);
+          getUserInfo();
         }
       })
     };
@@ -61,7 +61,7 @@ return (
         }}
       >
         <Typography textAlign={'center'} variant="caption">Profil Resmi</Typography>
-        <Avatar sx={{ width: 100, height: 100 }} src={localStorage.getItem('profile_picture')} />
+        <Avatar sx={{ width: 100, height: 100 }} src={userProfilePicture} />
         <Button component="label" variant="outlined">Değiştir<VisuallyHiddenInput onChange={(e) => UpdateProfilePicture(e.target.files[0])} accept="image/png" type="file" /></Button>
       </Box>
 

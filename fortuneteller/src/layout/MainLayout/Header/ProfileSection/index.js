@@ -35,7 +35,7 @@ const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
-  const {  userName, logout} = useContext(AuthContext);
+  const {  userName, logout , userProfilePicture} = useContext(AuthContext);
   
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
@@ -96,11 +96,11 @@ const ProfileSection = () => {
           },
           '& .MuiChip-label': {
             lineHeight: 0
-          }
+          } 
         }}
         icon={
           <Avatar
-            src={localStorage.getItem('profile_picture')}
+            src={userProfilePicture}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: '8px 0 8px 8px !important',
