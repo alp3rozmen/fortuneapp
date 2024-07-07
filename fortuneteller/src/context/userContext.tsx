@@ -10,8 +10,6 @@ export const AuthContext = createContext(null as any)
 
 export const AuthContextProvider = ({ children }: any) => {
 
-    
-       
     useEffect(() => {
         var token = localStorage.getItem('token')
 
