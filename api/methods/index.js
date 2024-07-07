@@ -77,6 +77,43 @@ function methods(app) {
         })
     })
 
+    //TOKEN ILE CHECK
+    app.post('/api/getUserInfo', authenticateToken, (req, res) => {
+
+        const { userid } = req.body;
+
+        if (userid === '') {
+            return res.status(400).json({ error: 'Kullanıcı adı ve sifre gereklidir', status: 'error' });
+        }
+
+        connection.select().from('users').where('id', userid).then((user) => {
+
+                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
+                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
+                
+                if (base64ProfileImage.includes('dataimage/pngbase64')) {
+                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
+                }
+                
+                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
+
+                var response = {
+                    status: 'success',
+                    message: 'Kullanıcı Bilgileri Alındı',
+                    userid: user[0].id,
+                    userName: user[0].username,
+                    user_role: user[0].user_role,
+                    profile_image: base64ImageWithPrefix,
+                    email : user[0].email,
+                    balance : user[0].balance
+                }
+
+                return res.status(200).json(response);
+        })
+    })
+
+
+
     app.get('/api/users/:user_name', (req, res) => {
         
         var username = req.query.user_name;
@@ -148,7 +185,7 @@ function methods(app) {
                 profileImageData = user.profile_image;
                 
                 const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
+                var base64ProfileImage = Buffer.from(profileImageData).toString('base64');
                 
             
                 if (base64ProfileImage.includes('dataimage/pngbase64')) {

@@ -10,12 +10,18 @@ export const AuthContext = createContext(null as any)
 
 export const AuthContextProvider = ({ children }: any) => {
 
+    
+       
     useEffect(() => {
-        const token = localStorage.getItem('token')
-        if (token) {
+        var token = localStorage.getItem('token')
+
+        if ((token) && (userId > 0)) {
             setIsLogin(true)
             setUserName(localStorage.getItem('userName'))
             setToken(token)
+        }
+        else if ((token) && (userId === 0)) {
+            getUserInfo()
         }
     })
 
@@ -28,6 +34,68 @@ export const AuthContextProvider = ({ children }: any) => {
     const [email, setEmail] = useState('')
     const [balance , setBalance] = useState(0)
     const [role , setRole] = useState('')
+
+    const getUserInfo = () => {
+            fetch('http://localhost:3000/api/getUserInfo', 
+                {
+                method: 'POST', 
+                headers: {'authorization': `Bearer ${localStorage.getItem('token')}`,'Accept': 'application/json', 'Content-Type': 'application/json', accessControlAllowOrigin: '*'}, 
+                body: JSON.stringify({userid : localStorage.getItem('userid')})}).then((response) => {
+                if (response.status === 200) {
+                    response.json().then((data) => {
+                        setUserId(data.userid)
+                        setIsLogin(true)
+                        setUserName(data.userName)
+                        setRole(data.user_role)
+                        setEmail(data.email)
+                        setBalance(data.balance)
+                        localStorage.setItem('userid', data.userid)
+                        localStorage.setItem('userName', data.userName)
+                        localStorage.setItem('userType', data.user_role)
+                        localStorage.setItem('profile_picture', data.profile_image)
+
+                    })
+                    
+                }
+                else {
+                    response.json().then((data) => {
+                        toast.error(data.error, {
+                            position: 'top-right',
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: 'light',
+                        })
+
+                        localStorage.removeItem('userid');
+                        localStorage.removeItem('userName')
+                        localStorage.removeItem('userType')
+                        localStorage.removeItem('profile_picture')
+                        navigate('/')   
+                    })
+                }
+            }).catch((error) => {
+                toast.error('Bir hata oluştu', {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'light',
+                })
+                localStorage.removeItem('userid');
+                localStorage.removeItem('userName')
+                localStorage.removeItem('userType')
+                localStorage.removeItem('profile_picture')
+                navigate('/') 
+                console.log(error)
+            })
+    }
 
     const login = (userName : String, password : String) => {
         
