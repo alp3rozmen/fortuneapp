@@ -51,9 +51,14 @@ function methods(app) {
 
                 const token = jwt.sign({ username: username }, 'secret', { expiresIn: '24h' });
                 const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                var base64ProfileImage = Buffer.from(user[0].profile_image, 'binary').toString('base64');
+                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
+                
+            
+                if (base64ProfileImage.includes('dataimage/pngbase64')) {
+                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
+                }
+                
                 const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-               
 
                 var response = {
                     status: 'success',
@@ -73,10 +78,9 @@ function methods(app) {
     })
 
     app.get('/api/users/:user_name', (req, res) => {
+        
         var username = req.query.user_name;
         var userResponse = [];
-        var profileImageData = null; 
-        var base64Image = null;
 
         if (username === undefined) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
@@ -88,9 +92,16 @@ function methods(app) {
             }
             else {
 
-                profileImageData = user[0].profile_image; 
-                base64Image =  Buffer.from(profileImageData).toString('base64');
-                var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
+             
+                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
+                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
+                
+            
+                if (base64ProfileImage.includes('dataimage/pngbase64')) {
+                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
+                }
+                
+                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
                 
                 userResponse.push(
                     {   user_id: user[0].id , 
@@ -100,7 +111,7 @@ function methods(app) {
                         gender: user[0].gender,
                         age: user[0].age,
                         bio: user[0].bio,
-                        profile_image: profileImageUrl,
+                        profile_image: base64ImageWithPrefix,
                         user_role: user[0].user_role,
                         status: user[0].status,
                         balance: user[0].balance
@@ -135,9 +146,18 @@ function methods(app) {
             .groupBy('users.id').then((users) => {
                 users.map((user) => {
                 profileImageData = user.profile_image;
-                base64Image =  Buffer.from(profileImageData).toString('base64');
-                var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
-
+                
+                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
+                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
+                
+            
+                if (base64ProfileImage.includes('dataimage/pngbase64')) {
+                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
+                }
+                
+                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
+                
+                    
                     userResponse.push({ id: user.id , 
                                         username: user.username, 
                                         email: user.email,
@@ -145,7 +165,7 @@ function methods(app) {
                                         gender: user.gender,
                                         age: user.age,
                                         bio: user.bio,
-                                        profile_image: profileImageUrl,
+                                        profile_image: base64ImageWithPrefix,
                                         user_role: user.user_role,
                                         status: user.status,
                                         balance: user.balance,
@@ -165,8 +185,17 @@ function methods(app) {
             .groupBy('users.id').then((users) => {
                 users.map((user) => {
                 profileImageData = user.profile_image;
-                base64Image =  Buffer.from(profileImageData).toString('base64');
-                var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
+
+                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
+                var base64ProfileImage = Buffer.from(profileImageData).toString('base64');
+                
+            
+                if (base64ProfileImage.includes('dataimage/pngbase64')) {
+                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
+                }
+                
+                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
+                
 
                     userResponse.push({ id: user.id , 
                                         username: user.username, 
@@ -175,7 +204,7 @@ function methods(app) {
                                         gender: user.gender,
                                         age: user.age,
                                         bio: user.bio,
-                                        profile_image: profileImageUrl,
+                                        profile_image: base64ImageWithPrefix,
                                         user_role: user.user_role,
                                         status: user.status,
                                         balance: user.balance,
@@ -193,10 +222,21 @@ function methods(app) {
 
             connection.select('users.*').select('user_details.id as user_details_id').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
                 users.map((user) => {
-                    profileImageData = user.profile_image;
-                    base64Image =  Buffer.from(profileImageData).toString('base64');
-                    var profileImageUrl = `data:image/jpeg;base64,${base64Image}`;
-    
+                  profileImageData = user.profile_image; 
+                  
+                  
+                  const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
+                  var base64ProfileImage = Buffer.from(profileImageData).toString('base64');
+                  
+              
+                  if (base64ProfileImage.includes('dataimage/pngbase64')) {
+                      base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
+                  }
+                  
+                  const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
+                
+                    
+        
                         userResponse.push({ id: user.id , 
                                             username: user.username, 
                                             email: user.email,
@@ -204,7 +244,7 @@ function methods(app) {
                                             gender: user.gender,
                                             age: user.age,
                                             bio: user.bio,
-                                            profile_image: profileImageUrl,
+                                            profile_image: base64ImageWithPrefix,
                                             user_role: user.user_role,
                                             status: user.status,
                                             balance: user.balance,

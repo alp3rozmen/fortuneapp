@@ -359,12 +359,15 @@ function userDetails(app , connection) {
             return res.status(400).json({ message: 'Lütfen parametreleri kontrol edin', status: '404' });
         }
 
+        console.log(binaryFile);
+
         connection.update({ 
             profile_image: binaryFile
-         }).from('user_details').where('user_id', user_id).then((faltypes) => {
+         }).from('users').where('id', user_id).then((faltypes) => {
             return res.status(200).json({
                 status: '200',
-                message: 'Kullanıcı Resmi Güncellendi'
+                message: 'Kullanıcı Resmi Güncellendi',
+                profile_picture: fileBase64
             }); 
         });
         

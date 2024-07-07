@@ -5,11 +5,10 @@ import { useContext } from "react";
 import { styled } from '@mui/material/styles';
 import { toast } from "react-toastify";
 import { userDetailService } from "network/user_details/user_detail_service.ts";
-import { useState } from "react";
+
 const AccountSettings = () => {
   const { userName, email, role, balance, userId } = useContext(AuthContext);
-  const [base64Image, setBase64Image] = useState('');
-
+  
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -32,21 +31,19 @@ const AccountSettings = () => {
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      console.log(e.target.result);
+      userDetailService.UpdateUserProfilePicture({
+        fileBase64: e.target.result,
+        user_id: userId
+      }).then((response) => {
+        console.log(response);
+        if (response.status === '200') {
+          toast.success('Profil resmi değiştirildi');
+          localStorage.setItem('profile_picture', response.profile_picture);
+        }
+      })
     };
-
     
-
-    // userDetailService.UpdateUserProfilePicture({
-    //   fileBase64: base64Image,
-    //   user_id: userId
-    // }).then((response) => {
-    //   if (response.status === 200) {
-    //     toast.success('Profil resmi değiştirildi');
-    //     localStorage.setItem('profile_picture', response.data.profile_picture);
-    //   }
-    // })
-
+    reader.readAsDataURL(file);
   }
 
 return (

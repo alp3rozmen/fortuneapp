@@ -1,10 +1,14 @@
 import express from 'express';
 import methods from './methods/index.js';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 const app = express();
 
 // CORS middleware
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*"}));
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // JSON ve URL-encoded veri ayrıştırma middleware'leri
 app.use(express.json());
