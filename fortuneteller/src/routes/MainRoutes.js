@@ -1,18 +1,13 @@
-import { lazy } from 'react';
+import { lazy, useContext } from 'react';
 
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-
+import AuthContext from 'context/userContext.tsx';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // utilities routing
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 const FortuneTelling = Loadable(lazy(() => import('views/fortune-telling')));
 const AccountSettings = Loadable(lazy(() => import('views/account-settings')));
 const Tarot = Loadable(lazy(() => import('views/tarot')));
@@ -20,12 +15,22 @@ const Yildizname = Loadable(lazy(() => import('views/yildizname')));
 const Katina = Loadable(lazy(() => import('views/katina')));
 const Water = Loadable(lazy(() => import('views/water')));
 const UserDetail = Loadable(lazy(() => import('views/user-detail')));
-// sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 const UserEdit = Loadable(lazy(() => import('views/users-edit')));
 const FaltypesEdit = Loadable(lazy(() => import('views/faltypes-edit')));
 
 // ==============================|| MAIN ROUTING ||============================== //
+const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent }) => {
+
+  const { role } = useContext(AuthContext);
+
+  if (roles.includes(role)) {
+    return <Component />;
+  } else {
+    return FallbackComponent ? <FallbackComponent /> : null;
+  }
+};
+
+
 
 const MainRoutes = {
   path: '/',
@@ -33,99 +38,47 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <DashboardDefault />
+      element: <RoleBasedRoute roles={['1','2', '3', '']} component={DashboardDefault} />,
     },
     {
       path: 'fals/coffee',
-      element: <FortuneTelling />
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={FortuneTelling} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'fals/tarot',
-      element: <Tarot />
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={Tarot} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'fals/katina',
-      element: <Katina />
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={Katina} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'fals/yildizname',
-      element: <Yildizname />
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={Yildizname} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'fals/water',
-      element: <Water />
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={Water} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'user/:username',
-      element: <UserDetail />        
-    },
-    {
-      path: 'admin',
-      element: <DashboardDefault />
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={UserDetail} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'account',
-      element: <AccountSettings />
+      element: <RoleBasedRoute roles={['1', '2', '3']} component={AccountSettings} fallbackComponent={DashboardDefault} />,
     },
     {
-      path : 'users/edit',
-      element : <UserEdit />
+      path: 'users/edit',
+      element: <RoleBasedRoute roles={['3']} component={UserEdit} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'faltypes/edit',
-      element: <FaltypesEdit />
-    },
-
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-typography',
-          element: <UtilsTypography />
-        }
-      ]
-    },
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-color',
-          element: <UtilsColor />
-        }
-      ]
-    },
-    {
-      path: 'utils',
-      children: [
-        {
-          path: 'util-shadow',
-          element: <UtilsShadow />
-        }
-      ]
-    },
-    {
-      path: 'icons',
-      children: [
-        {
-          path: 'tabler-icons',
-          element: <UtilsTablerIcons />
-        }
-      ]
-    },
-    {
-      path: 'icons',
-      children: [
-        {
-          path: 'material-icons',
-          element: <UtilsMaterialIcons />
-        }
-      ]
-    },
-    {
-      path: 'sample-page',
-      element: <SamplePage />
+      element: <RoleBasedRoute roles={['3']} component={FaltypesEdit} fallbackComponent={DashboardDefault} />,
     }
   ]
 };
+
+
 
 export default MainRoutes;
