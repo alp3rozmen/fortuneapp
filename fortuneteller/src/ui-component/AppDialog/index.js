@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Box, Typography, Radio, RadioGroup } from '@mui/material';
+import { Box, Typography, Radio, RadioGroup, DialogActions } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import tr from 'dayjs/locale/tr';
@@ -12,7 +12,7 @@ import { userDetailService } from '../../network/user_details/user_detail_servic
 
 const DefaultPages = ['dateSelectPage', 'informationPage', 'successPage'];
 
-function AppDialog({  handleClose  ,open, cardid }) {
+function AppDialog({handleClose  ,open, cardid }) {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [hoursList, setHoursList] = useState([]);
   const [appointmentDetails, setAppointmentDetails] = useState({});
@@ -71,6 +71,8 @@ function AppDialog({  handleClose  ,open, cardid }) {
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <DateCalendar
+           
+            value={dayjs(selectedDate)}
             selected={selectedDate}
             ref={calendarRef}
             onChange={(newValue) => getAppointmentTimes(dayjs(newValue).format('YYYY-MM-DD'))}
@@ -86,7 +88,7 @@ function AppDialog({  handleClose  ,open, cardid }) {
                   Randevuya kapalıdır.
                 </Typography>
               )}
-              <RadioGroup onChange={(e) => setSelectedHour(e.target.value)} aria-labelledby="radio-group-label" defaultValue="female" name="radio-group">
+              <RadioGroup value={selectedHour} onChange={(e) => setSelectedHour(e.target.value)} aria-labelledby="radio-group-label" defaultValue="female" name="radio-group">
                 {hoursList.map((hour, index) => (
                   <Box key={index} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <Radio value={hour.format('HH:mm')} sx={{ display: 'flex' }} />
@@ -142,13 +144,24 @@ function AppDialog({  handleClose  ,open, cardid }) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
+      
+      <DialogActions sx={{display : 'flex', flexDirection : 'row' , justifyContent : 'space-between'}}>
       <DialogTitle>Randevu Al</DialogTitle>
+        <Button sx={{borderRadius : 100 , width : 10, height : 24}} color='error' variant='contained' 
+          onClick={()=> handleClose()}>X</Button>
+      </DialogActions>
+      
       <LocalizationProvider dateAdapter={AdapterDayjs} locale={tr}>
-        {activePage === 'dateSelectPage' && <DateSelectPage />}
+        <>
+        
+        {activePage === 'dateSelectPage' && <DateSelectPage /> }
         {activePage === 'informationPage' && <InformationPage />}
         {activePage === 'successPage' && <SuccessPage />}
         {!DefaultPages.includes(activePage) && <Typography>Sayfa bulunamadı.</Typography>}
+       
+        </> 
       </LocalizationProvider>
+
     </Dialog>
   );
 }
@@ -169,7 +182,7 @@ export default function AppointmentDialog({ name, btnStyle, carduserid }) {
       <Button variant="outlined" onClick={handleClickOpen} sx={btnStyle}>
         {name}
       </Button>
-      <AppDialog open={open} onClose={handleClose} cardid={carduserid} />
+      <AppDialog open={open} handleClose={handleClose} cardid={carduserid} />
     </Box>
   );
 }
