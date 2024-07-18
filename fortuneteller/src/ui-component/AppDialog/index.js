@@ -19,11 +19,20 @@ function AppDialog({handleClose  ,open, cardid }) {
   const calendarRef = useRef(null);
   const [selectedHour, setSelectedHour] = useState('');
   const [activePage, setActivePage] = useState(DefaultPages[0]);
-
   useEffect(() => {
     gApps();
    
   }, []);
+
+  const innerHandleClose = () => {
+    handleClose();
+    setVisible(false);
+    setSelectedDate(dayjs().format('YYYY-MM-DD'));
+    setHoursList([]);
+    setAppointmentDetails({});
+    setSelectedHour('');
+    setActivePage(DefaultPages[0]);
+  }
 
   const gApps = async () => {
     try {
@@ -143,12 +152,12 @@ function AppDialog({handleClose  ,open, cardid }) {
   };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
+    
+    <Dialog open={open}>
       
-      <DialogActions sx={{display : 'flex', flexDirection : 'row' , justifyContent : 'space-between'}}>
-      <DialogTitle>Randevu Al</DialogTitle>
+      <DialogActions sx={{display : 'flex', flexDirection : 'row' , justifyContent : 'right'}}>
         <Button sx={{borderRadius : 100 , width : 10, height : 24}} color='error' variant='contained' 
-          onClick={()=> handleClose()}>X</Button>
+          onClick={()=> innerHandleClose()}>X</Button>
       </DialogActions>
       
       <LocalizationProvider dateAdapter={AdapterDayjs} locale={tr}>
@@ -163,6 +172,7 @@ function AppDialog({handleClose  ,open, cardid }) {
       </LocalizationProvider>
 
     </Dialog>
+   
   );
 }
 
