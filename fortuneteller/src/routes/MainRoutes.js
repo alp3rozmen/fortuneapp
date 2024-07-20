@@ -4,6 +4,7 @@ import { lazy, useContext } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthContext from 'context/userContext.tsx';
+
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
@@ -17,6 +18,7 @@ const Water = Loadable(lazy(() => import('views/water')));
 const UserDetail = Loadable(lazy(() => import('views/user-detail')));
 const UserEdit = Loadable(lazy(() => import('views/users-edit')));
 const FaltypesEdit = Loadable(lazy(() => import('views/faltypes-edit')));
+const FaltypesDesign = Loadable(lazy(() => import('views/faltypes-design')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent }) => {
@@ -75,7 +77,11 @@ const MainRoutes = {
     {
       path: 'faltypes/edit',
       element: <RoleBasedRoute roles={['3']} component={FaltypesEdit} fallbackComponent={DashboardDefault} />,
-    }
+    },
+    {
+      path: 'faltypes/design',
+      element: <RoleBasedRoute roles={['3']} component={FaltypesDesign} fallbackComponent={DashboardDefault} />,
+    },
   ]
 };
 

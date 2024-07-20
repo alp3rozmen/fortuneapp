@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { Box, Typography, Radio, RadioGroup, DialogActions } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -26,7 +25,6 @@ function AppDialog({handleClose  ,open, cardid }) {
 
   const innerHandleClose = () => {
     handleClose();
-    setVisible(false);
     setSelectedDate(dayjs().format('YYYY-MM-DD'));
     setHoursList([]);
     setAppointmentDetails({});

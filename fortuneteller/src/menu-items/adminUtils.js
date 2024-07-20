@@ -1,8 +1,8 @@
 
-import { IconClock, IconDashboard, IconEdit, IconSelect } from '@tabler/icons-react';
+import { IconDirectionSign ,IconClock, IconDashboard, IconEdit, IconSelect } from '@tabler/icons-react';
 
 // constant
-const icons = {IconSelect, IconDashboard  ,IconEdit , IconClock };
+const icons = {IconDirectionSign , IconSelect, IconDashboard  ,IconEdit , IconClock };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -35,7 +35,16 @@ const adminUtils = {
           url: '/faltypes/edit',
           icon: icons.IconClock,
           breadcrumbs: false
-        }    
+        },
+        {
+          id: 'FalTypesDesign',
+          title: 'Bakım Tipi Detayları',
+          type: 'item',
+          url: '/faltypes/design',
+          icon: icons.IconDirectionSign,
+          breadcrumbs: false
+        }   
+        
       ]
     },
     
