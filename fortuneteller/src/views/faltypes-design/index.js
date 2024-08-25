@@ -3,7 +3,7 @@ import { ReactFormBuilder, ReactFormGenerator } from 'react-form-builder2';
 import 'react-form-builder2/dist/app.css';
 import { Box, Select, FormControl, InputLabel, MenuItem, Button } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { toast } from 'react-toastify';
 
 const FalTypesDesign = () => {
