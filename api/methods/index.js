@@ -90,8 +90,7 @@ function methods(app) {
 
                 const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
                 
-                console.log(user[0]);
-
+                if (user[0]) {
                 var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
 
 
@@ -114,6 +113,7 @@ function methods(app) {
                 }
 
                 return res.status(200).json(response);
+            }
         })
     })
 
@@ -180,10 +180,9 @@ function methods(app) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
 
         }
-
     
         if (user_role === 0 && fortuner_type === 0 && isAdminReq === 1) {
-            connection.select('users.*').select('user_details.id as user_details_id').from('users').leftJoin('user_details', 'users.id', 'user_details.user_id')
+            connection.select('users.*').select('user_details.id as user_details_id').select('user_details.fal_type').from('users').leftJoin('user_details', 'users.id', 'user_details.user_id')
             .whereNotIn('user_role', [1,3])
             .groupBy('users.id').then((users) => {
                 users.map((user) => {
@@ -213,7 +212,9 @@ function methods(app) {
                                         balance: user.balance,
                                         created_at: user.created_at,
                                         updated_at: user.updated_at,
-                                        user_details_id: user.user_details_id})
+                                        user_details_id: user.user_details_id,
+                                        fal_type: user.fal_type
+                                    })
                 });
                 
                 return res.status(200).json(
@@ -222,7 +223,7 @@ function methods(app) {
             });
         }
         else if (user_role === 0 && fortuner_type === 0 && isAdminReq === 0) {
-            connection.select('users.*').select('user_details.id as user_details_id').from('users').leftJoin('user_details', 'users.id', 'user_details.user_id')
+            connection.select('users.*').select('user_details.id as user_details_id').select('user_details.fal_type').from('users').leftJoin('user_details', 'users.id', 'user_details.user_id')
             .whereNotNull('user_details.id')
             .groupBy('users.id').then((users) => {
                 users.map((user) => {
@@ -237,8 +238,7 @@ function methods(app) {
                 }
                 
                 const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-                
-
+                    
                     userResponse.push({ id: user.id , 
                                         username: user.username, 
                                         email: user.email,
@@ -252,9 +252,10 @@ function methods(app) {
                                         balance: user.balance,
                                         created_at: user.created_at,
                                         updated_at: user.updated_at,
-                                        user_details_id: user.user_details_id})
+                                        user_details_id: user.user_details_id,
+                                        fal_type: user.fal_type})
                 });
-                
+              
                 return res.status(200).json(
                     userResponse
                 );
@@ -262,7 +263,7 @@ function methods(app) {
         }
         else if (user_role > 0 && fortuner_type > 0 && isAdminReq === 0) {
 
-            connection.select('users.*').select('user_details.id as user_details_id').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
+            connection.select('users.*').select('user_details.id as user_details_id').select('user_details.fal_type').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
                 users.map((user) => {
                   profileImageData = user.profile_image; 
                   
@@ -292,7 +293,8 @@ function methods(app) {
                                             balance: user.balance,
                                             created_at: user.created_at,
                                             updated_at: user.updated_at,
-                                            user_details_id: user.user_details_id})
+                                            user_details_id: user.user_details_id,
+                                            fal_type: user.fal_type})
                     });
                     
                     return res.status(200).json(
@@ -300,6 +302,8 @@ function methods(app) {
                     );
             });
         }
+
+       
     })
 
 

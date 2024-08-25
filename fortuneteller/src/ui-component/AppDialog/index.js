@@ -8,19 +8,22 @@ import tr from 'dayjs/locale/tr';
 import dayjs from 'dayjs';
 import { useState, useEffect, useRef } from 'react';
 import { userDetailService } from '../../network/user_details/user_detail_service.ts';
+import { ReactFormGenerator } from 'react-form-builder2';
+import { FalTypes } from 'network/FalTypes/FalTypes.ts';
 
 const DefaultPages = ['dateSelectPage', 'informationPage', 'successPage'];
 
-function AppDialog({handleClose  ,open, cardid }) {
+function AppDialog({handleClose  ,open, cardid , fal_type }) {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [hoursList, setHoursList] = useState([]);
   const [appointmentDetails, setAppointmentDetails] = useState({});
   const calendarRef = useRef(null);
   const [selectedHour, setSelectedHour] = useState('');
   const [activePage, setActivePage] = useState(DefaultPages[0]);
+ 
   useEffect(() => {
     gApps();
-   
+
   }, []);
 
   const innerHandleClose = () => {
@@ -31,6 +34,8 @@ function AppDialog({handleClose  ,open, cardid }) {
     setSelectedHour('');
     setActivePage(DefaultPages[0]);
   }
+
+  
 
   const gApps = async () => {
     try {
@@ -131,9 +136,38 @@ function AppDialog({handleClose  ,open, cardid }) {
     </Box>
   );
 
-  const InformationPage = () => (
+
+  const GetFaltypeDesign = async (fal_type) => {
+    const response = await FalTypes.GetFalTypeDesign(fal_type);
+    if (response) {
+        return response;
+    }
+  }
+
+  const InformationPage = () => {
+    const [formData , setFormData] = useState([]);
+
+    useEffect(() => {
+        GetFaltypeDesign(fal_type).then((response) => {
+          
+          if (response.status == 404) {
+            return
+          }else{
+            const parsedJson = JSON.parse(response.data[0].formdata);
+          
+            setFormData(parsedJson.task_data);
+
+          }
+          
+        })
+    }, []);
+
+    return(   
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
-      <Typography variant="subtitle1">Information Page</Typography>
+      
+      {formData.length !== 0 ? <ReactFormGenerator hide_actions = {true} data={formData} /> : <Typography variant="subtitle1">Yakında...</Typography>}
+
+
       <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
         <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[0])}>
           Geri
@@ -143,7 +177,8 @@ function AppDialog({handleClose  ,open, cardid }) {
         </Button>
       </Box>
     </Box>
-  );
+    )
+  };
 
   const SetPage = (page) => {
     setActivePage(page);
@@ -174,7 +209,7 @@ function AppDialog({handleClose  ,open, cardid }) {
   );
 }
 
-export default function AppointmentDialog({ name, btnStyle, carduserid }) {
+export default function AppointmentDialog({ name, btnStyle, carduserid , fal_type }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -190,7 +225,7 @@ export default function AppointmentDialog({ name, btnStyle, carduserid }) {
       <Button variant="outlined" onClick={handleClickOpen} sx={btnStyle}>
         {name}
       </Button>
-      <AppDialog open={open} handleClose={handleClose} cardid={carduserid} />
+      <AppDialog open={open} handleClose={handleClose} cardid={carduserid} fal_type={fal_type} />
     </Box>
   );
 }

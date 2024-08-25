@@ -83,6 +83,16 @@ export const FalTypes = {
             console.log("/api/insertFalDesign - FalTypes AddFalTypeDesign", error); 
             throw error;
         }
+    },
+    GetFalTypeDesign : async (id : any) => {
+        try {
+            var response = await baseService.post<any[]>("getFalDesign", {fal_type_id : id});
+            return response;
+        }
+        catch (error) {
+            console.log("/api/getFalDesign - FalTypes GetFalTypeDesign", error); 
+            throw error;
+        }
     }
 }
 

@@ -13,6 +13,7 @@ const FalTypesDesign = () => {
     const [faltypes , setFaltypes] = useState([]);
     
     useEffect(() => {
+        
          FalTypes.getAll().then((response) => {
             if (response) {
                 setFaltypes(response.data);
@@ -23,6 +24,29 @@ const FalTypesDesign = () => {
 
     const handleChange = (event) => {
         setSelectedType(event.target.value);
+
+        console.log(event.target.value);
+       FalTypes.GetFalTypeDesign(event.target.value).then((response) => {
+            if (response) {
+             
+                if (response.status == 404) {
+                    if (formData) {
+                        closePreview();
+                        setFormData([]);
+                    }
+                    return
+                }
+                else{
+                    const jsonParsed = JSON.parse(response.data[0].formdata);
+                    setFormData(jsonParsed);
+                    alert("Bu tip için tanımlı form bulunmaktadır yapacağınız yeni form varolan tasarımı silecektir.");
+                    setPreview(true);
+                } 
+            
+                
+            }
+        })
+
     };
 
     const handleSave = () => {
@@ -48,7 +72,7 @@ const FalTypesDesign = () => {
     };
 
     const saveData = () =>{
-        FalTypes.AddFalTypeDesign(1 , JSON.stringify(formData.task_data)).then((response) => {
+        FalTypes.AddFalTypeDesign(1 , JSON.stringify(formData)).then((response) => {
             if (response) {
                 toast.success("Formunuz kaydedildi");
             }
@@ -61,7 +85,32 @@ const FalTypesDesign = () => {
       
    <>
       <MainCard>
-
+      <Button sx={{ m: 2 }} variant="outlined" onClick={openPreview}>Önizleme</Button>
+      {preview && (
+                            <div style={{ display: 'block' , padding : 10}}>
+                                <h3>Formu Önizle</h3>
+                                <div className="modal-dialog modal-lg" role="document">
+                                    <div style={{padding : 10}} className="modal-content">
+                                        <ReactFormGenerator
+                                            download_path=""
+                                            back_action=""
+                                            back_name="Back"
+                                            answer_data={{}}
+                                            form_action=""
+                                            form_method="POST"
+                                            data={formData.task_data}
+                                            submitButton={false}
+                                            onSubmit={(info) => console.log(info)}
+                                        />
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closePreview}>Önizlemeyi Kapat</button>
+                                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={saveData}>Kaydet</button>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        )}
         <Box>
             <FormControl fullWidth>
                 <InputLabel id="select-label">Lütfen Bakım Türü Seçiniz</InputLabel>
@@ -84,37 +133,14 @@ const FalTypesDesign = () => {
                 <ReactFormBuilder
                     onPost={(data) => setFormData(data)}
                 />
-                <Button variant="outlined" onClick={openPreview}>Önizleme</Button>
+              
             </Box>
 
            
         </MainCard>
 
         
-        {preview && (
-                            <div style={{ display: 'block' , padding : 10}}>
-                                <h3>Formu Önizle</h3>
-                                <div className="modal-dialog modal-lg" role="document">
-                                    <div style={{padding : 10}} className="modal-content">
-                                        <ReactFormGenerator
-                                            download_path=""
-                                            back_action=""
-                                            back_name="Back"
-                                            answer_data={{}}
-                                            form_action=""
-                                            form_method="POST"
-                                            data={formData.task_data}
-                                            submitButton={false}
-                                            onSubmit={(info) => saveData(selectedType, info)}
-                                        />
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={() => closePreview}>Önizlemeyi Kapat</button>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+       
         </>
     );
 };

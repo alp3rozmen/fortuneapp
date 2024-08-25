@@ -98,30 +98,67 @@ function FalEndPoints(app , connection) {
 
 
     app.post('/api/insertFalDesign', authenticateToken, (req, res) => {
-       
-        var fal_type_id = req.body.fal_type_id;
-        var form_data = req.body.form_data;
-        console.log('test');
+        const fal_type_id = req.body.fal_type_id;
+        const form_data = req.body.form_data;
+    
         if (fal_type_id === undefined || fal_type_id === 0) {
-            return res.status(200).json({ message: 'Bakım türü id gereklidir', status: 'error' });
+            return res.status(400).json({ message: 'Bakım türü id gereklidir', status: 'error' });
         }
-        else if (form_data === undefined || form_data === 0 || form_data === '') {   
-            return res.status(200).json({ message: 'Form verisi gereklidir', status: 'error' });
+        if (form_data === undefined || form_data === '' || form_data === 0) {   
+            return res.status(400).json({ message: 'Form verisi gereklidir', status: 'error' });
         }
-        else
-        {
-            connection.insert({ 
-                formdata: form_data,
-                fal_type: fal_type_id,
-                created_at : new Date(),
-                updated_at : new Date()
-            }).into('fal_type_design').then((faltypes) => {
+    
+        // Silme işlemini yap
+        connection.delete().from('fal_type_design').where('fal_type', fal_type_id)
+            .then(() => {
+                // Silme işlemi tamamlandığında ekleme işlemini yap
+                return connection.insert({ 
+                    formdata: form_data,
+                    fal_type: fal_type_id,
+                    created_at : new Date(),
+                    updated_at : new Date()
+                }).into('fal_type_design');
+            })
+            .then(() => {
+                // Ekleme işlemi tamamlandığında yanıt gönder
                 return res.status(200).json({
                     status: '200',
                     message: 'Form verisi eklendi'
                 });
+            })
+            .catch((error) => {
+                // Herhangi bir hata oluşursa yanıt gönder
+                console.error('Error:', error);
+                return res.status(500).json({ message: 'İşlem sırasında hata oluştu', status: 'error' });
+            });
+    });
+    
+
+    app.post('/api/getFalDesign', authenticateToken, (req, res) => {
+       
+        var fal_type_id = req.body.fal_type_id;
+        
+        if (fal_type_id === undefined || fal_type_id === 0) {
+            return res.status(200).json({ message: 'Bakım türü id gereklidir', status: 'error' });
+        }
+        else
+        {
+
+
+            connection.select().from('fal_type_design').where('fal_type', fal_type_id).then((faltypes) => {
+                
+                if (faltypes.length === 0) {
+                    return res.status(200).json({ message: 'Form verisi bulunamadı', status: '404' });
+                }
+
+                return res.status(200).json({
+                    status: '200',
+                    message: 'Form verisi getirildi',
+                    data : faltypes
+                });
             });
         }
+    
     })
 
 }

@@ -16,7 +16,7 @@ const FortunersCard = ({ roles, types, title }) => {
     userDetailService.getByRoleAndType(roles, types ,0).then((response) => {
       setUserDetails(response);
       setLoading(false);
-
+      console.log(response);
       
     });
   }, [roles, types]);
@@ -78,7 +78,7 @@ const FortunersCard = ({ roles, types, title }) => {
                                 color  : 'black',
                                 display: 'flex', 
                                 mr: 2, 
-                                mt: 0.5}} name={'Fal baktır'} open={false} carduserid={userDetail.user_details_id} />
+                                mt: 0.5}} name={'Fal baktır'} open={false} fal_type={userDetail.fal_type} carduserid={userDetail.user_details_id} />
                 </Box>
                 ))
               )}
