@@ -5,13 +5,14 @@ import { Box, Select, FormControl, InputLabel, MenuItem, Button } from '@mui/mat
 import MainCard from 'ui-component/cards/MainCard';
 import { toast } from 'react-toastify';
 import { FalTypes } from 'network/FalTypes/FalTypes.ts';
+import FormElementsEdit from 'utils/form-elements-edit';
 
 const FalTypesDesign = () => {
     const [selectedType, setSelectedType] = useState('');
     const [preview, setPreview] = useState(false);
     const [formData, setFormData] = useState([]);
     const [faltypes , setFaltypes] = useState([]);
-    
+
     useEffect(() => {
         
          FalTypes.getAll().then((response) => {
@@ -72,6 +73,7 @@ const FalTypesDesign = () => {
     };
 
     const saveData = () =>{
+        console.log(formData);
         FalTypes.AddFalTypeDesign(1 , JSON.stringify(formData)).then((response) => {
             if (response) {
                 toast.success("Formunuz kaydedildi");
@@ -92,6 +94,7 @@ const FalTypesDesign = () => {
                                 <div className="modal-dialog modal-lg" role="document">
                                     <div style={{padding : 10}} className="modal-content">
                                         <ReactFormGenerator
+                                            renderForm={props => <FormElementsEdit {...props}/>}
                                             download_path=""
                                             back_action=""
                                             back_name="Back"
@@ -131,6 +134,7 @@ const FalTypesDesign = () => {
 
             <Box className="clearfix" mt={5}>
                 <ReactFormBuilder
+                    renderEditForm={props => <FormElementsEdit {...props}/>}
                     onPost={(data) => setFormData(data)}
                 />
               

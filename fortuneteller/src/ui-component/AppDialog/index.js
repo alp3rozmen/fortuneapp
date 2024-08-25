@@ -154,9 +154,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
             return
           }else{
             const parsedJson = JSON.parse(response.data[0].formdata);
-          
             setFormData(parsedJson.task_data);
-
           }
           
         })
