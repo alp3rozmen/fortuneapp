@@ -96,6 +96,34 @@ function FalEndPoints(app , connection) {
         }
     })
 
+
+    app.post('/api/insertFalDesign', authenticateToken, (req, res) => {
+       
+        var fal_type_id = req.body.fal_type_id;
+        var form_data = req.body.form_data;
+        console.log('test');
+        if (fal_type_id === undefined || fal_type_id === 0) {
+            return res.status(200).json({ message: 'Bakım türü id gereklidir', status: 'error' });
+        }
+        else if (form_data === undefined || form_data === 0 || form_data === '') {   
+            return res.status(200).json({ message: 'Form verisi gereklidir', status: 'error' });
+        }
+        else
+        {
+            connection.insert({ 
+                formdata: form_data,
+                fal_type: fal_type_id,
+                created_at : new Date(),
+                updated_at : new Date()
+            }).into('fal_type_design').then((faltypes) => {
+                return res.status(200).json({
+                    status: '200',
+                    message: 'Form verisi eklendi'
+                });
+            });
+        }
+    })
+
 }
 
 export default FalEndPoints;

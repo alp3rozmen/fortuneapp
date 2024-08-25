@@ -89,8 +89,13 @@ function methods(app) {
         connection.select().from('users').where('id', userid).then((user) => {
 
                 const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
                 
+                console.log(user[0]);
+
+                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
+
+
+
                 if (base64ProfileImage.includes('dataimage/pngbase64')) {
                     base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
                 }

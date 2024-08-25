@@ -73,6 +73,16 @@ export const FalTypes = {
             console.log(error);
             throw error;
         }
+    },
+    AddFalTypeDesign : async (id : any ,data : any) => {
+        try {
+            var response = await baseService.post<any[]>("insertFalDesign", {fal_type_id : id , form_data : data});
+            return response;
+        }
+        catch (error) {
+            console.log("/api/insertFalDesign - FalTypes AddFalTypeDesign", error); 
+            throw error;
+        }
     }
 }
 
