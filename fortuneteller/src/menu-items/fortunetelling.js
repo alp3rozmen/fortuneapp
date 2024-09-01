@@ -17,7 +17,7 @@ const ftelling = {
       id: 'Falls',
       title: 'Yorumcular',
       type: 'item',
-      icon: icons.IconSelect,
+      icon: icons.IconMoon,
       url : '/'
     }
     // {
