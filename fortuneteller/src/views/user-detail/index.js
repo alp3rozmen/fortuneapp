@@ -29,7 +29,7 @@ const UserDetail = () => {
   const {isLogin, balance} = useContext(AuthContext);
 
   useEffect(() => {
-
+ 
     const fetchUserDetails = async () => {
       const response = await userDetailService.getByUsername('users/:user_name', username,UserdetailModel );
       setUserDetail(response.data[0]);
@@ -96,9 +96,10 @@ const UserDetail = () => {
 
                   {!isLogin ? 
                       <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Lütfen Giriş Yapınız</Button> :
-                      
+                       
+
                   
-                       types.cost > balance ? <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Yetersiz Kredi</Button> :
+                      balance > types.cost  ? <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Yetersiz Kredi</Button> :
                       
                       
                       <AppointmentDialog 
