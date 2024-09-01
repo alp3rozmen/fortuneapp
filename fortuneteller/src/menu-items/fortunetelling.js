@@ -15,53 +15,61 @@ const ftelling = {
   children: [
     {
       id: 'Falls',
-      title: 'Bakımlar',
-      type: 'collapse',
+      title: 'Yorumcular',
+      type: 'item',
       icon: icons.IconSelect,
+      url : '/'
+    }
+    // {
+    // KAPATILDI TUM YORUMCULAR LISTELENIP ICERIDEN SECIM YAPILACAK 
+    //   id: 'Falls',
+    //   title: 'Bakımlar',
+    //   type: 'collapse',
+    //   icon: icons.IconSelect,
       
-      children: [
-        {
-          id: 'kahveFali',
-          title: 'Kahve Falı',
-          type: 'item',
-          icon: icons.IconCoffee,
-          breadcrumbs: false,
-          url : '/fals/coffee'
-        },
-        {
-          id: 'tarotFali',
-          title: 'Tarot Falı',
-          type: 'item',
-          url: '/fals/tarot',
-          icon: icons.IconCards,
-          breadcrumbs: false
-        },
-        {
-          id: 'katinaFali',
-          title: 'Katina Falı',
-          type: 'item',
-          url: '/fals/katina',
-          icon: icons.IconRings,
-          breadcrumbs: false
-        },
-        {
-          id: 'yildiznameFali',
-          title: 'Yıldızname',
-          type: 'item',
-          url: '/fals/yildizname',
-          icon: icons.IconMoon,
-          breadcrumbs: false
-        },
-        {
-          id: 'suFali',
-          title: 'Su Falı',
-          type: 'item',
-          url: '/fals/water',
-          icon: icons.IconWashTemperature1,
-          breadcrumbs: false
-        }    
-      ]
-    },
+    //   children: [
+    //     {
+    //       id: 'kahveFali',
+    //       title: 'Kahve Falı',
+    //       type: 'item',
+    //       icon: icons.IconCoffee,
+    //       breadcrumbs: false,
+    //       url : '/fals/coffee'
+    //     },
+    //     {
+    //       id: 'tarotFali',
+    //       title: 'Tarot Falı',
+    //       type: 'item',
+    //       url: '/fals/tarot',
+    //       icon: icons.IconCards,
+    //       breadcrumbs: false
+    //     },
+    //     {
+    //       id: 'katinaFali',
+    //       title: 'Katina Falı',
+    //       type: 'item',
+    //       url: '/fals/katina',
+    //       icon: icons.IconRings,
+    //       breadcrumbs: false
+    //     },
+    //     {
+    //       id: 'yildiznameFali',
+    //       title: 'Yıldızname',
+    //       type: 'item',
+    //       url: '/fals/yildizname',
+    //       icon: icons.IconMoon,
+    //       breadcrumbs: false
+    //     },
+    //     {
+    //       id: 'suFali',
+    //       title: 'Su Falı',
+    //       type: 'item',
+    //       url: '/fals/water',
+    //       icon: icons.IconWashTemperature1,
+    //       breadcrumbs: false
+    //     }    
+    //   ]
+    // },
     
     
   ]

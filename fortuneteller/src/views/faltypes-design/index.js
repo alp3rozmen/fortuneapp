@@ -274,7 +274,7 @@ const FalTypesDesign = () => {
 
     const saveData = () =>{
         console.log(formData);
-        FalTypes.AddFalTypeDesign(1 , JSON.stringify(formData)).then((response) => {
+        FalTypes.AddFalTypeDesign(selectedType, JSON.stringify(formData)).then((response) => {
             if (response) {
                 toast.success("Formunuz kaydedildi");
             }
