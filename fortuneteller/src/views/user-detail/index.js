@@ -3,7 +3,7 @@
 // project imports
 import {UserdetailModel , UserCommentModel} from '../../model/user_details/index.ts';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
-import { Button, Box, Card, Avatar, Typography } from '@mui/material';
+import {  Box, Card, Avatar, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import { IconCoin } from '@tabler/icons-react';
 import { CalendarMonth } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import tr from 'dayjs/locale/tr';
+import AppointmentDialog from 'ui-component/AppDialog/index.js';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const UserDetail = () => {
@@ -67,7 +68,7 @@ const UserDetail = () => {
             <StarIcon color='warning' fontSize='small' />
             <StarIcon color='warning' fontSize='small' />(110)
           </Box>
-          <Button variant="contained" sx={{ mt: 2 }} color='success' align="center">Randevu Al</Button>
+    
           {/* Randevu buraya eklenecek */}
 
         </Box>
@@ -89,7 +90,17 @@ const UserDetail = () => {
                   <Typography sx={{flex:1, flexDirection: 'column', display: 'flex' }} variant="button" >{types.name } </Typography>
                   <IconCoin  />
                   <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="button" >{types.cost} Kredi</Typography>
-                  <Button variant="contained" sx={{ flex:1, flexDirection: 'column' ,display: 'flex' }} color='success'>Randevu Al</Button>
+                  
+                  <AppointmentDialog 
+                      btnStyle={{
+                                width: 230,
+                                boxShadow: 3 ,
+                                borderRadius: 3,
+                                backgroundColor: 'white',
+                                color  : 'black',
+                                display: 'flex', 
+                                mr: 2, 
+                                mt: 0.5}} name={'Fal baktır'} open={false} fal_type={types.id} carduserid={types.user_details_id} /> 
               </Box>    
             ))}
           </Box>

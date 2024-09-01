@@ -8,7 +8,7 @@ function userDetails(app , connection) {
         if (userid === undefined || userid === 0) {
             return res.status(400).json({ error: 'Lütfen parametreleri kontrol edin', status: 'error' });
         }
-        connection.select('fal_types.*' ).select('user_details.cost').from('users').join('user_details', 'user_details.user_id', 'users.id').join('fal_types', 'fal_types.id', 'user_details.fal_type').where('users.id', userid).then((users) => {
+        connection.select('fal_types.*' ).select('user_details.id as user_details_id').select('user_details.cost').from('users').join('user_details', 'user_details.user_id', 'users.id').join('fal_types', 'fal_types.id', 'user_details.fal_type').where('users.id', userid).then((users) => {
             return res.status(200).json(users);
         });
     })

@@ -6,7 +6,6 @@ import { userDetailService } from 'network/user_details/user_detail_service.ts';
 import { IconPhoneCall, IconCamera, IconMessage } from '@tabler/icons-react';
 import CircleIcon from '@mui/icons-material/Circle';
 import StarIcon from '@mui/icons-material/Star';
-import AppointmentDialog from './AppDialog/index.js';
 
 const FortunersCard = ({ roles, types, title }) => {
   const [userDetails, setUserDetails] = useState([]);
@@ -69,7 +68,8 @@ const FortunersCard = ({ roles, types, title }) => {
                         </CardContent>
                     </CardActionArea>
                   </Card>
-                  <AppointmentDialog 
+                  {/* Kapatıldı tıklayıp içeriden ilgili fal için ilerliyecek */}
+                  {/* <AppointmentDialog 
                       btnStyle={{
                                 width: 230,
                                 boxShadow: 3 ,
@@ -78,7 +78,7 @@ const FortunersCard = ({ roles, types, title }) => {
                                 color  : 'black',
                                 display: 'flex', 
                                 mr: 2, 
-                                mt: 0.5}} name={'Fal baktır'} open={false} fal_type={userDetail.fal_type} carduserid={userDetail.user_details_id} />
+                                mt: 0.5}} name={'Fal baktır'} open={false} fal_type={userDetail.fal_type} carduserid={userDetail.user_details_id} /> */}
                 </Box>
                 ))
               )}
