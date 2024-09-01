@@ -21,7 +21,7 @@ export const AuthContextProvider = ({ children }: any) => {
         else if ((token) && (userId === 0)) {
             getUserInfo()
         }
-    })
+    }, [])
 
 
     const navigate = useNavigate()
@@ -40,6 +40,7 @@ export const AuthContextProvider = ({ children }: any) => {
                 method: 'POST', 
                 headers: {'authorization': `Bearer ${localStorage.getItem('token')}`,'Accept': 'application/json', 'Content-Type': 'application/json', accessControlAllowOrigin: '*'}, 
                 body: JSON.stringify({userid : localStorage.getItem('userid')})}).then((response) => {
+               
                 if (response.status === 200) {
                     response.json().then((data) => {
                         setUserId(data.userid)
@@ -69,12 +70,13 @@ export const AuthContextProvider = ({ children }: any) => {
                         })
 
                         localStorage.removeItem('userid');
-                        localStorage.removeItem('userName')
-                        localStorage.removeItem('userType')
+                        localStorage.removeItem('userName');
+                        localStorage.removeItem('userType');
+                        localStorage.removeItem('token');
                         navigate('/')   
                     })
                 }
-            }).catch((error) => {
+            }).catch(() => {
                 toast.error('Bir hata oluştu', {
                     position: 'top-right',
                     autoClose: 5000,
@@ -86,10 +88,11 @@ export const AuthContextProvider = ({ children }: any) => {
                     theme: 'light',
                 })
                 localStorage.removeItem('userid');
-                localStorage.removeItem('userName')
-                localStorage.removeItem('userType')
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userType');
+                localStorage.removeItem('token');
                 navigate('/') 
-                console.log(error)
+                
             })
     }
 
