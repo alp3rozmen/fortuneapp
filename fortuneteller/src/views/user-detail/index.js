@@ -94,12 +94,13 @@ const UserDetail = () => {
                   <IconCoin  />
                   <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="button" >{types.cost} Kredi</Typography>
                
+               
+                
                   {!isLogin ? 
                       <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Lütfen Giriş Yapınız</Button> :
                        
-
-                  
-                      balance < types.cost  ? <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Yetersiz Kredi</Button> :
+            
+                      Number(balance) < Number(types.cost)  ? <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Yetersiz Kredi</Button> :
                       
                       
                       <AppointmentDialog 
