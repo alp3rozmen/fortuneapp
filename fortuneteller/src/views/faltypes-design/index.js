@@ -1,11 +1,205 @@
 import React, { useState, useEffect} from 'react';
-import { ReactFormBuilder, ReactFormGenerator } from 'react-form-builder2';
+import { ReactFormBuilder, ReactFormGenerator, Registry } from 'react-form-builder2';
 import 'react-form-builder2/dist/app.css';
 import { Box, Select, FormControl, InputLabel, MenuItem, Button } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { toast } from 'react-toastify';
 import { FalTypes } from 'network/FalTypes/FalTypes.ts';
 import FormElementsEdit from 'utils/form-elements-edit';
+
+const customImageInput = (props) => {
+    return (
+        <div>
+            <input {...props} accept='image/*' type="file" />
+        </div>
+    );
+};
+
+const items = [
+    {
+        key: 'HeaderText',
+        name: 'Header Text',
+        element: 'Header',
+        icon: 'fa fa-font',
+        static: true,
+        content: 'Header Text',
+    },
+    {
+        key: 'Label',
+        name: 'Label',
+        element: 'Label',
+        icon: 'fa fa-font',
+        static: true,
+        content: 'Label',
+    },
+    {
+        key: 'Paragraph',
+        name: 'Paragraph',
+        element: 'Paragraph',
+        icon: 'fa fa-paragraph',
+        static: true,
+        content: 'Paragraph',
+    },
+    {
+        key: 'LineBreak',
+        name: 'Line Break',
+        element: 'LineBreak',
+        icon: 'fa fa-window-close',
+        static: true,
+    },
+    {
+        key: 'Dropdown',
+        name: 'Dropdown',
+        element: 'Dropdown',
+        icon: 'fa  fa-tasks',
+        field_name: 'dropdown_',
+        label: 'Dropdown',
+        options: [],
+    },
+    {
+        key: 'Tags',
+        name: 'Tags',
+        element: 'Tags',
+        icon: 'fa fa-tags',
+        field_name: 'tags_',
+        label: 'Tags',
+    },
+    {
+        key: 'Checkboxes',
+        name: 'Checkboxes',
+        element: 'Checkboxes',
+        icon: 'fa fa-list-ul',
+        field_name: 'checkboxes_',
+        label: 'Checkboxes',
+        options: [],
+    },
+    {
+        key: 'MultipleChoice',
+        name: 'Multiple Choice',
+        element: 'RadioButtons',
+        icon: 'fa fa-th-list',
+        field_name: 'multiple_choice_',
+        label: 'Multiple Choice',
+        options: [],
+    },
+    {
+        key: 'TextInput',
+        name: 'Text Input',
+        element: 'TextInput',
+        icon: 'fa fa-font',
+        field_name: 'text_input_',
+        label: 'Text Input',
+    },
+    {
+        key: 'NumberInput',
+        name: 'Number Input',
+        element: 'NumberInput',
+        icon: 'fa fa-plus',
+        field_name: 'number_input_',
+        label: 'Number Input',
+    },
+    {
+        key: 'MultiLineInput',
+        name: 'Multi-line Input',
+        element: 'TextArea',
+        icon: 'fa fa-text-height',
+        field_name: 'multi_line_input_',
+        label: 'Multi-line Input',
+    },
+    {
+        key: 'TwoColumnRow',
+        name: 'Two Column Row',
+        element: 'TwoColumnRow',
+        icon: 'fa fa-columns',
+    },
+    {
+        key: 'ThreeColumnRow',
+        name: 'Three Column Row',
+        element: 'ThreeColumnRow',
+        icon: 'fa fa-columns',
+    },
+    {
+        key: 'MultiColumnRow',
+        name: 'Multi Column Row',
+        element: 'MultiColumnRow',
+        icon: 'fa fa-columns',
+    },
+    {
+        key: 'Image',
+        name: 'Image',
+        element: 'Image',
+        icon: 'fa fa-camera-retro',
+        static: true,
+        props: { src: '', alt: '' },
+    },
+    {
+        key: 'Rating',
+        name: 'Rating',
+        element: 'Rating',
+        icon: 'fa fa-star',
+        field_name: 'rating_',
+        label: 'Rating',
+    },
+    {
+        key: 'Date',
+        name: 'Date',
+        element: 'Date',
+        icon: 'fa fa-calendar',
+        field_name: 'date_',
+        label: 'Date',
+    },
+    {
+        key: 'Signature',
+        name: 'Signature',
+        element: 'Signature',
+        icon: 'fa fa-map-signs',
+        field_name: 'signature_',
+        label: 'Signature',
+    },
+    {
+        key: 'Website',
+        name: 'Website',
+        element: 'TextInput',
+        icon: 'fa fa-globe',
+        field_name: 'website_',
+        label: 'Web site',
+    },
+    {
+        key: 'Fieldset',
+        name: 'Fieldset',
+        element: 'FieldSet',
+        icon: 'fa  fa-window-minimize',
+        label: 'Fieldset',
+    },
+    {
+        key: 'FileAttachment',
+        name: 'File Attachment',
+        element: 'FileUpload',
+        icon: 'fa fa-upload',
+        field_name: 'file_attachment_',
+        label: 'File Attachment',
+    },
+    {
+        key: 'Range',
+        name: 'Range',
+        element: 'Range',
+        icon: 'fa fa-ellipsis-h',
+        field_name: 'range_',
+        label: 'Range',
+    },
+    {
+        key: 'Camera',
+        name: 'Camera',
+        element: 'CustomElement',
+        component: customImageInput,
+        type: 'custom',
+        field_name: 'camera',
+        icon: 'fa fa-camera',
+        static: true,
+        label: 'Lütfen Resim Seçiniz',
+    },
+];
+
 
 const FalTypesDesign = () => {
     const [selectedType, setSelectedType] = useState('');
@@ -20,6 +214,12 @@ const FalTypesDesign = () => {
                 setFaltypes(response.data);
             }
         })
+        
+        if (Registry.get('customImageInput')) {
+            return;
+        }
+
+        Registry.register('customImageInput', customImageInput);
     }, []);
     
 
@@ -134,6 +334,7 @@ const FalTypesDesign = () => {
 
             <Box className="clearfix" mt={5}>
                 <ReactFormBuilder
+                toolbarItems={items}
                     renderEditForm={props => <FormElementsEdit {...props}/>}
                     onPost={(data) => setFormData(data)}
                 />
