@@ -8,7 +8,8 @@ import { userDetailService } from "network/user_details/user_detail_service.ts";
 
 const AccountSettings = () => {
   const { userName, email, role, balance, userId, getUserInfo, userProfilePicture } = useContext(AuthContext);
-  
+  const reader = new FileReader();
+
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -23,13 +24,12 @@ const AccountSettings = () => {
 
   const UpdateProfilePicture = async (file) => {
   
-    if (file.type !== 'image/png') {
-      toast.error('Lütfen resim dosyası yalnızca png uzantılı olacak şekilde yükleyin');
-      return
-    }
+    // if (file.type !== 'image/png') {
+    //   toast.error('Lütfen resim dosyası yalnızca png uzantılı olacak şekilde yükleyin');
+    //   return
+    // }
 
-    const reader = new FileReader();
-
+    
     reader.onload = (e) => {
       userDetailService.UpdateUserProfilePicture({
         fileBase64: e.target.result,
@@ -42,7 +42,7 @@ const AccountSettings = () => {
         }
       })
     };
-    
+    console.log(file);
     reader.readAsDataURL(file);
   }
 
@@ -62,7 +62,7 @@ return (
       >
         <Typography textAlign={'center'} variant="caption">Profil Resmi</Typography>
         <Avatar sx={{ width: 100, height: 100 }} src={userProfilePicture} />
-        <Button component="label" variant="outlined">Değiştir<VisuallyHiddenInput onChange={(e) => UpdateProfilePicture(e.target.files[0])} accept="image/png" type="file" /></Button>
+        <Button component="label" variant="outlined">Değiştir<VisuallyHiddenInput onChange={(e) => UpdateProfilePicture(e.target.files[0])} accept="image/*" type="file" /></Button>
       </Box>
 
       <Box

@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, ButtonBase} from '@mui/material';
+import { Avatar, Box, ButtonBase, Typography} from '@mui/material';
 
 // project imports
 import LogoSection from '../LogoSection';
 // import SearchSection from './SearchSection';
 import ProfileSection from './ProfileSection';
-import NotificationSection from './NotificationSection';
+// import NotificationSection from './NotificationSection';
 import AuthContext from 'context/userContext.tsx';
 import { useContext } from 'react';
 // assets
@@ -17,7 +17,7 @@ import { IconMenu2 } from '@tabler/icons-react';
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
-  const { isLogin } = useContext(AuthContext);
+  const { isLogin , balance} = useContext(AuthContext);
   const theme = useTheme();
 
   return (
@@ -76,7 +76,9 @@ const Header = ({ handleLeftDrawerToggle }) => {
         <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Kayıt Ol</Link>
       </Box> */}
 
-      {isLogin&& <Box sx={{ display: 'flex', alignItems: 'center' }}><NotificationSection />
+      {isLogin&& <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography variant="subtitle1" sx={{ mr: 1 }}>Kredi : {balance} </Typography>
+        {/* <NotificationSection /> */}
       <ProfileSection /></Box>}
       
     </Box>

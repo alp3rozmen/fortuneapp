@@ -87,34 +87,32 @@ function methods(app) {
         }
 
         connection.select().from('users').where('id', userid).then((user) => {
-
-                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                
-                if (user[0]) {
-                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
-
-
-
-                if (base64ProfileImage.includes('dataimage/pngbase64')) {
-                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
-                }
-                
-                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-
+            if (user[0]) {
                 var response = {
                     status: 'success',
                     message: 'Kullanıcı Bilgileri Alındı',
                     userid: user[0].id,
                     userName: user[0].username,
                     user_role: user[0].user_role,
-                    profile_image: base64ImageWithPrefix,
-                    email : user[0].email,
-                    balance : user[0].balance
-                }
-
+                    profile_image: user[0].profile_image.toString(),
+                    email: user[0].email,
+                    balance: user[0].balance
+                };
+        
                 return res.status(200).json(response);
+            } else {
+                return res.status(404).json({
+                    status: 'error',
+                    message: 'Kullanıcı bulunamadı',
+                });
             }
-        })
+        }).catch((err) => {
+            console.error(err);
+            return res.status(500).json({
+                status: 'error',
+                message: 'Bir hata oluştu',
+            });
+        });
     })
 
 
@@ -134,17 +132,6 @@ function methods(app) {
             }
             else {
 
-             
-                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
-                
-            
-                if (base64ProfileImage.includes('dataimage/pngbase64')) {
-                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
-                }
-                
-                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-                
                 userResponse.push(
                     {   user_id: user[0].id , 
                         username: user[0].username, 
@@ -153,7 +140,7 @@ function methods(app) {
                         gender: user[0].gender,
                         age: user[0].age,
                         bio: user[0].bio,
-                        profile_image: base64ImageWithPrefix,
+                        profile_image: user[0].profile_image.toString(),    
                         user_role: user[0].user_role,
                         status: user[0].status,
                         balance: user[0].balance
@@ -171,9 +158,7 @@ function methods(app) {
         var fortuner_type = req.body.fortuner_type;
         var isAdminReq = req.body.isAdmin;
         var userResponse = [];
-        var profileImageData = null; 
-        var base64Image = null;
-        
+ 
         // const blobData = result[0].blob_column;
 
         if ((user_role === undefined && fortuner_type !== undefined) || (user_role === undefined && fortuner_type === undefined)) {
@@ -186,19 +171,7 @@ function methods(app) {
             .whereNotIn('user_role', [1,3])
             .groupBy('users.id').then((users) => {
                 users.map((user) => {
-                profileImageData = user.profile_image;
-                
-                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                var base64ProfileImage = Buffer.from(profileImageData).toString('base64');
-                
-            
-                if (base64ProfileImage.includes('dataimage/pngbase64')) {
-                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
-                }
-                
-                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-                
-                    
+                  
                     userResponse.push({ id: user.id , 
                                         username: user.username, 
                                         email: user.email,
@@ -206,7 +179,7 @@ function methods(app) {
                                         gender: user.gender,
                                         age: user.age,
                                         bio: user.bio,
-                                        profile_image: base64ImageWithPrefix,
+                                        profile_image:   user.profile_image.toString(),
                                         user_role: user.user_role,
                                         status: user.status,
                                         balance: user.balance,
@@ -227,18 +200,7 @@ function methods(app) {
             .whereNotNull('user_details.id')
             .groupBy('users.id').then((users) => {
                 users.map((user) => {
-                profileImageData = user.profile_image;
-
-                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                var base64ProfileImage = Buffer.from(profileImageData).toString('base64');
-                
-            
-                if (base64ProfileImage.includes('dataimage/pngbase64')) {
-                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
-                }
-                
-                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-                    
+    
                     userResponse.push({ id: user.id , 
                                         username: user.username, 
                                         email: user.email,
@@ -246,7 +208,7 @@ function methods(app) {
                                         gender: user.gender,
                                         age: user.age,
                                         bio: user.bio,
-                                        profile_image: base64ImageWithPrefix,
+                                        profile_image: user.profile_image.toString(),
                                         user_role: user.user_role,
                                         status: user.status,
                                         balance: user.balance,
@@ -265,21 +227,6 @@ function methods(app) {
 
             connection.select('users.*').select('user_details.id as user_details_id').select('user_details.fal_type').from('users').where('users.user_role', user_role).join('user_details', 'users.id', 'user_details.user_id').where('user_details.fal_type', fortuner_type).then((users) => {
                 users.map((user) => {
-                  profileImageData = user.profile_image; 
-                  
-                  
-                  const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                  var base64ProfileImage = Buffer.from(profileImageData).toString('base64');
-                  
-              
-                  if (base64ProfileImage.includes('dataimage/pngbase64')) {
-                      base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
-                  }
-                  
-                  const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-                
-                    
-        
                         userResponse.push({ id: user.id , 
                                             username: user.username, 
                                             email: user.email,
@@ -287,7 +234,7 @@ function methods(app) {
                                             gender: user.gender,
                                             age: user.age,
                                             bio: user.bio,
-                                            profile_image: base64ImageWithPrefix,
+                                            profile_image: user.profile_image.toString(),
                                             user_role: user.user_role,
                                             status: user.status,
                                             balance: user.balance,
