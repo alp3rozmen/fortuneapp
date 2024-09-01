@@ -3,10 +3,10 @@
 // project imports
 import {UserdetailModel , UserCommentModel} from '../../model/user_details/index.ts';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
-import {  Box, Card, Avatar, Typography } from '@mui/material';
+import {Button, Box, Card, Avatar, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import StarIcon from '@mui/icons-material/Star';
 import CircleIcon from '@mui/icons-material/Circle';
 import { People } from '@mui/icons-material';
@@ -17,6 +17,7 @@ import { CalendarMonth } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import tr from 'dayjs/locale/tr';
 import AppointmentDialog from 'ui-component/AppDialog/index.js';
+import AuthContext from 'context/userContext.tsx';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const UserDetail = () => {
@@ -25,8 +26,10 @@ const UserDetail = () => {
   const [types, setTypes] = useState([]);
   const [comments, setComments] = useState([]);
   
+  const {isLogin, balance} = useContext(AuthContext);
 
   useEffect(() => {
+
     const fetchUserDetails = async () => {
       const response = await userDetailService.getByUsername('users/:user_name', username,UserdetailModel );
       setUserDetail(response.data[0]);
@@ -90,9 +93,16 @@ const UserDetail = () => {
                   <Typography sx={{flex:1, flexDirection: 'column', display: 'flex' }} variant="button" >{types.name } </Typography>
                   <IconCoin  />
                   <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="button" >{types.cost} Kredi</Typography>
+
+                  {!isLogin ? 
+                      <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Lütfen Giriş Yapınız</Button> :
+                      
                   
-                  <AppointmentDialog 
-                      btnStyle={{
+                       types.cost > balance ? <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Yetersiz Kredi</Button> :
+                      
+                      
+                      <AppointmentDialog 
+                                btnStyle={{
                                 width: 230,
                                 boxShadow: 3 ,
                                 borderRadius: 3,
@@ -101,6 +111,9 @@ const UserDetail = () => {
                                 display: 'flex', 
                                 mr: 2, 
                                 mt: 0.5}} name={'Fal baktır'} open={false} fal_type={types.id} carduserid={types.user_details_id} /> 
+                              
+                  }                  
+                                    
               </Box>    
             ))}
           </Box>
