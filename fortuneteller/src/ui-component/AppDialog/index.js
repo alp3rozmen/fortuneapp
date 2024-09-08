@@ -10,6 +10,7 @@ import { useState, useEffect, useRef } from 'react';
 import { userDetailService } from '../../network/user_details/user_detail_service.ts';
 import { ReactFormGenerator } from 'react-form-builder2';
 import { FalTypes } from 'network/FalTypes/FalTypes.ts';
+import 'react-form-builder2/dist/app.css';
 
 const DefaultPages = ['dateSelectPage', 'informationPage', 'successPage'];
 
@@ -22,8 +23,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   const [activePage, setActivePage] = useState(DefaultPages[0]);
  
   useEffect(() => {
-    gApps();
-
+    gApps();    
   }, []);
 
   const innerHandleClose = () => {
@@ -158,12 +158,17 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           }
           
         })
+
+        
     }, []);
 
     return(   
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
       
-      {formData.length !== 0 ? <ReactFormGenerator hide_actions = {true} data={formData} /> : <Typography variant="subtitle1">Yakında...</Typography>}
+      {formData.length !== 0 ? <ReactFormGenerator 
+
+       
+      hide_actions = {true} data={formData} /> : <Typography variant="subtitle1">Yakında...</Typography>}
 
 
       <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
