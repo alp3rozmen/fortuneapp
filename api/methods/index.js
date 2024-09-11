@@ -385,7 +385,7 @@ function methods(app) {
         }
 
         
-            connection.select('appointments.*').select('user_details.*')
+            connection.select('appointments.id as app_id').select('appointments.*').select('user_details.*')
             .from('user_details')
             .join('appointments', 'appointments.user_details_id', 'user_details.id')
             .where('user_details.id' , userid)

@@ -6,7 +6,8 @@ exports.up = function(knex) {
   
   return knex.schema.createTable('fals', function(table) {
     table.increments('id').primary();
-    table.integer('user_id').comment('user_id');
+    table.integer('user_id').comment('hangi kullanıcı fal isteginde bulundu'); // hangi kullanıcı
+    table.integer('fal_user_id').comment('kime bakım isteginde bulundu'); // kime 
     table.timestamps(true, true);
   });
   

@@ -10,9 +10,10 @@ import { useState, useEffect, useRef } from 'react';
 import { userDetailService } from '../../network/user_details/user_detail_service.ts';
 import { ReactFormGenerator } from 'react-form-builder2';
 import { FalTypes } from 'network/FalTypes/FalTypes.ts';
+import { UserFals } from 'network/UserFals/UserFals.ts';
 import 'react-form-builder2/dist/app.css';
 import { toast } from 'react-toastify';
-
+import AuthContext from 'context/userContext.tsx';
 
 const DefaultPages = ['dateSelectPage', 'informationPage', 'successPage'];
 
@@ -24,6 +25,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   const [selectedHour, setSelectedHour] = useState('');
   const [activePage, setActivePage] = useState(DefaultPages[0]);
  
+  const { userId } = React.useContext(AuthContext);
   useEffect(() => {
     gApps();    
   }, []);
@@ -50,7 +52,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
 
   const getAppointmentTimes = (appSelectedDate) => {
     setSelectedDate(appSelectedDate);
-
+    console.log(appointmentDetails);
     if (!appointmentDetails) {
       console.log('Randevu bulunamadı!');
       return;
@@ -126,13 +128,10 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
 
   const SuccessPage = () => (
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
-      <Typography variant="subtitle1">Success Page</Typography>
+      <Typography variant="subtitle1">Bakım kaydınız oluşturuldu randevu tarihinden itibaren 30 içerisinde yorumlanacaktır.</Typography>
       <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-        <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[1])}>
-          Geri
-        </Button>
-        <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[2])}>
-          İleri
+        <Button variant="contained" sx={{ mt: 2 }} onClick={() => innerHandleClose()}>
+          Kapat
         </Button>
       </Box>
     </Box>
@@ -164,7 +163,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
     const handleSubmit = (answerData) => {
       var showMessage = false;
       answerData.forEach(element => {
-         if (element.value === null) {
+         if (element.value === null || element.value === "") {
            showMessage = true;
          }
       });
@@ -173,8 +172,23 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
         toast.error("Lütfen tüm alanları doldurun");
       }
       else{
-         console.log(answerData);
-        //burda apiye kayıt edicez kredisi de yetiyorsa kredisini kesicez
+
+          //FALI INSERT EDER EKSIK KISIM KREDIYIDE KESMESI LAZIM
+          UserFals.insertUserFalRequest(userId, 
+            JSON.stringify(formData), 
+            JSON.stringify(answerData), 
+            cardid, 
+            appointmentDetails.app_id, 
+            userId, 
+            dayjs(selectedDate).format('YYYY-MM-DD'),
+            dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
+            appointmentDetails.start_hour,
+            appointmentDetails.end_hour).then((response) => {
+            if (response.status == 200) {
+              SetPage(DefaultPages[2]);
+            }
+          })
+         
       }
     }
 
