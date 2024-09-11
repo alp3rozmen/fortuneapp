@@ -163,84 +163,87 @@ function FalEndPoints(app , connection) {
     })
 
 
-    app.post('/api/insertUserFalRequest', authenticateToken, (req, res) => {
-
-        var user_id = req.body.user_id;
-        var formdata = req.body.formdata;
-        var formanswer = req.body.formanswer;
-        var fal_user_id = req.body.fal_user_id; //HANGİ FALCIYA FALS TABLOSUNA INSERT
-
-        var appointment_id = req.body.appointment_id;
-        var app_taken_user_id = req.body.app_taken_user_id;
-        var app_date = req.body.app_date;
-        var app_time = req.body.app_time;
-        var start_hour = req.body.start_hour;
-        var end_hour = req.body.end_hour;
-
-
-        if (user_id === undefined || user_id === 0) {
+    app.post('/api/insertUserFalRequest', authenticateToken, async (req, res) => {
+        const { user_id, formdata, formanswer, fal_user_id, fal_type, appointment_id, app_taken_user_id, app_date, app_time, start_hour, end_hour } = req.body;
+    
+        if (!user_id || user_id === 0) {
             return res.status(400).json({ message: 'Kullanıcı id gereklidir', status: 'error' });
         }
-        if (formdata === undefined || formdata === '' || formdata === 0) {   
+        if (!formdata) {
             return res.status(400).json({ message: 'Form verisi gereklidir', status: 'error' });
         }
-        if (formanswer === undefined || formanswer === '' || formanswer === 0) {   
+        if (!formanswer) {
             return res.status(400).json({ message: 'Form cevapları gereklidir', status: 'error' });
         }
-
-        const insertData = async (pconnection , puser_id, pfal_user_id, pformdata, pformanswer, pres) => {
-            try {
-              // 1. 'fals' tablosuna veri ekleme
-              const [fal_id] = await pconnection('fals')
+    
+        try {
+            // 1. 'fals' tablosuna veri ekleme
+            const [fal_id] = await connection('fals')
                 .insert({ 
-                  user_id: puser_id,
-                  fal_user_id: pfal_user_id,
-                  created_at: new Date(),
-                  updated_at: new Date()
+                    user_id,
+                    fal_user_id,
+                    fal_type,
+                    created_at: new Date(),
+                    updated_at: new Date()
                 })
-                .returning('id'); 
-
-              // 2. 'fal_details' tablosuna veri ekleme
-              await pconnection('fal_details')
+                .returning('id');
+    
+            // 2. 'fal_details' tablosuna veri ekleme
+            await connection('fal_details')
                 .insert({ 
-                  fal_id: fal_id,
-                  formdata: pformdata,
-                  formanswer: pformanswer,
-                  status: '1000',
-                  comment: '',
-                  created_at: new Date(),
-                  updated_at: new Date()
+                    fal_id,
+                    formdata,
+                    formanswer,
+                    status: '1000',
+                    comment: '',
+                    created_at: new Date(),
+                    updated_at: new Date()
                 });
-          
-                await pconnection('appointment_details')
+    
+            // 3. 'appointment_details' tablosuna veri ekleme
+            await connection('appointment_details')
                 .insert({
-                  appointment_id: appointment_id,
-                  app_taken_user_id: app_taken_user_id,
-                  app_date: app_date,
-                  app_time: app_time,
-                  start_hour: start_hour,
-                  end_hour: end_hour,
-                  created_at: new Date(),
-                  updated_at: new Date()
-                }).then(() => {
-                    // Ekleme işlemi tamamlandığında yanıt gönder
-                    return pres.status(200).json({
-                        status: '200',
-                        message: 'Form verisi eklendi'
-                    }); 
+                    appointment_id,
+                    app_taken_user_id,
+                    app_date,
+                    app_time,
+                    start_hour,
+                    end_hour,
+                    created_at: new Date(),
+                    updated_at: new Date()
                 });
-                
-            
-            } catch (error) {
-              // Hata durumunda hata mesajı döndürme
-              console.error('Error:', error);
-              return pres.status(500).json({ message: 'İşlem sırasında hata oluştu', status: 'error' });
+    
+            // 4. Kullanıcının maliyetini ve bakiyesini kontrol etme ve güncelleme
+            const [userDetails] = await connection('user_details')
+                .select('*')
+                .from('user_details')
+                .where('user_id', fal_user_id)
+                .andWhere('fal_type', fal_type);
+
+    
+            if (!userDetails || userDetails.length === 0) {
+                return res.status(404).json({ status: '404', message: 'Kullanıcı bilgileri bulunamadı' });
             }
-          };        
-
-          return insertData(connection, user_id, fal_user_id, formdata, formanswer, res);
-
-    })
+    
+            const fal_cost = userDetails.cost;
+    
+            if (fal_cost === 0) {
+                return res.status(400).json({ status: '404', message: 'Geçersiz maliyet' });
+            }
+    
+            await connection('users')
+                .where('id', user_id)
+                .update({
+                    balance: connection.raw('balance - ?', [fal_cost])
+                });
+    
+            return res.status(200).json({ status: '200', message: 'Form verisi eklendi' });
+    
+        } catch (error) {
+            console.error('Error:', error);
+            return res.status(500).json({ message: 'İşlem sırasında hata oluştu', status: 'error' });
+        }
+    });
 
 }
 

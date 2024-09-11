@@ -13,7 +13,8 @@ export const UserFals = {
         req_app_date : any,
         req_app_time : any,
         req_start_hour : any,
-        req_end_hour : any
+        req_end_hour : any,
+        req_fal_type : any,
     ) => {
         try {
             var response = await baseService.post<any[]>("insertUserFalRequest", {
@@ -26,7 +27,8 @@ export const UserFals = {
                 app_date : req_app_date,
                 app_time : req_app_time,
                 start_hour : req_start_hour,
-                end_hour : req_end_hour
+                end_hour : req_end_hour,
+                fal_type : req_fal_type,
             });
             return response;
         }

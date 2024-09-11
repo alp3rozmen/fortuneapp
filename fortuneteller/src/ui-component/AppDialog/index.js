@@ -25,7 +25,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   const [selectedHour, setSelectedHour] = useState('');
   const [activePage, setActivePage] = useState(DefaultPages[0]);
  
-  const { userId } = React.useContext(AuthContext);
+  const { userId , getUserInfo} = React.useContext(AuthContext);
   useEffect(() => {
     gApps();    
   }, []);
@@ -177,15 +177,18 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           UserFals.insertUserFalRequest(userId, 
             JSON.stringify(formData), 
             JSON.stringify(answerData), 
-            cardid, 
-            appointmentDetails.app_id, 
-            userId, 
+            appointmentDetails.user_id, //falcinin idsi 
+            appointmentDetails.app_id,
+            userId,
             dayjs(selectedDate).format('YYYY-MM-DD'),
             dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
             appointmentDetails.start_hour,
-            appointmentDetails.end_hour).then((response) => {
+            appointmentDetails.end_hour,
+            appointmentDetails.fal_type,
+          ).then((response) => {
             if (response.status == 200) {
               SetPage(DefaultPages[2]);
+              getUserInfo();
             }
           })
          

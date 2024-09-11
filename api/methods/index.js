@@ -309,6 +309,8 @@ function methods(app) {
 
                     if (result) {
                         return res.status(200).json({ message: 'Fal kaydedildi!' });
+
+                        
                     }
                     else {
                         return res.status(400).json({ message: 'Bir hata meydana geldi!' });
