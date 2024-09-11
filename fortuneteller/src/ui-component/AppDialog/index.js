@@ -190,6 +190,9 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
               SetPage(DefaultPages[2]);
               getUserInfo();
             }
+            else{
+              toast.error(response.message);
+            }
           })
          
       }
