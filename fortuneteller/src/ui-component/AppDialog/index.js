@@ -118,8 +118,8 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-        <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[1])}>
+      <Box  sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+        <Button disabled = {!selectedDate || !selectedHour} variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[1])}>
           İleri
         </Button>
       </Box>
