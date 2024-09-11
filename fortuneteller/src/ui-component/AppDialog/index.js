@@ -11,6 +11,8 @@ import { userDetailService } from '../../network/user_details/user_detail_servic
 import { ReactFormGenerator } from 'react-form-builder2';
 import { FalTypes } from 'network/FalTypes/FalTypes.ts';
 import 'react-form-builder2/dist/app.css';
+import { toast } from 'react-toastify';
+
 
 const DefaultPages = ['dateSelectPage', 'informationPage', 'successPage'];
 
@@ -146,38 +148,60 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
 
   const InformationPage = () => {
     const [formData , setFormData] = useState([]);
-
+    const formRef = useRef(null);
+   
     useEffect(() => {
         GetFaltypeDesign(fal_type).then((response) => {
-          
           if (response.status == 404) {
             return
           }else{
             const parsedJson = JSON.parse(response.data[0].formdata);
             setFormData(parsedJson.task_data);
           }
-          
         })
-
-        
     }, []);
+
+    const handleSubmit = (answerData) => {
+      var showMessage = false;
+      answerData.forEach(element => {
+         if (element.value === null) {
+           showMessage = true;
+         }
+      });
+
+      if (showMessage) {
+        toast.error("Lütfen tüm alanları doldurun");
+      }
+      else{
+         console.log(answerData);
+        //burda apiye kayıt edicez kredisi de yetiyorsa kredisini kesicez
+      }
+    }
 
     return(   
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
       
       {formData.length !== 0 ? <ReactFormGenerator 
-
+        ref={formRef}
+        skip_validations={true}
+        onSubmit={(info) => handleSubmit(info)}
+       submitButton={
        
-      hide_actions = {true} data={formData} /> : <Typography variant="subtitle1">Yakında...</Typography>}
+        <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+          <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[0])}>
+            Geri
+          </Button>
+          <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+            İleri
+          </Button>
+        </Box>
+       
+      }
+      hide_actions = {false} data={formData} /> : <Typography variant="subtitle1">Yakında...</Typography>}
 
 
       <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-        <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[0])}>
-          Geri
-        </Button>
-        <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[2])}>
-          İleri
-        </Button>
+        
       </Box>
     </Box>
     )
