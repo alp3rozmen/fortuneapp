@@ -15,7 +15,7 @@ import 'react-form-builder2/dist/app.css';
 import { toast } from 'react-toastify';
 import AuthContext from 'context/userContext.tsx';
 
-const DefaultPages = ['dateSelectPage', 'informationPage', 'successPage'];
+
 
 function AppDialog({handleClose  ,open, cardid , fal_type }) {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
@@ -23,20 +23,21 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   const [appointmentDetails, setAppointmentDetails] = useState({});
   const calendarRef = useRef(null);
   const [selectedHour, setSelectedHour] = useState('');
-  const [activePage, setActivePage] = useState(DefaultPages[0]);
+  const [activePage, setActivePage] = useState([]);
  
   const { userId , getUserInfo} = React.useContext(AuthContext);
   useEffect(() => {
     gApps();    
+    setActivePage('dateSelectPage');
   }, []);
 
   const innerHandleClose = () => {
     handleClose();
-    setSelectedDate(dayjs().format('YYYY-MM-DD'));
-    setHoursList([]);
-    setAppointmentDetails({});
-    setSelectedHour('');
-    setActivePage(DefaultPages[0]);
+    // setSelectedDate(dayjs().format('YYYY-MM-DD'));
+    // setHoursList([]);
+    // setAppointmentDetails({});
+    // setSelectedHour('');
+    // setActivePage(DefaultPages[0]);
   }
 
   
@@ -83,11 +84,11 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   };
 
   const DateSelectPage = () => (
+    console.log(selectedDate),
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <DateCalendar
-           
             value={dayjs(selectedDate)}
             selected={selectedDate}
             ref={calendarRef}
@@ -118,13 +119,14 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           </Box>
         </Box>
       </Box>
-      <Box  sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-        <Button disabled = {!selectedDate || !selectedHour} variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[1])}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+        <Button disabled={!selectedDate || !selectedHour} variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('informationPage')}>
           İleri
         </Button>
       </Box>
     </Box>
   );
+  
 
   const SuccessPage = () => (
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
@@ -146,85 +148,89 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   }
 
   const InformationPage = () => {
-    const [formData , setFormData] = useState([]);
+    const [formData, setFormData] = useState([]);
+    const [loading, setLoading] = useState(true); // Yükleme durumunu ekleyin
     const formRef = useRef(null);
-   
+  
     useEffect(() => {
-        GetFaltypeDesign(fal_type).then((response) => {
-          if (response.status == 404) {
-            return
-          }else{
+      const fetchData = async () => {
+        setLoading(true); // Yükleme başladığında true yap
+        try {
+          const response = await GetFaltypeDesign(fal_type);
+          if (response.status === 404) {
+            setLoading(false);
+            return;
+          } else {
             const parsedJson = JSON.parse(response.data[0].formdata);
             setFormData(parsedJson.task_data);
           }
-        })
-    }, []);
-
+        } catch (error) {
+          console.error('Veri yükleme hatası:', error);
+        } finally {
+          setLoading(false); // Yükleme tamamlandığında false yap
+        }
+      };
+  
+      fetchData();
+    }, [fal_type]); // Dependencileri unutmayın
+  
     const handleSubmit = (answerData) => {
-      var showMessage = false;
-      answerData.forEach(element => {
-         if (element.value === null || element.value === "") {
-           showMessage = true;
-         }
-      });
-
+      const showMessage = answerData.some(element => element.value === null || element.value === "");
+  
       if (showMessage) {
-        toast.error("Lütfen tüm alanları doldurun");
+        toast.error("Lütfen tüm alanları doldurun");
+      } else {
+        UserFals.insertUserFalRequest(
+          userId, 
+          JSON.stringify(formData), 
+          JSON.stringify(answerData), 
+          appointmentDetails.user_id, // falcının idsi 
+          appointmentDetails.app_id,
+          userId,
+          dayjs(selectedDate).format('YYYY-MM-DD'),
+          dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
+          appointmentDetails.start_hour,
+          appointmentDetails.end_hour,
+          appointmentDetails.fal_type
+        ).then((response) => {
+          console.log(response.status);
+          if (response.status == 200) {
+            SetPage('successPage');
+            getUserInfo();
+          } else {
+            toast.error(response.message);
+          }
+        });
       }
-      else{
-
-          //FALI INSERT EDER EKSIK KISIM KREDIYIDE KESMESI LAZIM
-          UserFals.insertUserFalRequest(userId, 
-            JSON.stringify(formData), 
-            JSON.stringify(answerData), 
-            appointmentDetails.user_id, //falcinin idsi 
-            appointmentDetails.app_id,
-            userId,
-            dayjs(selectedDate).format('YYYY-MM-DD'),
-            dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
-            appointmentDetails.start_hour,
-            appointmentDetails.end_hour,
-            appointmentDetails.fal_type,
-          ).then((response) => {
-            if (response.status == 200) {
-              SetPage(DefaultPages[2]);
-              getUserInfo();
+    };
+  
+    return (
+      <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
+        {loading ? (
+          <Typography variant="subtitle1">Yükleniyor...</Typography>
+        ) : formData.length !== 0 ? (
+          <ReactFormGenerator
+            ref={formRef}
+            skip_validations={true}
+            onSubmit={(info) => handleSubmit(info)}
+            submitButton={
+              <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('dateSelectPage')}>
+                  Geri
+                </Button>
+                <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                  İleri
+                </Button>
+              </Box>
             }
-            else{
-              toast.error(response.message);
-            }
-          })
-         
-      }
-    }
-
-    return(   
-    <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
-      
-      {formData.length !== 0 ? <ReactFormGenerator 
-        ref={formRef}
-        skip_validations={true}
-        onSubmit={(info) => handleSubmit(info)}
-       submitButton={
-       
-        <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-          <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage(DefaultPages[0])}>
-            Geri
-          </Button>
-          <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-            İleri
-          </Button>
-        </Box>
-       
-      }
-      hide_actions = {false} data={formData} /> : <Typography variant="subtitle1">Yakında...</Typography>}
-
-
-      <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-        
+            hide_actions={false}
+            data={formData}
+          />
+        ) : (
+          <Typography variant="subtitle1">Yakında...</Typography>
+        )}
       </Box>
-    </Box>
-    )
+    );
   };
 
   const SetPage = (page) => {
@@ -246,7 +252,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
         {activePage === 'dateSelectPage' && <DateSelectPage /> }
         {activePage === 'informationPage' && <InformationPage />}
         {activePage === 'successPage' && <SuccessPage />}
-        {!DefaultPages.includes(activePage) && <Typography>Sayfa bulunamadı.</Typography>}
+        {!activePage.includes(activePage) && <Typography>Sayfa bulunamadı.</Typography>}
        
         </> 
       </LocalizationProvider>
