@@ -21,14 +21,14 @@ const ftelling = {
       url : '/'
     },{
       id: 'waitingFals',
-      title: 'Bekleyen Bakımlarım',
+      title: 'Bekleyenler',
       type: 'item',
       icon: icons.IconClock,
       url : '/waitingFals'
     },
     {
       id: 'doneFals',
-      title: 'Yorumlanan Bakımlarım',
+      title: 'Yorumlananlar',
       type: 'item',
       icon: icons.IconTicketOff,
       url : '/doneFals'
