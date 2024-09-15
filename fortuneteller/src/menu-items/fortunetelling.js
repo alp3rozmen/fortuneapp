@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard , IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconSelect, IconClock } from '@tabler/icons-react';
+import { IconDashboard , IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconSelect, IconClock, IconTicketOff } from '@tabler/icons-react';
 
 // constant
-const icons = { IconSelect,IconDashboard, IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconClock  };
+const icons = { IconSelect,IconDashboard, IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconClock, IconTicketOff  };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -25,6 +25,13 @@ const ftelling = {
       type: 'item',
       icon: icons.IconClock,
       url : '/waitingFals'
+    },
+    {
+      id: 'doneFals',
+      title: 'Yorumlanan Bakımlarım',
+      type: 'item',
+      icon: icons.IconTicketOff,
+      url : '/doneFals'
     }
         
     // {

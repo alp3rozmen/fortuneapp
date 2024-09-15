@@ -86,7 +86,11 @@ const MainRoutes = {
     {
       path: 'waitingFals',
       element: <RoleBasedRoute roles={['3']} component={WaitingFals} fallbackComponent={DashboardDefault} />,
-    }
+    },
+    {
+      path: 'doneFals',
+      element: <RoleBasedRoute roles={['3']} component={WaitingFals} fallbackComponent={DashboardDefault} />,
+    },
   ]
 };
 

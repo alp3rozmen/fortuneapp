@@ -1,14 +1,15 @@
 // material-ui
 
 // project imports
+import { GridView } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 
-const WaitingFals = () => {
+const DoneFals = () => {
     return (
         <MainCard>
             <Box>
-                <Typography variant="h3">Bekleyen Bakımlarım</Typography>
+                <Typography variant="h3">Yorumlanan Bakımlarım</Typography>
                         
             </Box>
         </MainCard>   
@@ -16,4 +17,4 @@ const WaitingFals = () => {
 };
 
 
-export default WaitingFals;
+export default DoneFals;

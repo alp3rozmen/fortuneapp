@@ -22,7 +22,7 @@ const MenuList = () => {
       //LOGİN DEGİLSE MENU ITEMLERİ FİLTRELE
       if (!isLogin) {
          menuItem.NormalmenuItems.items.map((item) => {
-          item.children = item.children.filter((child) => child.id !== 'waitingFals') 
+          item.children = item.children.filter((child) => child.id !== 'waitingFals' && child.id !== 'doneFals'); 
         })
         
         setMenu(menuItem.NormalmenuItems.items);
