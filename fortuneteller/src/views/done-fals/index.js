@@ -1,7 +1,6 @@
 // material-ui
 
 // project imports
-import { GridView } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 
