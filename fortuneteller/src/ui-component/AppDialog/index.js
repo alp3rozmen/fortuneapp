@@ -176,7 +176,11 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   
     const handleSubmit = (answerData) => {
       const showMessage = answerData.some(element => element.value === null || element.value === "");
-  
+
+
+      // console.log("showMessage: ", answerData);
+      // return
+      
       if (showMessage) {
         toast.error("Lütfen tüm alanları doldurun");
       } else {

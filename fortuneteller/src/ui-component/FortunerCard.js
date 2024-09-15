@@ -1,4 +1,4 @@
-import { Card, Typography, CardActionArea, CardContent, CardMedia, Box, CircularProgress} from '@mui/material';
+import { Card, Typography, CardActionArea, CardContent,  Box, CircularProgress , Avatar, CardMedia} from '@mui/material';
 import { useEffect, useState } from 'react';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -40,11 +40,11 @@ const FortunersCard = ({ roles, types, title }) => {
                 <Box sx={{  gridTemplateColumns: 'repeat(4, 1fr)', mt: 2, justifyContent: 'center'}} key={userDetail.id}>
                   <Card id={userDetail.id} key={userDetail.id} sx={{ display: 'flex', mr: 2, boxShadow: 3, maxWidth: 230 }}>
                     <CardActionArea onClick={() => window.location.href = `/user/${userDetail.username}`} >
-                      <CardMedia
-                        sx={{ width: 230, height: 140 }}
-                        component="img"
-                        image={userDetail.profile_image}
-                      />
+                      <CardMedia sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                      
+                      <Avatar sx={{mt: 2, width: 100, height: 100 }} src={userDetail.profile_image} />
+
+                      </CardMedia>
                       <CardContent>
                         <Typography variant="h5" component="div">
                           {userDetail.username}

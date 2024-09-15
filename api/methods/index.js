@@ -94,7 +94,7 @@ function methods(app) {
                     userid: user[0].id,
                     userName: user[0].username,
                     user_role: user[0].user_role,
-                    profile_image: user[0].profile_image.toString(),
+                    profile_image: btoa(user[0].profile_image),
                     email: user[0].email,
                     balance: user[0].balance
                 };
@@ -140,7 +140,7 @@ function methods(app) {
                         gender: user[0].gender,
                         age: user[0].age,
                         bio: user[0].bio,
-                        profile_image: user[0].profile_image.toString(),    
+                        profile_image: btoa(user[0].profile_image),    
                         user_role: user[0].user_role,
                         status: user[0].status,
                         balance: user[0].balance
@@ -179,7 +179,7 @@ function methods(app) {
                                         gender: user.gender,
                                         age: user.age,
                                         bio: user.bio,
-                                        profile_image:   user.profile_image.toString(),
+                                        profile_image: btoa(user.profile_image),
                                         user_role: user.user_role,
                                         status: user.status,
                                         balance: user.balance,
@@ -208,7 +208,7 @@ function methods(app) {
                                         gender: user.gender,
                                         age: user.age,
                                         bio: user.bio,
-                                        profile_image: user.profile_image.toString(),
+                                        profile_image: user.profile_image.toString('base64'),
                                         user_role: user.user_role,
                                         status: user.status,
                                         balance: user.balance,
