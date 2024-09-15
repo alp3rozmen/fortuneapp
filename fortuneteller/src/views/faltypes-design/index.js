@@ -50,7 +50,7 @@ const FalTypesDesign = () => {
 
     const handleSave = () => {
         // APİYE POST EDİLECEK
-        console.log(formData);
+        
     };
 
     const openPreview = () => {

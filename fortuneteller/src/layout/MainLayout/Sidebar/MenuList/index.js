@@ -19,7 +19,19 @@ const MenuList = () => {
     }
     else
     {
-      setMenu(menuItem.NormalmenuItems.items);
+      //LOGİN DEGİLSE MENU ITEMLERİ FİLTRELE
+      if (!isLogin) {
+         menuItem.NormalmenuItems.items.map((item) => {
+          item.children = item.children.filter((child) => child.id !== 'waitingFals') 
+        })
+        
+        setMenu(menuItem.NormalmenuItems.items);
+        
+      }
+      else{
+        setMenu(menuItem.NormalmenuItems.items);
+      }
+      
     }
 
   }, [isLogin]);

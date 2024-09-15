@@ -4,6 +4,7 @@ import { lazy, useContext } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import AuthContext from 'context/userContext.tsx';
+import WaitingFals from 'views/waiting-fals';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -82,6 +83,10 @@ const MainRoutes = {
       path: 'faltypes/design',
       element: <RoleBasedRoute roles={['3']} component={FaltypesDesign} fallbackComponent={DashboardDefault} />,
     },
+    {
+      path: 'waitingFals',
+      element: <RoleBasedRoute roles={['3']} component={WaitingFals} fallbackComponent={DashboardDefault} />,
+    }
   ]
 };
 

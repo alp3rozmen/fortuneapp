@@ -162,7 +162,7 @@ const FaltypesEdit = () => {
                             name: 'İptal',
                             color: 'error',
                             onClick: () => {
-                                console.log('Kapatildi');
+                                
                             }
 
                         }]

@@ -276,7 +276,7 @@ const UserEdit = () => {
                     color: 'success',
                     onClick: () => {
                       fetchAddUserFalType().then((response) => {
-                        console.log(response);
+                        
                         if (response.data.status === '200') {
                           toast.success(response.data.message);
                           selectedOnChange(selectedValue);
@@ -294,7 +294,7 @@ const UserEdit = () => {
                     name: 'İptal',
                     color: 'error',
                     onClick: () => {
-                      console.log('clicked');
+                     
                     }
                   }
                   ]
@@ -362,7 +362,7 @@ const UserEdit = () => {
                   name: 'İptal',
                   color: 'error',
                   onClick: () => {
-                    console.log('clicked');
+                    
                   }
                 }
                 ]

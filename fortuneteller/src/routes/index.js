@@ -6,8 +6,6 @@ import AuthenticationRoutes from './AuthenticationRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
-export default function ThemeRoutes() {
- 
-
-  return useRoutes([MainRoutes, AuthenticationRoutes]);
+export default function ThemeRoutes() { 
+ return useRoutes([MainRoutes, AuthenticationRoutes]);
 }

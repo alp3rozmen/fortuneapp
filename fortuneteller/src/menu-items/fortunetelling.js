@@ -1,8 +1,8 @@
 // assets
-import { IconDashboard , IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconSelect } from '@tabler/icons-react';
+import { IconDashboard , IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconSelect, IconClock } from '@tabler/icons-react';
 
 // constant
-const icons = { IconSelect,IconDashboard, IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1  };
+const icons = { IconSelect,IconDashboard, IconCoffee, IconCards, IconRings, IconMoon, IconWashTemperature1, IconClock  };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -19,7 +19,14 @@ const ftelling = {
       type: 'item',
       icon: icons.IconMoon,
       url : '/'
+    },{
+      id: 'waitingFals',
+      title: 'Bekleyen Bakımlarım',
+      type: 'item',
+      icon: icons.IconClock,
+      url : '/waitingFals'
     }
+        
     // {
     // KAPATILDI TUM YORUMCULAR LISTELENIP ICERIDEN SECIM YAPILACAK 
     //   id: 'Falls',
