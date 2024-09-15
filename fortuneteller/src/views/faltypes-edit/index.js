@@ -122,11 +122,6 @@ const FaltypesEdit = () => {
                                 sx={{ width: 300 }} InputLabelProps={{ shrink: true }} type='text' id="outlined-basic" label="Bakım İsmi" variant="outlined" />
                         </Box>
                     </Box>
-
-                    {/* <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 2 }}>
-                        <Button onClick={() => AddFaltype()} id='okButton' sx={{ width: '50%' }} variant='contained' color='success'>Ekle</Button>
-                        <Button id='cancelButton' sx={{ width: '50%' }} variant='contained' color='error'>İptal</Button>
-                    </Box> */}
                 </CustomDialog>
                 {
                     faltypes.length > 0 &&

@@ -1,20 +1,47 @@
 // material-ui
 
 // project imports
-import { Box , Button} from '@mui/material';
+import { Box } from '@mui/material';
 import AuthContext from 'context/userContext.tsx';
 import { UserFals } from 'network/UserFals/UserFals.ts';
-import {useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import DataTable from 'ui-component/data-table';
-
+import { ReactFormGenerator } from 'react-form-builder2';
+import CustomDialog from 'ui-component/CustomDialog';
 const WaitingFals = () => {
 
-    const CustomShowDetails = () => {
+
+    const CustomShowDetails = (props) => {
         return (
-            <Button variant="contained" size="small" disableElevation>
-              Bakım Detayı
-          </Button>
+            <CustomDialog
+                buttons={
+                    [{
+                        id: 'okButton',
+                        name: 'Kapat',
+                        color: 'success',
+                        onClick: () => console.log('ok')
+                    }]
+                }
+                name={'Detayı Gör'} boxStyle={{ mr: 2, mb: 1 }} >
+                <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <ReactFormGenerator
+                            download_path=""
+                            back_action=""
+                            back_name="Back"
+                            answer_data={JSON.parse(props.formanswer)}
+                            form_action=""
+                            form_method="POST"
+                            data={JSON.parse(props.formdata)}
+                            hide_actions={true}
+                            read_only={true}
+                            variables={true}    
+                        />
+
+                    </Box>
+                </Box>
+            </CustomDialog>
         );
     };
 
@@ -39,21 +66,23 @@ const WaitingFals = () => {
             fetchFals(); // userId varsa veri çekme işlemini başlat
         }
 
-    }, [userId]); 
+    }, [userId]);
 
     return (
         <MainCard>
             <Box>
                 <DataTable
-                        customButtons={CustomShowDetails()}
-                        customButtonHeader='İşlemler'                         
-                        title="Bekleyen Bakımlarım"
-                        rows={fals}
-                        rowNames={['fal_types_name','users_username' ,'situations_name' , 'fals_created_at' ]}
-                        rowHeaders={['Bakım Adı', 'Yorumcu', 'Durum' , 'Gönderme Zamanı' ]}
-                        />
+                    customButtons={(data) => CustomShowDetails(data)}
+                    customButtonHeader='İşlemler'
+                    title="Bekleyen Bakımlarım"
+                    rows={fals}
+                    rowNames={['fal_types_name', 'users_username', 'situations_name', 'fals_created_at']}
+                    rowHeaders={['Bakım Adı', 'Yorumcu', 'Durum', 'Gönderme Zamanı']}
+                />
             </Box>
-        </MainCard>   
+
+
+        </MainCard>
     )
 };
 

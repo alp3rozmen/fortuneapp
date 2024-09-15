@@ -259,6 +259,8 @@ function FalEndPoints(app , connection) {
         .join('situations as s', 's.statuscode', 'fd.status')
         .select(
           'f.id as fals_id',
+          'fd.formanswer',
+          'fd.formdata',
           'f.user_id as fals_user_id',
           'f.fal_type as fals_fal_type',
           'f.created_at as fals_created_at',
@@ -293,9 +295,9 @@ function FalEndPoints(app , connection) {
           's.updated_at as situations_updated_at'
         )
         .where('f.user_id', user_id)
-        .andWhere('fd.status', 1000)
         .andWhere('s.type', 1)
         .andWhere('ud.fal_type', connection.raw('f.fal_type'))
+        .orderBy('f.created_at', 'desc')
         .then(rows => {
           return res.status(200).json(rows);
         })

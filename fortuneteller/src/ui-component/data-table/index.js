@@ -99,7 +99,7 @@ export default function DataTable({customButtons ,customButtonHeader = '', showA
 
                                 {customButtons &&
                                 <TableCell width={'175'} align="center" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                    {customButtons}
+                                    {customButtons(rows[index])}
                                 </TableCell>
                                 }
 
