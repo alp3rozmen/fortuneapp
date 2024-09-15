@@ -21,7 +21,7 @@ const StyledTypography = styled(Typography)({
 });
 
 
-export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChildrens , dialogButtons, deleteClick, handleUpdateClick }) {
+export default function DataTable({customButtons ,customButtonHeader = '', showAdminButtons = false, title, rowHeaders, rowNames, rows, dialogChildrens , dialogButtons, deleteClick, handleUpdateClick }) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -30,7 +30,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChi
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
+    
     const isHaveId = (row) => {
         if (row[rowNames[0]]) {
             return true;
@@ -68,8 +68,14 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChi
                             {rowHeaders.map((name) => (
                                 <TableCell key={name} align="center">{name}</TableCell>
                             ))}
-                            <TableCell width={'175'} align="center">İşlemler</TableCell>
 
+                            {showAdminButtons &&
+                            <TableCell width={'175'} align="center">İşlemler</TableCell>
+                            }
+
+                            {customButtonHeader &&
+                              <TableCell width={'175'} align="center">{customButtonHeader}</TableCell>
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -81,6 +87,7 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChi
                                         {iso8601Regex.test(row[name]) && dayjs(row[name]).isValid() && i !== 0 ? dayjs(row[name]).locale('tr').format('DD MMMM YYYY') : row[name]}
                                     </TableCell>
                                 ))}
+                                {showAdminButtons &&
                                 <TableCell width={'175'} align="center" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                                     <Button sx={{ mr: 1  }} onClick={() => deleteClick(row[rowNames[0]])} color='error' variant="outlined">Sil</Button>
 
@@ -88,6 +95,14 @@ export default function DataTable({ title, rowHeaders, rowNames, rows, dialogChi
                                         {dialogChildrens}
                                     </CustomDialog>
                                 </TableCell>
+                                }
+
+                                {customButtons &&
+                                <TableCell width={'175'} align="center" sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                    {customButtons}
+                                </TableCell>
+                                }
+
 
                             </TableRow>
                         ))}

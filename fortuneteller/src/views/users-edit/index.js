@@ -422,6 +422,7 @@ const UserEdit = () => {
 
             <Box sx={{ mt: 1 }}>
               <DataTable
+                showAdminButtons={true}
                 deleteClick={(id) => deleteUserFalType(id)}
                 handleUpdateClick={(params) => userFalTypesTbUpdHandle(params)}
                 title="Bakımlar"
@@ -483,6 +484,7 @@ const UserEdit = () => {
 
             <Box >
               <DataTable title="Randevu Aralıkları"
+                showAdminButtons={true}
                 dialogChildrens={
                   <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

@@ -33,7 +33,17 @@ export const UserFals = {
             return response;
         }
         catch (error) {
-            console.log("/api/insertFalDesign - FalTypes AddFalTypeDesign", error); 
+            console.log("/api/insertFalDesign - UserFals insertUserFalRequest", error); 
+            throw error;
+        }
+    },
+    getWaitingFals : async (puser_id : any) => {
+        try {
+            var response = await baseService.post<any[]>("userWaitingFals" , {user_id : puser_id});
+            return response;
+        }
+        catch (error) {
+            console.log("/api/userWaitingFals - UserFals getWaitingFals", error); 
             throw error;
         }
     }

@@ -131,7 +131,9 @@ const FaltypesEdit = () => {
                 {
                     faltypes.length > 0 &&
 
-                    <DataTable title="Bakım Türleri"
+                    <DataTable
+                        showAdminButtons={true}
+                        title="Bakım Türleri"
                         rowHeaders={['ID', 'Bakım İsmi', 'Oluşturma Tarihi', 'Güncelleme Tarihi']}
                         rows={faltypes}
                         rowNames={['id', 'name', 'created_at', 'updated_at']}
