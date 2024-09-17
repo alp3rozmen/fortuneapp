@@ -140,7 +140,7 @@ function methods(app) {
                         gender: user[0].gender,
                         age: user[0].age,
                         bio: user[0].bio,
-                        profile_image: btoa(user[0].profile_image),    
+                        profile_image: user[0].profile_image.toString('base64'),    
                         user_role: user[0].user_role,
                         status: user[0].status,
                         balance: user[0].balance
@@ -179,7 +179,7 @@ function methods(app) {
                                         gender: user.gender,
                                         age: user.age,
                                         bio: user.bio,
-                                        profile_image: btoa(user.profile_image),
+                                        profile_image: user.profile_image.toString('base64'),
                                         user_role: user.user_role,
                                         status: user.status,
                                         balance: user.balance,

@@ -176,14 +176,43 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
   
     const handleSubmit = (answerData) => {
       const showMessage = answerData.some(element => element.value === null || element.value === "");
-
-
-      // console.log("showMessage: ", answerData);
-      // return
-      
+    
       if (showMessage) {
         toast.error("Lütfen tüm alanları doldurun");
-      } else {
+        return;
+      }
+    
+      const filesToRead = answerData.filter(element => element.name.includes('camera_'));
+      let filesRead = 0;
+    
+      const reader = new FileReader();
+      
+      const processFile = (file, index) => {
+        return new Promise((resolve, reject) => {
+          reader.onloadend = () => {
+            answerData[index].value = reader.result;
+            filesRead++;
+            if (filesRead === filesToRead.length) {
+              submitForm();
+            }
+            resolve();
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      };
+    
+      const readAllFiles = async () => {
+        try {
+          for (let i = 0; i < filesToRead.length; i++) {
+            await processFile(filesToRead[i].value, answerData.findIndex(el => el === filesToRead[i]));
+          }
+        } catch (error) {
+          toast.error("Dosya okuma hatası!");
+        }
+      };
+    
+      const submitForm = () => {
         UserFals.insertUserFalRequest(
           userId, 
           JSON.stringify(formData), 
@@ -205,8 +234,12 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
             toast.error(response.message);
           }
         });
-      }
+      };
+    
+      // Start reading files
+      readAllFiles();
     };
+    
   
     return (
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>

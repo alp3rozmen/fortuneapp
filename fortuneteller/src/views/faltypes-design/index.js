@@ -71,7 +71,6 @@ const FalTypesDesign = () => {
     };
 
     const saveData = () =>{
-        console.log(formData);
         FalTypes.AddFalTypeDesign(selectedType, JSON.stringify(formData)).then((response) => {
             if (response) {
                 toast.success("Formunuz kaydedildi");
@@ -80,6 +79,20 @@ const FalTypesDesign = () => {
             toast.error(error.message || "Form kaydedilemedi");
         })
     }   
+
+    const onSubmitForm = (value) => {
+        
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            console.log(reader.result); // Base64 veriyi state'e kaydediyoruz
+        };
+        
+        value.map((element) => {
+            reader.readAsDataURL(element.value);
+        })
+
+    }
 
     return (
       
@@ -94,15 +107,12 @@ const FalTypesDesign = () => {
                                         <ReactFormGenerator
                                             
                                             renderForm={props => <FormElementsEdit {...props}/>}
-                                            download_path=""
+                                            download_path="/asd"
                                             back_action=""
                                             back_name="Back"
-                                            answer_data={{}}
-                                            form_action=""
-                                            form_method="POST"
                                             data={formData.task_data}
                                             submitButton={false}
-                                            onSubmit={(info) => console.log(info)}
+                                            onSubmit={(value) => onSubmitForm(value)}
                                         />
                                         <div className="modal-footer">
                                             <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closePreview}>Önizlemeyi Kapat</button>
