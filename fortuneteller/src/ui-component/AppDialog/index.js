@@ -226,7 +226,6 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           appointmentDetails.end_hour,
           appointmentDetails.fal_type
         ).then((response) => {
-          console.log(response.status);
           if (response.status == 200) {
             SetPage('successPage');
             getUserInfo();
