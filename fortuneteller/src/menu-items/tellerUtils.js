@@ -15,26 +15,18 @@ const tellerUtils = {
   children: [
     {
       id: 'Appointments',
-      title: 'Randevularım',
+      title: 'İşlemler',
       type: 'collapse',
       icon: icons.IconDashboard ,
       
       children: [
         {
           id: 'waitingAppointments',
-          title: 'Bekleyen Randevular',
+          title: 'Randevularım',
           type: 'item',
           icon: icons.IconEdit,
           breadcrumbs: false,
-          url : '/fals/coffee'
-        },
-        {
-          id: 'completedAppointments',
-          title: 'Tamamlanan Randevular',
-          type: 'item',
-          url: '/fals/tarot',
-          icon: icons.IconClock,
-          breadcrumbs: false
+          url : '/personal/appointments'
         }    
       ]
     },

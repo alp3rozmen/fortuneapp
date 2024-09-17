@@ -46,6 +46,17 @@ export const UserFals = {
             console.log("/api/userWaitingFals - UserFals getWaitingFals", error); 
             throw error;
         }
+    },
+
+    getPersonalWaitingFals : async (puser_id : any) => {
+        try {
+            var response = await baseService.post<any[]>("personalWaitingFals" , {user_id : puser_id});
+            return response;
+        }
+        catch (error) {
+            console.log("/api/userWaitingFals - UserFals getWaitingFals", error); 
+            throw error;
+        }
     }
 }
 

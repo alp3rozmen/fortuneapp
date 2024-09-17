@@ -245,9 +245,71 @@ function FalEndPoints(app , connection) {
         }
     });
 
+    app.post('/api/personalWaitingFals', authenticateToken, async (req, res) => {
+        var user_id = req.body.user_id;
+        console.log(user_id);
+        if (!user_id || user_id === 0) {
+            return res.status(400).json({ message: 'Kullanıcı id gereklidir', status: 'error' });
+        }
+        connection('fals as f')
+        .join('fal_details as fd', 'f.id', 'fd.fal_id')
+        .join('user_details as ud', 'ud.user_id', 'f.fal_user_id')
+        .join('users as u', 'u.id', 'ud.user_id')
+        .join('fal_types as ft', 'ft.id', 'f.fal_type')
+        .join('situations as s', 's.statuscode', 'fd.status')
+        .select(
+          'f.id as fals_id',
+          'fd.formanswer',
+          'fd.formdata',
+          'f.user_id as fals_user_id',
+          'f.fal_type as fals_fal_type',
+          'f.created_at as fals_created_at',
+          'f.updated_at as fals_updated_at',
+          'ud.id as user_details_id',
+          'ud.user_id as user_details_user_id',
+          'ud.balance as user_details_balance',
+          'ud.fal_type as user_details_fal_type',
+          'ud.cost as user_details_cost',
+          'ud.created_at as user_details_created_at',
+          'ud.updated_at as user_details_updated_at',
+          'u.id as users_id',
+          'u.username as users_username',
+          'u.email as users_email',
+          'u.gender as users_gender',
+          'u.age as users_age',
+          'u.bio as users_bio',
+          'u.profile_image as users_profile_image',
+          'u.status as users_status',
+          'u.balance as users_balance',
+          'u.created_at as users_created_at',
+          'u.updated_at as users_updated_at',
+          'ft.id as fal_types_id',
+          'ft.name as fal_types_name',
+          'ft.created_at as fal_types_created_at',
+          'ft.updated_at as fal_types_updated_at',
+          's.id as situations_id',
+          's.statuscode as situations_statuscode',
+          's.name as situations_name',
+          's.type as situations_type',
+          's.created_at as situations_created_at',
+          's.updated_at as situations_updated_at'
+        )
+        .where('f.fal_user_id', user_id)
+        .andWhere('s.type', 1)
+        .andWhere('ud.fal_type', connection.raw('f.fal_type'))
+        .orderBy('f.created_at', 'desc')
+        .then(rows => {
+          return res.status(200).json(rows);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    });
+
+
     app.post('/api/userWaitingFals', authenticateToken, async (req, res) => {
         var user_id = req.body.user_id;
-    
+        console.log(user_id);
         if (!user_id || user_id === 0) {
             return res.status(400).json({ message: 'Kullanıcı id gereklidir', status: 'error' });
         }
