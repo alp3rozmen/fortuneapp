@@ -40,10 +40,6 @@ const ProfileSection = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    console.log('testererrrrr' ,userProfilePicture)
-  }, []);
-  
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
