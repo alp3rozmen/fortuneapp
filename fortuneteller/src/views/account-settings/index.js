@@ -40,6 +40,8 @@ const AccountSettings = () => {
           toast.success('Profil resmi değiştirildi');
           getUserInfo();
         }
+      }).catch((error) => {
+        console.log(error);
       })
     };
     console.log(file);
