@@ -41,7 +41,7 @@ export const AuthContextProvider = ({ children }: any) => {
                 headers: {'authorization': `Bearer ${localStorage.getItem('token')}`,'Accept': 'application/json', 'Content-Type': 'application/json', accessControlAllowOrigin: '*'}, 
                 body: JSON.stringify({userid : localStorage.getItem('userid')})}).then((response) => {
                
-                if (response.status === 200) {
+                if (response.status == 200) {
                     response.json().then((data) => {
                         setUserId(data.userid)
                         setIsLogin(true)

@@ -50,16 +50,9 @@ function methods(app) {
                 }
 
                 const token = jwt.sign({ username: username }, 'secret', { expiresIn: '24h' });
-                const mimeType = 'image/png'; // Bu örnek için PNG, resmin gerçek MIME türünü kullanın
-                var base64ProfileImage = Buffer.from(user[0].profile_image).toString('base64');
                 
             
-                if (base64ProfileImage.includes('dataimage/pngbase64')) {
-                    base64ProfileImage = base64ProfileImage.substring(base64ProfileImage.indexOf('64') + 2, base64ProfileImage.length -1);    
-                }
                 
-                const base64ImageWithPrefix = `data:${mimeType};base64,${base64ProfileImage}`;
-
                 var response = {
                     status: 'success',
                     message: 'Giris basarili',
@@ -67,7 +60,7 @@ function methods(app) {
                     userid: user[0].id,
                     userName: user[0].username,
                     user_role: user[0].user_role,
-                    profile_image: base64ImageWithPrefix,
+                    profile_image: user[0].profile_image,
                     email : user[0].email,
                     balance : user[0].balance
                 }
