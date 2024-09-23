@@ -1,7 +1,7 @@
 // material-ui
 
 // project imports
-import { Box } from '@mui/material';
+import { Box, Input, Button } from '@mui/material';
 import AuthContext from 'context/userContext.tsx';
 import { UserFals } from 'network/UserFals/UserFals.ts';
 import { useState, useContext, useEffect } from 'react';
@@ -9,8 +9,24 @@ import MainCard from 'ui-component/cards/MainCard';
 import DataTable from 'ui-component/data-table';
 import { ReactFormGenerator } from 'react-form-builder2';
 import CustomDialog from 'ui-component/CustomDialog';
+import { toast } from 'react-toastify';
+
+
 const PersonalWaitingFals = () => {
+    const [inputValue, setInputValue] = useState('');
+    const updateFalState = () => {
+       if (confirm('Falı göndermek istediğinizden emin misiniz?')) {
+            if (inputValue)  {
+                console.log(inputValue);
+            }
+            else {
+                toast.error('Lütfen yorum alanını doldurunuz!');
+            }
+       }
+    };
+
     const CustomShowDetails = (props) => {
+        
         return (
             <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                 <CustomDialog
@@ -53,23 +69,11 @@ const PersonalWaitingFals = () => {
                         }]
                     }
                     name={'Yorumla'} boxStyle={{ mr: 2, mb: 1 }} >
-                    <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                            <ReactFormGenerator
-                                download_path=""
-                                back_action=""
-                                back_name="Back"
-                                answer_data={JSON.parse(props.formanswer)}
-                                form_action=""
-                                form_method="POST"
-                                data={JSON.parse(props.formdata)}
-                                hide_actions={true}
-                                read_only={true}
-                                variables={true}    
-                            />
-
-                        </Box>
-                    </Box>
+                
+                <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Input value={inputValue} onChange={(e) => setInputValue(e.target.value)} label="Yorum" multiline rows={4} sx={{ width: 500 }} />
+                    <Button onClick={() => updateFalState()} variant='contained' sx={{ mt: 2 }}>Yorumla</Button>
+                </Box>
                 </CustomDialog>
 
 
