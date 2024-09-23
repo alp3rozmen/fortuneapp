@@ -1,195 +1,164 @@
+import React, { useState, useEffect, createContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import React from "react"
-import { createContext } from "react"
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
-import 'react-toastify/dist/ReactToastify.css';
-
-export const AuthContext = createContext(null as any)
+export const AuthContext = createContext(null as any);
 
 export const AuthContextProvider = ({ children }: any) => {
+  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
+  const [userId, setUserId] = useState(0);
+  const [token, setToken] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [balance, setBalance] = useState(0);
+  const [role, setRole] = useState("");
+  const [userProfilePicture, setUserProfilePicture] = useState("");
+  const [isLoading, setIsLoading] = useState(true); // Yükleme durumu ekle
 
-    useEffect(() => {
-        var token = localStorage.getItem('token')
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
-        if ((token) && (userId > 0)) {
-            setIsLogin(true)
-            setUserName(localStorage.getItem('userName'))
-            setToken(token)
-        }
-        else if ((token) && (userId === 0)) {
-            getUserInfo()
-        }
-    }, [])
-
-
-    const navigate = useNavigate()
-    const [isLogin , setIsLogin] = useState(false)
-    const [userId, setUserId] = useState(0)
-    const [token, setToken] = useState('')
-    const [userName, setUserName] = useState('')
-    const [email, setEmail] = useState('')
-    const [balance , setBalance] = useState(0)
-    const [role , setRole] = useState('')
-    const [userProfilePicture, setUserProfilePicture] = useState('')
-
-    const getUserInfo = () => {
-            fetch('http://localhost:3000/api/getUserInfo', 
-                {
-                method: 'POST', 
-                headers: {'authorization': `Bearer ${localStorage.getItem('token')}`,'Accept': 'application/json', 'Content-Type': 'application/json', accessControlAllowOrigin: '*'}, 
-                body: JSON.stringify({userid : localStorage.getItem('userid')})}).then((response) => {
-               
-                if (response.status == 200) {
-                    response.json().then((data) => {
-                        setUserId(data.userid)
-                        setIsLogin(true)
-                        setUserName(data.userName)
-                        setRole(data.user_role)
-                        setEmail(data.email)
-                        setBalance(data.balance)
-                        setUserProfilePicture(data.profile_image)
-                        localStorage.setItem('userid', data.userid)
-                        localStorage.setItem('userName', data.userName)
-                        localStorage.setItem('userType', data.user_role)
-                    })
-                    
-                }
-                else {
-                    response.json().then((data) => {
-                        toast.error(data.error, {
-                            position: 'top-right',
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: 'light',
-                        })
-
-                        localStorage.removeItem('userid');
-                        localStorage.removeItem('userName');
-                        localStorage.removeItem('userType');
-                        localStorage.removeItem('token');
-                        navigate('/')   
-                    })
-                }
-            }).catch(() => {
-                toast.error('Bir hata oluştu', {
-                    position: 'top-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light',
-                })
-                localStorage.removeItem('userid');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userType');
-                localStorage.removeItem('token');
-                navigate('/') 
-                
-            })
+    if (token) {
+      // Token varsa, kullanıcı bilgilerini al
+      getUserInfo().then(() => {
+        setIsLogin(true);
+        setIsLoading(false); // Yükleme bitti
+      }).catch(() => {
+        setIsLogin(false);
+        setIsLoading(false); // Yükleme bitti
+      });
+    } else {
+      setIsLogin(false);
+      setIsLoading(false); // Yükleme bitti
     }
+  }, []);
 
-    const login = (userName : String, password : String) => {
-        
-        fetch('http://localhost:3000/api/login', {method: 'POST', headers: {'Accept': 'application/json', 'Content-Type': 'application/json', accessControlAllowOrigin: '*'}, 
-            body: JSON.stringify({username: userName, password: password})}).then((response) => {
-            if (response.status === 200) {
-                response.json().then((data) => {
-                    setToken(data.token)
-                    setUserId(data.userid)
-                    setIsLogin(true)
-                    setUserName(data.userName)
-                    setRole(data.user_role)
-                    setEmail(data.email)
-                    setBalance(data.balance)
+  const getUserInfo = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/getUserInfo", {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          accessControlAllowOrigin: "*",
+        },
+        body: JSON.stringify({ userid: localStorage.getItem("userid") }),
+      });
 
-                    console.log(data)
-                    navigate('/')
-                    localStorage.setItem('token', data.token)
-                    localStorage.setItem('userid', data.userid)
-                    localStorage.setItem('userName', data.userName)
-                    localStorage.setItem('userType', data.user_role)
-                    setUserProfilePicture(data.profile_image);
-                    toast.success(data.message, {
-                        position: 'top-right',
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: 'light',
-                    })
-                
-                })
-                
-            }
-            else {
-                response.json().then((data) => {
-                    toast.error(data.error, {
-                        position: 'top-right',
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: 'light',
-                    })
-                    setIsLogin(false)
-                })
-            }
-        }).catch((error) => {
-            toast.error('Bir hata oluştu', {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            })
-            console.log(error)
-            setIsLogin(false)
-        })
-        
+      if (response.status === 200) {
+        const data = await response.json();
+        setUserId(data.userid);
+        setUserName(data.userName);
+        setRole(data.user_role);
+        setEmail(data.email);
+        setBalance(data.balance);
+        setUserProfilePicture(data.profile_image);
+        localStorage.setItem("userid", data.userid);
+        localStorage.setItem("userName", data.userName);
+        localStorage.setItem("userType", data.user_role);
+      } else {
+        handleLogout();
+      }
+    } catch (error) {
+      handleLogout();
+      throw new Error('Fetch user info failed');
     }
+  };
 
-    const logout = () => {
-        setIsLogin(false)
-        navigate('/')
-        localStorage.clear()
+  const login = async (userName: string, password: string) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          accessControlAllowOrigin: "*",
+        },
+        body: JSON.stringify({ username: userName, password: password }),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        setToken(data.token);
+        setUserId(data.userid);
+        setIsLogin(true);
+        setUserName(data.userName);
+        setRole(data.user_role);
+        setEmail(data.email);
+        setBalance(data.balance);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userid", data.userid);
+        localStorage.setItem("userName", data.userName);
+        localStorage.setItem("userType", data.user_role);
+        setUserProfilePicture(data.profile_image);
+        navigate("/");
+        toast.success(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setIsLogin(false);
+      }
+    } catch (error) {
+      toast.error("Bir hata oluştu", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setIsLogin(false);
     }
+  };
 
-    return (
-        <AuthContext.Provider value={{token,userId, userName, isLogin, email , role, balance, login, logout, getUserInfo, userProfilePicture }}>
-            {children}
-        </AuthContext.Provider>
-    )
+  const handleLogout = () => {
+    setIsLogin(false);
+    localStorage.clear();
+    navigate("/");
+  };
 
-}
+  return (
+    <AuthContext.Provider
+      value={{
+        token,
+        userId,
+        userName,
+        isLogin,
+        email,
+        role,
+        balance,
+        login,
+        logout: handleLogout,
+        getUserInfo,
+        userProfilePicture,
+      }}
+    >
+      {!isLoading ? children : <div>Yükleniyor...</div>} {/* Yükleniyor göstergesi */}
+    </AuthContext.Provider>
+  );
+};
 
-
-export type AuthContextType = {
-    isLogin: boolean,
-    userName : string,
-    userType : string,
-    email : string,
-    balance : number,
-    role : string,
-    userProfilePicture : string,
-    login: (userName : String, password : String) => void,
-    logout: () => void,
-    getUserInfo : () => void
-}
-
-
-export default AuthContext
+export default AuthContext;
