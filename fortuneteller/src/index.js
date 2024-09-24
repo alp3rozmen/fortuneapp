@@ -11,6 +11,7 @@ import { store } from 'store';
 
 // style + assets
 import 'assets/scss/style.scss';
+import 'assets/app.css';
 import config from './config';
 import { AuthContextProvider } from './context/userContext.tsx';
 import { ToastContainer } from 'react-toastify';

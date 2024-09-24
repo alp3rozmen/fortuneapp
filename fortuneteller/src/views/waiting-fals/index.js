@@ -9,6 +9,7 @@ import MainCard from 'ui-component/cards/MainCard';
 import DataTable from 'ui-component/data-table';
 import { ReactFormGenerator } from 'react-form-builder2';
 import CustomDialog from 'ui-component/CustomDialog';
+
 const WaitingFals = () => {
 
 
@@ -57,9 +58,9 @@ const WaitingFals = () => {
                     }]
                 }
                 name={'Yorumu Gör'} boxStyle={{  mr: 2, mb: 1 }} >
-                <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                      <Input sx={{ border: '1px solid black' , padding: '10px'}} readOnly multiline rows={4} value={props.comment} />            
+                <Box sx={{width: '500px', p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Box>
+                      <Input sx={{ width: '450px',border: '1px solid black' ,padding: '10px' , borderRadius: '10px' }}  disableUnderline  readOnly multiline rows={4} value={props.comment} />            
                     </Box>
                 </Box>
             </CustomDialog>
