@@ -57,6 +57,16 @@ export const UserFals = {
             console.log("/api/userWaitingFals - UserFals getWaitingFals", error); 
             throw error;
         }
+    },
+    setCommentFal : async (pfalid : any , pcomment : any) => {
+        try {
+            var response = await baseService.post<any[]>("sendCommentFal" , {fal_id : pfalid , comment : pcomment});
+            return response;
+        }
+        catch (error) {
+            console.log("/api/sendCommentFal - UserFals sendCommentFal", error); 
+            throw error;
+        }
     }
 }
 

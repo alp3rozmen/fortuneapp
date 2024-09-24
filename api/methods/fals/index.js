@@ -368,6 +368,21 @@ function FalEndPoints(app , connection) {
         });
     });
 
+
+    app.post('/api/sendCommentFal', authenticateToken, async (req, res) => {
+        const {fal_id , comment} = req.body;
+        if (!fal_id || fal_id === 0) {
+            return res.status(400).json({ message: 'Fal id gereklidir', status: 'error' });
+        }
+        
+        connection('fal_details').where('fal_id', fal_id).update({ status: 2000 ,comment: comment }).then(() => {
+            return res.status(200).json({ message: 'Yorumunuz kaydedildi', status: 'success' });
+        }).catch(error => {
+            return res.status(400).json({ message: 'Yorumunuz kaydedilirken hata oluştu', status: 'error' });
+        });
+
+    });
+
 }
 
 export default FalEndPoints;

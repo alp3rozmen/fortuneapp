@@ -11,19 +11,27 @@ import { ReactFormGenerator } from 'react-form-builder2';
 import CustomDialog from 'ui-component/CustomDialog';
 import { toast } from 'react-toastify';
 
-
 const PersonalWaitingFals = () => {
     const [inputValue, setInputValue] = useState('');
     const updateFalState = () => {
-       if (confirm('Falı göndermek istediğinizden emin misiniz?')) {
+        
+        if (confirm('Falı göndermek istediğinizden emin misiniz?')) {
             if (inputValue)  {
-                console.log(inputValue);
+                UserFals.setCommentFal(fals[0].fals_id, inputValue).then(res => {
+                    if (res) {
+                        toast.success('Yorumunuz kaydedildi!');
+                    }
+                    else {
+                        toast.error('Yorumunuz kaydedilemedi!');
+                    }
+                })
             }
             else {
                 toast.error('Lütfen yorum alanını doldurunuz!');
             }
        }
     };
+
 
     const CustomShowDetails = (props) => {
         
@@ -58,31 +66,24 @@ const PersonalWaitingFals = () => {
                     </Box>
                 </CustomDialog>
 
-
-                <CustomDialog
+                {fals[0].situations_statuscode == '1000' &&
+                <CustomDialog  
                     buttons={
-                        [{
-                            id: 'okButton',
-                            name: 'Kapat',
-                            color: 'success',
-                            onClick: () => console.log('ok')
-                        }]
-                    }
-                    name={'Yorumla'} boxStyle={{ mr: 2, mb: 1 }} >
-                
-                <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Input value={inputValue} onChange={(e) => setInputValue(e.target.value)} label="Yorum" multiline rows={4} sx={{ width: 500 }} />
-                    <Button onClick={() => updateFalState()} variant='contained' sx={{ mt: 2 }}>Yorumla</Button>
-                </Box>
+                            [{
+                                id: 'okButton',
+                                name: 'Kapat',
+                                color: 'success',
+                                onClick: () => console.log('ok')
+                            }]
+                        }
+                        name={'Yorumla'} boxStyle={{ mr: 2, mb: 1 }} >
+                    <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <Input value={inputValue} onChange={(e) => setInputValue(e.target.value)} label="Yorum" multiline rows={4} sx={{ width: 500 }} />
+                        <Button onClick={() => updateFalState()} variant='contained' sx={{ mt: 2 }}>Yorumla</Button>
+                    </Box>
                 </CustomDialog>
-
-
-
-
+                }
             </Box>
-
-
-
         );
     };
 
@@ -123,7 +124,7 @@ const PersonalWaitingFals = () => {
                     customButtonHeader='İşlemler'
                     title="Randevularım"
                     rows={fals}
-                    rowNames={['fal_types_name', 'users_username', 'situations_name', 'fals_created_at']}
+                    rowNames={[ 'fal_types_name', 'users_username', 'situations_name', 'fals_created_at']}
                     rowHeaders={['Bakım Adı', 'Yorumcu', 'Durum', 'Gönderme Zamanı']}
                 />
             </Box>
