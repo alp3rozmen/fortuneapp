@@ -70,11 +70,11 @@ export default function DataTable({customButtons ,customButtonHeader = '', showA
                             ))}
 
                             {showAdminButtons &&
-                            <TableCell width={'175'} align="center">İşlemler</TableCell>
+                            <TableCell width={'220'} align="center">İşlemler</TableCell>
                             }
 
                             {customButtonHeader &&
-                              <TableCell width={'175'} align="center">{customButtonHeader}</TableCell>
+                              <TableCell width={'220'} align="center">{customButtonHeader}</TableCell>
                             }
                         </TableRow>
                     </TableHead>

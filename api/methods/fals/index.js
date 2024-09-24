@@ -354,7 +354,8 @@ function FalEndPoints(app , connection) {
           's.name as situations_name',
           's.type as situations_type',
           's.created_at as situations_created_at',
-          's.updated_at as situations_updated_at'
+          's.updated_at as situations_updated_at',
+          'fd.comment as comment'
         )
         .where('f.user_id', user_id)
         .andWhere('s.type', 1)

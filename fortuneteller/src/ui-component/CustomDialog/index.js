@@ -38,8 +38,8 @@ export default function CustomDialog({buttons ,params, name, children, boxStyle 
 
   return (
  
-    <Box sx={{ display: 'flex', alignItems: 'flex-end' , ...boxStyle}}>
-      <Button variant="outlined" onClick={handleClickOpen}  >
+    <Box sx={{ display: 'flex' , flexDirection: 'row' , flexWrap: 'wrap' , justifyContent: 'center' ,  ...boxStyle}}>
+      <Button sx={{ width: '100%' }} size='small' variant="contained" onClick={handleClickOpen}  >
         {name}
       </Button>
       
