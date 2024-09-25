@@ -21,6 +21,9 @@ const UserDetail = Loadable(lazy(() => import('views/user-detail')));
 const UserEdit = Loadable(lazy(() => import('views/users-edit')));
 const FaltypesEdit = Loadable(lazy(() => import('views/faltypes-edit')));
 const FaltypesDesign = Loadable(lazy(() => import('views/faltypes-design')));
+const BePartner = Loadable(lazy(() => import('views/bepartner/index')));
+const HowItWorks = Loadable(lazy(() => import('views/howItWorks/index')));
+const AboutUs = Loadable(lazy(() => import('views/aboutUs/index')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent }) => {
@@ -91,7 +94,20 @@ const MainRoutes = {
     {
       path: 'personal/appointments',
       element: <RoleBasedRoute roles={['2']} component={PersonalWaitingFals} fallbackComponent={DashboardDefault} />,
-    }
+    },
+    {
+      path: 'bePartner',
+      element: <RoleBasedRoute roles={['1', '2', '3' ,'']} component={BePartner} fallbackComponent={DashboardDefault} />,
+    },
+    {
+      path: 'howwork',
+      element: <RoleBasedRoute roles={['1', '2', '3' ,'']} component={HowItWorks} fallbackComponent={DashboardDefault} />,
+    },
+    {
+      path: 'about',
+      element: <RoleBasedRoute roles={['1', '2', '3' ,'']} component={AboutUs} fallbackComponent={DashboardDefault} />,
+    },
+    
   ]
 };
 
