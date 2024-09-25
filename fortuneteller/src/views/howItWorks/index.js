@@ -42,7 +42,7 @@ function HowItWorks() {
         <div className="col-md-4 text-center mb-4">
           <h4>5. Sonuçları Görün</h4>
           <p>
-            Fal yorumunuz tamamlandığında, kullanıcı panelinizdeki "Bakımlarım" sekmesinden falınızı görüntüleyebilirsiniz.
+            Fal yorumunuz tamamlandığında, kullanıcı panelinizdeki Bakımlarım sekmesinden falınızı görüntüleyebilirsiniz.
           </p>
         </div>
 
