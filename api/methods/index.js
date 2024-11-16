@@ -7,6 +7,7 @@ import path from "path";
 import userDetails from "./userdetails/index.js";
 import FalEndPoints from "./fals/index.js";
 import { error } from "console";
+
 function methods(app) {
     
     async function insertFals(user_id) {
@@ -330,6 +331,8 @@ function methods(app) {
     })
 
     app.post('/api/register', (req, res) => {
+        var name = req.body.name;
+        var surname = req.body.surname;
         var username = req.body.username;
         var email = req.body.email;
         var password = req.body.password;
@@ -338,16 +341,16 @@ function methods(app) {
         var balance = 0;
 
         if (!username || !email || !password) {
-            return res.status(400).json({ error: 'Lütfen zorunlu alanları doldurun!' });
+            return res.status(200).json({ error: 'Lütfen zorunlu alanları doldurun!' });
         }
 
         if (password.length < 6) {
-            return res.status(400).json({ error: 'Şifre en az 6 karakter olmalıdır!' });
+            return res.status(200).json({ error: 'Şifre en az 6 karakter olmalıdır!' });
         }
 
         connection.select().from('users').where('username', username).orWhere('email', email).then((users) => {
             if (users.length > 0) {
-                return res.status(400).json({ error: 'Kullanıcı adı ya da e-posta zaten kayıtlı!' });
+                return res.status(200).json({ error: 'Kullanıcı adı ya da e-posta zaten kayıtlı!' });
             } else {
                 connection('users').insert({
                     username: username,
@@ -360,12 +363,12 @@ function methods(app) {
                     return res.status(200).json({ message: 'Kayıt Başarılı!' });
                 }).catch((err) => {
                     console.error(err);
-                    return res.status(400).json({ message: 'Bir hata meydana geldi!' });
+                    return res.status(400).json({ error: 'Bir hata meydana geldi!' });
                 });
             }
         }).catch((err) => {
             console.error(err);
-            return res.status(400).json({ message: 'Bir hata meydana geldi!' });
+            return res.status(400).json({ error: 'Bir hata meydana geldi!' });
         });
     });
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { baseService } from '../../../../network/BaseService.ts';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -22,12 +22,14 @@ import {
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // project imports
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
-
+import { toast } from "react-toastify";
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -60,6 +62,13 @@ const FirebaseRegister = ({ ...others }) => {
     changePassword('123456');
   }, []);
 
+  const register = async (values) => {
+    var result = baseService.postWithData('register', {username : values.username, email : values.email, password : values.password}).then((response) => {
+      return response
+    })
+    return await result;
+  };
+
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
@@ -71,20 +80,38 @@ const FirebaseRegister = ({ ...others }) => {
       </Grid>
 
       <Formik
+
         initialValues={{
           email: '',
           password: '',
+          username : '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Geçerli bir e-posta olmalı').max(255).required('E-posta gereklidir'),
-          password: Yup.string().max(255).required('Şifre gereklidir')
+          password: Yup.string().max(255).required('Şifre gereklidir'),
+          username :Yup.string().max(12).required('Kullanıcı adı gereklidir')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             if (scriptedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
+             
+               register(values).then((response) => {
+                
+                 if (response.statusCode == 200) {
+                   setStatus({ success: true });
+                   setSubmitting(false);
+                   if (response.data.error != null && response.data.error != "") {
+                     toast.error(response.data.error);
+                   }
+                   else{
+                    // kayit başarılı logine yönlendir
+                     toast.success(response.data.message);
+                     window.location.href = "/pages/login/login3";
+                   }
+                   
+                 }
+               }) 
             }
           } catch (err) {
             console.error(err);
@@ -123,7 +150,7 @@ const FirebaseRegister = ({ ...others }) => {
               </Grid>
             </Grid>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-register">E-posta Adresi / Kullanıcı Adı</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-register">E-posta Adresi</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-register"
                 type="email"
@@ -133,9 +160,22 @@ const FirebaseRegister = ({ ...others }) => {
                 onChange={handleChange}
                 inputProps={{}}
               />
-              {touched.email && errors.email && (
+              
+            </FormControl>
+            <FormControl fullWidth error={Boolean(touched.username && errors.username)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-email-register">Kullanıcı Adı</InputLabel>
+                <OutlinedInput
+                id="outlined-adornment-email-register"
+                type="text"
+                value={values.username}
+                name="username"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                inputProps={{}}
+               />
+              {touched.username && errors.username && (
                 <FormHelperText error id="standard-weight-helper-text--register">
-                  {errors.email}
+                  {errors.username}
                 </FormHelperText>
               )}
             </FormControl>
