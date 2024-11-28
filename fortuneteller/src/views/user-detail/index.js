@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
 import StarIcon from '@mui/icons-material/Star';
 import CircleIcon from '@mui/icons-material/Circle';
-import { People } from '@mui/icons-material';
+// import { People } from '@mui/icons-material';
 import { falTypeAndCostService } from 'network/falTypeAndCost/falTypeAndCostService.ts';
 import { CircleRounded } from '@mui/icons-material';
 import { IconCoin } from '@tabler/icons-react';
@@ -63,14 +63,14 @@ const UserDetail = () => {
           <Typography mb={2} variant="h4" align="center">{userDetail.username}</Typography>
           <Avatar title={userDetail.username} src={userDetail.profile_image} sx={{ width: 200, height: 200 }} />
 
-          <Typography variant="subtitle1" mt={2} align="center">150 <People /></Typography>
+          {/* <Typography variant="subtitle1" mt={2} align="center">150 <People /></Typography>
           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <StarIcon color='warning' fontSize='small' />
             <StarIcon color='warning' fontSize='small' />
             <StarIcon color='warning' fontSize='small' />
             <StarIcon color='warning' fontSize='small' />
             <StarIcon color='warning' fontSize='small' />(110)
-          </Box>
+          </Box> */}
     
           {/* Randevu buraya eklenecek */}
 

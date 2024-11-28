@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
-import { IconPhoneCall, IconCamera, IconMessage } from '@tabler/icons-react';
-import CircleIcon from '@mui/icons-material/Circle';
-import StarIcon from '@mui/icons-material/Star';
+// import { IconPhoneCall, IconCamera, IconMessage } from '@tabler/icons-react';
+// import CircleIcon from '@mui/icons-material/Circle';
+// import StarIcon from '@mui/icons-material/Star';
 
 const FortunersCard = ({ roles, types, title }) => {
   const [userDetails, setUserDetails] = useState([]);
@@ -46,13 +46,14 @@ const FortunersCard = ({ roles, types, title }) => {
 
                       </CardMedia>
                       <CardContent>
+
                         <Typography variant="h5" component="div">
                           {userDetail.username}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {userDetail.bio.length > 20 ? userDetail.bio.slice(0, 20) + '...' : userDetail.bio}
+                          {userDetail.bio}
                         </Typography>
-                        <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        {/* <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                           <IconPhoneCall sx={{ color: 'green' }} />11
                           <IconCamera sx={{ color: 'green' }} />11
                           <IconMessage sx={{ color: 'green' }} />11
@@ -64,8 +65,10 @@ const FortunersCard = ({ roles, types, title }) => {
                           <StarIcon color='warning' fontSize='small' />
                           <StarIcon color='warning' fontSize='small' />
                           <StarIcon color='warning' fontSize='small' />(110)
-                        </Box>
-                        </CardContent>
+                        </Box> */}
+                        
+                        
+                    </CardContent>
                     </CardActionArea>
                   </Card>
                   {/* Kapatıldı tıklayıp içeriden ilgili fal için ilerliyecek */}
