@@ -175,8 +175,11 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
     }, [fal_type]); // Dependencileri unutmayın
   
     const handleSubmit = (answerData) => {
+
+      
       const showMessage = answerData.some(element => element.value === null || element.value === "");
-    
+      
+      console.log(showMessage);
       if (showMessage) {
         toast.error("Lütfen tüm alanları doldurun");
         return;
@@ -184,7 +187,8 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
     
       const filesToRead = answerData.filter(element => element.name.includes('camera_'));
       let filesRead = 0;
-    
+      
+     
       const reader = new FileReader();
       
       const processFile = (file, index) => {
@@ -204,6 +208,10 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
     
       const readAllFiles = async () => {
         try {
+          if  (filesToRead.length === 0) {
+            submitForm();
+            return;
+          }
           for (let i = 0; i < filesToRead.length; i++) {
             await processFile(filesToRead[i].value, answerData.findIndex(el => el === filesToRead[i]));
           }
