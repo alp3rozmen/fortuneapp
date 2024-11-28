@@ -164,6 +164,8 @@ function FalEndPoints(app , connection) {
 
 
     app.post('/api/insertUserFalRequest', authenticateToken, async (req, res) => {
+        var takedAppointmentDetailId = 0;
+
         const { user_id, formdata, formanswer, fal_user_id, fal_type, appointment_id, app_taken_user_id, app_date, app_time, start_hour, end_hour } = req.body;
     
         if (!user_id || user_id === 0) {
@@ -188,20 +190,8 @@ function FalEndPoints(app , connection) {
                 })
                 .returning('id');
     
-            // 2. 'fal_details' tablosuna veri ekleme
-            await connection('fal_details')
-                .insert({ 
-                    fal_id,
-                    formdata,
-                    formanswer,
-                    status: '1000',
-                    comment: '',
-                    created_at: new Date(),
-                    updated_at: new Date()
-                });
-    
             // 3. 'appointment_details' tablosuna veri ekleme
-            await connection('appointment_details')
+            takedAppointmentDetailId = await connection('appointment_details')
                 .insert({
                     appointment_id,
                     app_taken_user_id,
@@ -211,7 +201,20 @@ function FalEndPoints(app , connection) {
                     end_hour,
                     created_at: new Date(),
                     updated_at: new Date()
-                });
+                }).returning('id');
+
+            // 2. 'fal_details' tablosuna veri ekleme
+            await connection('fal_details')
+            .insert({ 
+                fal_id,
+                formdata,
+                formanswer,
+                status: '1000',
+                comment: '',
+                app_detail_id: takedAppointmentDetailId,
+                created_at: new Date(),
+                updated_at: new Date()
+            });
     
             // 4. Kullanıcının maliyetini ve bakiyesini kontrol etme ve güncelleme
             const [userDetails] = await connection('user_details')

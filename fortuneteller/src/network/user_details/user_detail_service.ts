@@ -43,10 +43,11 @@ export const userDetailService = {
             throw error;
         }
     },
-    getUserAppointments: async (url , userid : any) => {
+    getUserAppointments: async (url , userid : any, faltype : any) => {
         try {
-            var response = await baseService.postWithData(url, {userid : userid});
+            var response = await baseService.postWithData(url, {userid : userid , faltype : faltype});
             return response;
+            
 
         } catch (error) {
             console.log(error);

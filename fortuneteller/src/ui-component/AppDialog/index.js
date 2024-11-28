@@ -44,7 +44,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
 
   const gApps = async () => {
     try {
-      const response = await userDetailService.getUserAppointments('getAppointment', cardid);
+      const response = await userDetailService.getUserAppointments('getAppointment', cardid , fal_type);
       setAppointmentDetails(response.data[0]);
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -179,7 +179,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
       
       const showMessage = answerData.some(element => element.value === null || element.value === "");
       
-      console.log(showMessage);
+    
       if (showMessage) {
         toast.error("Lütfen tüm alanları doldurun");
         return;

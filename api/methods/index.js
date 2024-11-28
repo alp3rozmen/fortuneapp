@@ -7,6 +7,7 @@ import path from "path";
 import userDetails from "./userdetails/index.js";
 import FalEndPoints from "./fals/index.js";
 import { error } from "console";
+import dayjs from 'dayjs';
 
 function methods(app) {
     
@@ -375,34 +376,58 @@ function methods(app) {
     userDetails(app, connection);
 
 
-    app.post('/api/getAppointment', (req, res) => {
+    app.post('/api/getAppointment', async (req, res) => {
         // userid userdetail tablosunun idsi
-        const { userid } = req.body;
+        const { userid , faltype } = req.body;
         
         if (!userid) {
             return res.status(400).json({ error: 'Lütfen zorunlu alanları doldurun!' });
         }
 
-        
             connection.select('appointments.id as app_id').select('appointments.*').select('user_details.*')
             .from('user_details')
             .join('appointments', 'appointments.user_details_id', 'user_details.id')
             .where('user_details.id' , userid)
-            .then((user) => {
-            if (user.length === 0) {
-                return res.status(200).json({ message: 'Randevu bulunamadı!' , status : 'error' });
-            }
-            return res.status(200).json(user);
+            .andWhere('user_details.fal_type' , faltype)
+            .then((result) => {
+                
+                if (result.length > 0) {
+                
+                    const startDate = dayjs(result[0].app_start_date);
+                    const endDate = dayjs(result[0].app_end_date);
+                    const startHour = result[0].start_hour;
+                    const endHour = result[0].end_hour;
+                    const interval = result[0].interval_time;
+                    const selectedDate = dayjs();
+                
+                    let currentTime = dayjs(startDate).set('hour', startHour.split(':')[0]).set('minute', startHour.split(':')[1]).set('second', startHour.split(':')[2]);
+                    let currentEndTime = dayjs(startDate).set('hour', endHour.split(':')[0]).set('minute', endHour.split(':')[1]).set('second', endHour.split(':')[2]);
+                   
+                    // secili gun ve saatinden buyuk olan randevuları getir
+                    // alınmıs randevuları getirme
+                    
+                    const hoursL = [];
+                    while (currentTime.isBefore(currentEndTime) || currentTime.isSame(currentEndTime)) {
+                        if (currentTime.isAfter(dayjs().format('YYYY-MM-DD HH:mm:ss'))) {
+                            hoursL.push(currentTime);
+                            currentTime = currentTime.add(interval, 'minutes');    
+                        }
+                        
+                    }
+                   
+                    
+                    console.log(hoursL);
+                    
+                    return res.status(200).json(result);
+                } else {
+                    return res.status(400).json({ message: 'Bir hata meydana geldi!' });
+                }
             })
-            .catch((err) => {
-            console.error('Error:', err);
-            return res.status(500).json({ message: 'Sunucu hatası!' });
-            });
-        
-    });
+            
+
+    })
 
     FalEndPoints(app , connection);
-
 }
 
 

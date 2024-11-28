@@ -12,6 +12,8 @@ exports.up = function(knex) {
     table.text('formanswer').comment('formun cevapları');
     table.string('status').comment('status');  
     table.string('comment').comment('falyorumu');
+    table.integer('app_detail_id').comment('appointment_details_id').unsigned();
+    table.foreign('app_detail_id').references('id').inTable('appointment_details');
     table.timestamps(true, true);
   });
 };
