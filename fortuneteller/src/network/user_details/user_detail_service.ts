@@ -43,9 +43,9 @@ export const userDetailService = {
             throw error;
         }
     },
-    getUserAppointments: async (url , userid : any, faltype : any) => {
+    getUserAppointments: async (url , userid : any, faltype : any , selectedDate : any) => {
         try {
-            var response = await baseService.postWithData(url, {userid : userid , faltype : faltype});
+            var response = await baseService.postWithData(url, {userid : userid , faltype : faltype , pselectedDate : selectedDate});
             return response;
             
 

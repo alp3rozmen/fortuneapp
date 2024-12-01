@@ -215,7 +215,10 @@ function FalEndPoints(app , connection) {
                 created_at: new Date(),
                 updated_at: new Date()
             });
-    
+            
+            console.log('fal_id user idsi', fal_user_id);
+            console.log('fal type', fal_type);
+            
             // 4. Kullanıcının maliyetini ve bakiyesini kontrol etme ve güncelleme
             const [userDetails] = await connection('user_details')
                 .select('*')

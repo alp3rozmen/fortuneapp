@@ -15,76 +15,63 @@ import 'react-form-builder2/dist/app.css';
 import { toast } from 'react-toastify';
 import AuthContext from 'context/userContext.tsx';
 
+var appDetails = {};
+function appSetAppDetails(paramappDetails) {
+  appDetails = {};
+  appDetails = paramappDetails;
+  return appDetails;
+}
 
 
 function AppDialog({handleClose  ,open, cardid , fal_type }) {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [hoursList, setHoursList] = useState([]);
-  const [appointmentDetails, setAppointmentDetails] = useState({});
   const calendarRef = useRef(null);
   const [selectedHour, setSelectedHour] = useState('');
   const [activePage, setActivePage] = useState([]);
+  
  
   const { userId , getUserInfo} = React.useContext(AuthContext);
   useEffect(() => {
-    gApps();    
-    setActivePage('dateSelectPage');
-  }, []);
+    if  (!open) {
+      return;
+    }
+    if (calendarRef.current) {
+      calendarRef.current.focus();
+    }
+    setActivePage('dateSelectPage');   
+  }, [open]);
 
   const innerHandleClose = () => {
     handleClose();
-    // setSelectedDate(dayjs().format('YYYY-MM-DD'));
-    // setHoursList([]);
-    // setAppointmentDetails({});
-    // setSelectedHour('');
-    // setActivePage(DefaultPages[0]);
   }
 
   
 
-  const gApps = async () => {
+  const gApps = async (selectedDate) => {
     try {
-      const response = await userDetailService.getUserAppointments('getAppointment', cardid , fal_type);
-      setAppointmentDetails(response.data[0]);
+      const response = await userDetailService.getUserAppointments('getAppointment', cardid , fal_type, selectedDate);
+      setHoursList(response.data.hours);
+      appSetAppDetails(response.data.app_details);
     } catch (error) {
       console.error('Error fetching appointments:', error);
     }
   };
 
   const getAppointmentTimes = (appSelectedDate) => {
+    
     setSelectedDate(appSelectedDate);
-    console.log(appointmentDetails);
-    if (!appointmentDetails) {
+    gApps(appSelectedDate);
+    
+    if (!hoursList) {
       console.log('Randevu bulunamadı!');
       return;
     }
-
-    const startDate = dayjs(appointmentDetails.app_start_date);
-    const endDate = dayjs(appointmentDetails.app_end_date);
-    const startHour = appointmentDetails.start_hour;
-    const endHour = appointmentDetails.end_hour;
-    const interval = appointmentDetails.interval_time;
-    const selectedDate = dayjs(appSelectedDate);
-
-    if (selectedDate.isAfter(endDate)) {
-      setHoursList([]);
-      return;
-    }
-
-    let currentTime = dayjs(startDate).set('hour', startHour.split(':')[0]).set('minute', startHour.split(':')[1]).set('second', startHour.split(':')[2]);
-    let currentEndTime = dayjs(startDate).set('hour', endHour.split(':')[0]).set('minute', endHour.split(':')[1]).set('second', endHour.split(':')[2]);
-
-    const hoursL = [];
-
-    while (currentTime.isBefore(currentEndTime) || currentTime.isSame(currentEndTime)) {
-      hoursL.push(currentTime);
-      currentTime = currentTime.add(interval, 'minutes');
-    }
-    setHoursList(hoursL);
+  
   };
 
   const DateSelectPage = () => (
-    console.log(selectedDate),
+
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -106,11 +93,11 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
                 </Typography>
               )}
               <RadioGroup value={selectedHour} onChange={(e) => setSelectedHour(e.target.value)} aria-labelledby="radio-group-label" defaultValue="female" name="radio-group">
-                {hoursList.map((hour, index) => (
+                {hoursList.length > 0 && hoursList.map((hour, index) => (
                   <Box key={index} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <Radio value={hour.format('HH:mm')} sx={{ display: 'flex' }} />
+                    <Radio value={dayjs(hour).format('HH:mm')} sx={{ display: 'flex' }} />
                     <Typography variant="subtitle2" sx={{ ml: 1 }}>
-                      {hour.format('HH:mm')}
+                      {dayjs(hour).locale('tr').format('HH:mm')}
                     </Typography>
                   </Box>
                 ))}
@@ -221,18 +208,19 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
       };
     
       const submitForm = () => {
+        console.log(appDetails);
         UserFals.insertUserFalRequest(
           userId, 
           JSON.stringify(formData), 
           JSON.stringify(answerData), 
-          appointmentDetails.user_id, // falcının idsi 
-          appointmentDetails.app_id,
+          appDetails.user_id, // falcının idsi 
+          appDetails.app_id,
           userId,
           dayjs(selectedDate).format('YYYY-MM-DD'),
           dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
-          appointmentDetails.start_hour,
-          appointmentDetails.end_hour,
-          appointmentDetails.fal_type
+          appDetails.start_hour,
+          appDetails.end_hour,
+          appDetails.fal_type
         ).then((response) => {
           if (response.status == 200) {
             SetPage('successPage');

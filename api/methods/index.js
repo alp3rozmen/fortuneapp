@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from "path";
 import userDetails from "./userdetails/index.js";
 import FalEndPoints from "./fals/index.js";
-import { error } from "console";
+import { clear, error } from "console";
 import dayjs from 'dayjs';
 
 function methods(app) {
@@ -378,47 +378,87 @@ function methods(app) {
 
     app.post('/api/getAppointment', async (req, res) => {
         // userid userdetail tablosunun idsi
-        const { userid , faltype } = req.body;
-        
+        const { userid , faltype , pselectedDate } = req.body;
+       
         if (!userid) {
             return res.status(400).json({ error: 'Lütfen zorunlu alanları doldurun!' });
         }
 
-            connection.select('appointments.id as app_id').select('appointments.*').select('user_details.*')
+           await connection.select('appointments.id as app_id').select('appointments.*').select('user_details.*')
             .from('user_details')
             .join('appointments', 'appointments.user_details_id', 'user_details.id')
             .where('user_details.id' , userid)
             .andWhere('user_details.fal_type' , faltype)
             .then((result) => {
-                
-                if (result.length > 0) {
-                
+
+                if (result.length > 0) {    
                     const startDate = dayjs(result[0].app_start_date);
                     const endDate = dayjs(result[0].app_end_date);
                     const startHour = result[0].start_hour;
                     const endHour = result[0].end_hour;
                     const interval = result[0].interval_time;
-                    const selectedDate = dayjs();
+                    var selectedDate = pselectedDate;
                 
-                    let currentTime = dayjs(startDate).set('hour', startHour.split(':')[0]).set('minute', startHour.split(':')[1]).set('second', startHour.split(':')[2]);
-                    let currentEndTime = dayjs(startDate).set('hour', endHour.split(':')[0]).set('minute', endHour.split(':')[1]).set('second', endHour.split(':')[2]);
+                    let currentTime = dayjs(selectedDate).set('hour', startHour.split(':')[0]).set('minute', startHour.split(':')[1]).set('second', startHour.split(':')[2]);
+                    let currentEndTime = dayjs(selectedDate).set('hour', endHour.split(':')[0]).set('minute', endHour.split(':')[1]).set('second', endHour.split(':')[2]);
                    
-                    // secili gun ve saatinden buyuk olan randevuları getir
-                    // alınmıs randevuları getirme
-                    
-                    const hoursL = [];
-                    while (currentTime.isBefore(currentEndTime) || currentTime.isSame(currentEndTime)) {
-                        if (currentTime.isAfter(dayjs().format('YYYY-MM-DD HH:mm:ss'))) {
-                            hoursL.push(currentTime);
-                            currentTime = currentTime.add(interval, 'minutes');    
-                        }
-                        
+                    let hoursL = [];
+
+                    //ALINAN FAL RANDEVU SAATLERINI CEKER
+                    connection
+                    .select(
+                      'appointment_details.app_date', 
+                      'user_details.*'
+                    )
+                    .from('appointments') // Tablodan veri çekmek için başlangıç tablosunu belirtin
+                    .join('user_details', 'appointments.user_details_id', 'user_details.id') // Doğru inner join yapısı
+                    .join('appointment_details', 'appointments.id', 'appointment_details.appointment_id')
+                    .where('user_details.id', userid)
+                    .andWhere('user_details.fal_type', faltype)
+                    .then((result) => {
+                      if (result && result.length > 0) {
+                        console.log(result.toString());
+                      } else {
+                        console.log('No appointments found.');
+                      }
+                    })
+                    .catch((err) => {
+                      console.error('Database query error:', err);
+                    });
+                  
+
+
+                    if (selectedDate == dayjs().locale('tr').format('YYYY-MM-DD')) {
+                        selectedDate = dayjs().locale('tr').format('YYYY-MM-DD HH:mm:ss');
                     }
-                   
+                    else{
+                        selectedDate = dayjs(selectedDate).locale('tr').format('YYYY-MM-DD HH:mm:ss');
+                    }
+
+                    if ((dayjs(selectedDate).isAfter(startDate) && dayjs(selectedDate).isBefore(endDate))
+                         || (dayjs(selectedDate).isSame(startDate) || dayjs(selectedDate).isSame(endDate))) {
+
+                        while (currentTime.isBefore(currentEndTime)) {
+                            hoursL.push(currentTime.format('YYYY-MM-DD HH:mm:ss'));
+                            currentTime = currentTime.add(interval, 'minute');
+                        } 
+                          
+                    }
                     
-                    console.log(hoursL);
-                    
-                    return res.status(200).json(result);
+                     var response =
+                             {
+                                 hours : hoursL,
+                                 app_details : {
+                                    user_id : result[0].user_id,
+                                    app_id : result[0].app_id,
+                                    app_start_date : result[0].app_start_date,
+                                    start_hour : result[0].start_hour,
+                                    end_hour : result[0].end_hour,
+                                    fal_type : result[0].fal_type
+                                 }
+                             }
+
+                    return res.status(200).json(response);
                 } else {
                     return res.status(400).json({ message: 'Bir hata meydana geldi!' });
                 }
