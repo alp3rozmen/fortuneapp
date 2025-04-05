@@ -467,6 +467,103 @@ function methods(app) {
 
     })
 
+    app.post('/api/getZodiacs',authenticateToken, (req, res) => {
+        connection.select().from('zodiac_signs').then((zodiacs) => {
+            if (zodiacs.length > 0) {
+                return res.status(200).json({data : zodiacs, statusCode : 200});
+            }
+            else {
+                return res.status(400).json({ error: 'Bir hata meydana geldi!' });
+            }
+        })
+    }
+    )
+
+    app.post('/api/addNewSignComment',authenticateToken, (req, res) => {
+        connection.select().from('zodiac_signs_comments').where('zodiac_sign_id', req.body.signId).andWhere('created_at', req.body.date).then((comments) => {
+            if (comments.length > 0) {
+                return res.status(200).json({ message: 'Bu tarih için yorum zaten var!' , statusCode : 404 });
+            }
+            else {
+                connection('zodiac_signs_comments').insert({
+                    zodiac_sign_id: req.body.signId,
+                    comment: req.body.dailyComment,
+                    commentlove: req.body.loveComment,
+                    commentwork: req.body.careerComment,
+                    commenthealth: req.body.healthComment,
+                    created_at: req.body.date
+                }).then((result) => {
+                    if (result) {
+                        return res.status(200).json({ message: 'Yorum eklendi!' , statusCode : 200 });
+                    }
+                    else {
+                        return res.status(400).json({ message: 'Bir hata meydana geldi!' , statusCode : 404 });
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    return res.status(400).json({ message: 'Bir hata meydana geldi!'  , statusCode : 404 });
+                })
+            }
+        }
+        ).catch((err) => {
+            console.log(err);
+            return res.status(400).json({ message: 'Bir hata meydana geldi!' });
+        })
+    }
+    )
+
+    app.post('/api/getSignComments',authenticateToken, (req, res) => {
+        connection.select('zodiac_signs_comments.*', 'zodiac_signs.name').from('zodiac_signs_comments')
+            .join('zodiac_signs', 'zodiac_signs.id', 'zodiac_signs_comments.zodiac_sign_id')
+            .where('zodiac_sign_id', req.body.signId).then((comments) => {
+            if (comments.length > 0) {
+                return res.status(200).json({data : comments, statusCode : 200});
+            }
+            else if (comments.length == 0) {
+                return res.status(200).json({data : comments, statusCode : 404});
+            }
+            else {
+                return res.status(400).json({ error: 'Bir hata meydana geldi!' });
+            }
+        })
+    }
+    )
+
+    app.post('/api/deleteSignComment',authenticateToken, (req, res) => {
+        connection('zodiac_signs_comments').where('id', req.body.commentId).del().then((result) => {
+            if (result) {
+                return res.status(200).json({ statusCode : 200,message: 'Yorum silindi!' });
+            }
+            else {
+                return res.status(400).json({statusCode : 400, message: 'Bir hata meydana geldi!' });
+            }
+        }).catch((err) => {
+            console.log(err);
+            return res.status(400).json({ message: 'Bir hata meydana geldi!' });
+        })
+    }
+    )
+    
+    // UPDATE SIGN COMMENT
+    app.post('/api/updateSignComment', authenticateToken, (req, res) => {
+        
+        connection('zodiac_signs_comments')
+        .where('id', req.body.commentId)
+        .update({
+        comment: req.body.dailyComment,
+        commentlove: req.body.loveComment,
+        commentwork: req.body.careerComment,
+        commenthealth: req.body.healthComment
+    }
+        ).then((result) => {
+            return res.status(200).json({ statusCode: 200, message: 'Yorum güncellendi!' });
+        }).catch((err) => {
+            console.log(err);
+            return res.status(400).json({ statusCode: 400, message: 'Bir hata meydana geldi!' });
+        });
+    });
+
+
     FalEndPoints(app , connection);
 }
 

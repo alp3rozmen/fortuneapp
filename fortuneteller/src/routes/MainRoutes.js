@@ -36,6 +36,7 @@ const YayBurcu = Loadable(lazy(() => import('views/horoscopes/yay')));
 const OglakBurcu = Loadable(lazy(() => import('views/horoscopes/oglak')));
 const KovaBurcu = Loadable(lazy(() => import('views/horoscopes/kova')));
 const BalikBurcu = Loadable(lazy(() => import('views/horoscopes/balik')));
+const ZodiacEdit = Loadable(lazy(() => import('views/zodiac-edit')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent }) => {
@@ -94,6 +95,10 @@ const MainRoutes = {
     {
       path: 'faltypes/edit',
       element: <RoleBasedRoute roles={['3']} component={FaltypesEdit} fallbackComponent={DashboardDefault} />,
+    },
+    {
+      path : 'zodiac/edit',
+      element : <RoleBasedRoute roles={['3']} component={ZodiacEdit} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'faltypes/design',

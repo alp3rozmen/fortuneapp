@@ -1,8 +1,8 @@
 
-import { IconDirectionSign ,IconClock, IconDashboard, IconEdit, IconSelect } from '@tabler/icons-react';
+import { IconDirectionSign ,IconClock, IconDashboard, IconEdit, IconSelect, IconZodiacVirgo } from '@tabler/icons-react';
 
 // constant
-const icons = {IconDirectionSign , IconSelect, IconDashboard  ,IconEdit , IconClock };
+const icons = {IconZodiacVirgo ,IconDirectionSign , IconSelect, IconDashboard  ,IconEdit , IconClock };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -44,6 +44,14 @@ const adminUtils = {
           url: '/faltypes/design',
           icon: icons.IconDirectionSign,
           breadcrumbs: false
+        },
+        {
+          id : 'ZodiacEdit',
+          title: 'Burçlar',
+          type: 'item',
+          url: '/zodiac/edit',
+          icon: icons.IconZodiacVirgo,
+          breadcrumbs : false
         }   
         
       ]
