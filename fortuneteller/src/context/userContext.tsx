@@ -19,7 +19,7 @@ export const AuthContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+    
     if (token) {
       // Token varsa, kullanıcı bilgilerini al
       getUserInfo().then(() => {

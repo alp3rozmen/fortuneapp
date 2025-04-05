@@ -7,10 +7,10 @@ import FortunersCard from 'ui-component/FortunerCard';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
-  
-
   return (
-    <FortunersCard title={"Yorumcularımız"} roles={0} types={0} />
+    <>
+      <FortunersCard title={"Yorumcularımız"} roles={0} types={0} /> 
+    </>
   );
 };
 
