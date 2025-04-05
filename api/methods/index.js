@@ -3,7 +3,7 @@ import connection from "../knex/connection.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
-import path from "path";
+import path, { join } from "path";
 import userDetails from "./userdetails/index.js";
 import FalEndPoints from "./fals/index.js";
 import { clear, error } from "console";
@@ -562,6 +562,25 @@ function methods(app) {
             return res.status(400).json({ statusCode: 400, message: 'Bir hata meydana geldi!' });
         });
     });
+
+
+    app.post('/api/getZodiacSignInfo', (req, res) => {
+        connection.select().from('zodiac_signs')
+            .join('zodiac_signs_comments', 'zodiac_signs.id', 'zodiac_signs_comments.zodiac_sign_id')
+            .where('zodiac_signs.id', req.body.id).andWhere('zodiac_signs_comments.created_at', req.body.date).then((sign) => {
+            if (sign.length > 0) {
+                return res.status(200).json({data : sign, statusCode : 200});
+            }
+            else if (sign.length == 0) {
+                return res.status(200).json({data : sign, statusCode : 404});
+            }
+            else {
+                return res.status(400).json({ error: 'Bir hata meydana geldi!' });
+            }
+        })
+    }
+    )
+
 
 
     FalEndPoints(app , connection);

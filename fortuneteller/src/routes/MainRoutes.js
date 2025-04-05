@@ -24,27 +24,15 @@ const FaltypesDesign = Loadable(lazy(() => import('views/faltypes-design')));
 const BePartner = Loadable(lazy(() => import('views/bepartner/index')));
 const HowItWorks = Loadable(lazy(() => import('views/howItWorks/index')));
 const AboutUs = Loadable(lazy(() => import('views/aboutUs/index')));
-const KocBurcu = Loadable(lazy(() => import('views/horoscopes/koc')));
-const BogaBurcu = Loadable(lazy(() => import('views/horoscopes/boga')));
-const IkizlerBurcu = Loadable(lazy(() => import('views/horoscopes/ikizler')));
-const YengecBurcu = Loadable(lazy(() => import('views/horoscopes/yengec')));
-const AslanBurcu = Loadable(lazy(() => import('views/horoscopes/aslan')));
-const BasakBurcu = Loadable(lazy(() => import('views/horoscopes/basak')));
-const TeraziBurcu = Loadable(lazy(() => import('views/horoscopes/terazi')));
-const AkrepBurcu = Loadable(lazy(() => import('views/horoscopes/akrep')));
-const YayBurcu = Loadable(lazy(() => import('views/horoscopes/yay')));
-const OglakBurcu = Loadable(lazy(() => import('views/horoscopes/oglak')));
-const KovaBurcu = Loadable(lazy(() => import('views/horoscopes/kova')));
-const BalikBurcu = Loadable(lazy(() => import('views/horoscopes/balik')));
 const ZodiacEdit = Loadable(lazy(() => import('views/zodiac-edit')));
-
+const Horoscope = Loadable(lazy(() => import('views/horoscopes/index')));
 // ==============================|| MAIN ROUTING ||============================== //
-const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent }) => {
+const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent, props = null}) => {
 
   const { role } = useContext(AuthContext);
 
   if (roles.includes(role)) {
-    return <Component />;
+    return <Component {...props} />;
   } else {
     return FallbackComponent ? <FallbackComponent /> : null;
   }
@@ -126,51 +114,51 @@ const MainRoutes = {
     },
     {
       path: 'koc',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={KocBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 1}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'boga',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={BogaBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 2}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'ikizler',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={IkizlerBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 3}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'yengec',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={YengecBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 4}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'aslan',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={AslanBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 5}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'basak',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={BasakBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 6}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'terazi',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={TeraziBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 7}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'akrep',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={AkrepBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 8}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'yay',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={YayBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 9}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'oglak',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={OglakBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 10}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'kova',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={KovaBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 11}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'balik',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={BalikBurcu} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 12}} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     
   ]

@@ -1,23 +1,71 @@
 import { useEffect, useState } from 'react';
 import { Grid, Typography, Card, CardContent, Box, useTheme } from '@mui/material';
-import { IconZodiacTaurus } from '@tabler/icons-react';
+import { IconZodiacScorpio } from '@tabler/icons-react';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonTotalGrowthBarChart from 'ui-component/cards/Skeleton/TotalGrowthBarChart';
+import { baseService } from '../../network/BaseService.ts';
+import dayjs from 'dayjs';
+dayjs.locale('tr')
 
-const BogaBurcu = () => {
+const Horoscope = (props) => {
     const theme = useTheme();
     const [isLoading, setIsLoading] = useState(true);
+    const [horoscopeData, setHData] = useState({});
     
-    // Simulated data - replace with actual API call
-    const horoscopeData = {
-        date: '27 Aralık 2024',
-        dailyHoroscope: 'Bugün maddi konularda dikkatli olmalısınız. Pratik çözümler üretme konusunda başarılı olacaksınız. Sabırlı ve kararlı yaklaşımınız size avantaj sağlayacak.',
-        love: 'İlişkinizde güven ve istikrar ön planda olacak. Partnerinizle ortak planlar yapabilirsiniz.',
-        career: 'İş hayatınızda finansal fırsatlar doğabilir. Yeni yatırım fırsatlarını değerlendirin.',
-        health: 'Boğaz sağlığınıza dikkat etmelisiniz. Düzenli egzersiz yapmak için uygun bir gün.',
-        luckyNumber: '6',
-        luckyColor: 'Yeşil',
-        compatibility: 'Oğlak'
+    const GetColorEngName = (colorTrName) => {
+        switch (colorTrName) {
+            case 'Kırmızı':
+                return 'red';
+            case 'Mavi':
+                return 'blue';
+            case 'Yeşil':
+                return 'green';
+            case 'Sarı':
+                return 'yellow';
+            case 'Turuncu':
+                return 'orange';
+            case 'Mor':
+                return 'purple';
+            case 'Pembe':
+                return 'pink';
+            case 'Beyaz':
+                return 'white';
+            case 'Siyah':
+                return 'black';
+            case 'Gri':
+                return 'grey';
+            case 'Altın Sarısı':
+                return 'gold';
+            case 'Koyu mavi':
+                return 'darkblue';
+            case 'Koyu yeşil':
+                return 'darkgreen';
+            case 'Koyu sarı':
+                return 'darkyellow';
+            default:
+                return 'primary'; // Fallback color if none match
+
+        }
+    }
+
+    useEffect(() => {
+        setHData({});
+        getHoroscopeData();
+        console.log('Horoscope ID:', horoscopeData.id);
+    }, [props.id]);
+    
+    const getHoroscopeData = () => {
+      baseService.post('/getZodiacSignInfo', { id : props.id, date : dayjs().format('YYYY-MM-DD') })
+        .then((response) => {
+            if (response.statusCode == 200) {
+                setHData(response.data[0]);
+            } else {
+                console.error('Error fetching horoscope data:', response.statusText);
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching horoscope data:', error);
+        });
     };
 
     useEffect(() => {
@@ -31,15 +79,17 @@ const BogaBurcu = () => {
     if (isLoading) return <SkeletonTotalGrowthBarChart />;
 
     return (
+
+        horoscopeData.id > 0 ? (
         <MainCard>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box display="flex" alignItems="center" gap={2}>
-                        <IconZodiacTaurus size={48} color={theme.palette.primary.main} />
-                        <Typography variant="h2">Boğa Burcu Günlük Yorumu</Typography>
+                        <IconZodiacScorpio size={48} color={theme.palette.primary.main} />
+                        <Typography variant="h2">{horoscopeData.name} Burcu Günlük Yorumu</Typography>
                     </Box>
                     <Typography variant="subtitle2" color="textSecondary">
-                        {horoscopeData.date}
+                        {dayjs(horoscopeData.created_at).format('DD MMMM YYYY')}
                     </Typography>
                 </Grid>
 
@@ -50,7 +100,7 @@ const BogaBurcu = () => {
                                 Günlük Yorum
                             </Typography>
                             <Typography variant="body1">
-                                {horoscopeData.dailyHoroscope}
+                                {horoscopeData.comment}
                             </Typography>
                         </CardContent>
                     </Card>
@@ -63,7 +113,7 @@ const BogaBurcu = () => {
                                 Aşk
                             </Typography>
                             <Typography variant="body1">
-                                {horoscopeData.love}
+                                {horoscopeData.commentlove}
                             </Typography>
                         </CardContent>
                     </Card>
@@ -76,7 +126,7 @@ const BogaBurcu = () => {
                                 Kariyer
                             </Typography>
                             <Typography variant="body1">
-                                {horoscopeData.career}
+                                {horoscopeData.commentwork}
                             </Typography>
                         </CardContent>
                     </Card>
@@ -89,7 +139,7 @@ const BogaBurcu = () => {
                                 Sağlık
                             </Typography>
                             <Typography variant="body1">
-                                {horoscopeData.health}
+                                {horoscopeData.commenthealth}
                             </Typography>
                         </CardContent>
                     </Card>
@@ -105,7 +155,7 @@ const BogaBurcu = () => {
                                             Şanslı Sayı
                                         </Typography>
                                         <Typography variant="h4" color="primary">
-                                            {horoscopeData.luckyNumber}
+                                            {horoscopeData.luckynumber}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -114,8 +164,8 @@ const BogaBurcu = () => {
                                         <Typography variant="h6" color="textSecondary" gutterBottom>
                                             Şanslı Renk
                                         </Typography>
-                                        <Typography variant="h4" color="primary">
-                                            {horoscopeData.luckyColor}
+                                        <Typography variant="h4" color={GetColorEngName(horoscopeData.luckycolor)}>
+                                            {horoscopeData.luckycolor}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -125,7 +175,7 @@ const BogaBurcu = () => {
                                             Uyumlu Burç
                                         </Typography>
                                         <Typography variant="h4" color="primary">
-                                            {horoscopeData.compatibility}
+                                            {horoscopeData.compotiblehs}
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -135,7 +185,12 @@ const BogaBurcu = () => {
                 </Grid>
             </Grid>
         </MainCard>
+        ) : (
+            <Typography variant="h2" color="ActiveBorder">
+                Bugünlük burç yorumu bulunamadı.Lütfen daha sonra tekrar deneyin.
+            </Typography>
+        )
     );
 };
 
-export default BogaBurcu;
+export default Horoscope;
