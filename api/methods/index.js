@@ -6,7 +6,7 @@ import fs from 'fs';
 import path, { join } from "path";
 import userDetails from "./userdetails/index.js";
 import FalEndPoints from "./fals/index.js";
-import { clear, error } from "console";
+import { clear, Console, error } from "console";
 import dayjs from 'dayjs';
 
 function methods(app) {
@@ -394,11 +394,14 @@ function methods(app) {
                 if (result.length > 0) {    
                     const startDate = dayjs(result[0].app_start_date);
                     const endDate = dayjs(result[0].app_end_date);
-                    const startHour = result[0].start_hour;
+                    var startHour = result[0].start_hour;
                     const endHour = result[0].end_hour;
                     const interval = result[0].interval_time;
                     var selectedDate = pselectedDate;
-                
+                    
+                    var now = dayjs().locale('tr').format('YYYY-MM-DD HH:mm:ss');
+                    
+
                     let currentTime = dayjs(selectedDate).set('hour', startHour.split(':')[0]).set('minute', startHour.split(':')[1]).set('second', startHour.split(':')[2]);
                     let currentEndTime = dayjs(selectedDate).set('hour', endHour.split(':')[0]).set('minute', endHour.split(':')[1]).set('second', endHour.split(':')[2]);
                    
@@ -426,7 +429,6 @@ function methods(app) {
                       console.error('Database query error:', err);
                     });
                   
-
 
                     if (selectedDate == dayjs().locale('tr').format('YYYY-MM-DD')) {
                         selectedDate = dayjs().locale('tr').format('YYYY-MM-DD HH:mm:ss');

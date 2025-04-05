@@ -8,10 +8,10 @@ exports.up = function(knex) {
     table.increments('id').primary();
     table.integer('zodiac_sign_id').comment('Burç id').unsigned();
     table.foreign('zodiac_sign_id').references('id').inTable('zodiac_signs');
-    table.string('comment').comment('Burç yorumu');
-    table.string('commentlove').comment('Aşk yorumu');
-    table.string('commentwork').comment('İş yorumu');
-    table.string('commenthealth').comment('Sağlık yorumu');
+    table.text('comment', 'longtext').comment('Burç yorumu');
+    table.text('commentlove', 'longtext').comment('Aşk yorumu');
+    table.text('commentwork', 'longtext').comment('İş yorumu');
+    table.text('commenthealth', 'longtext').comment('Sağlık yorumu');
     table.timestamps(true, true);
   });
 };
