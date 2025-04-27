@@ -15,63 +15,50 @@ import 'react-form-builder2/dist/app.css';
 import { toast } from 'react-toastify';
 import AuthContext from 'context/userContext.tsx';
 
-var appDetails = {};
-function appSetAppDetails(paramappDetails) {
-  appDetails = {};
-  appDetails = paramappDetails;
-  return appDetails;
-}
-
-
-function AppDialog({handleClose  ,open, cardid , fal_type }) {
+function AppDialog({ handleClose, open, cardid, fal_type }) {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [hoursList, setHoursList] = useState([]);
   const calendarRef = useRef(null);
   const [selectedHour, setSelectedHour] = useState('');
   const [activePage, setActivePage] = useState([]);
-  
- 
-  const { userId , getUserInfo} = React.useContext(AuthContext);
+  const [appDetails, setAppDetails] = useState({});
+
+  const { userId, getUserInfo } = React.useContext(AuthContext);
   useEffect(() => {
-    if  (!open) {
+    if (!open) {
       return;
     }
     if (calendarRef.current) {
       calendarRef.current.focus();
     }
-    setActivePage('dateSelectPage');   
+    setActivePage('dateSelectPage');
   }, [open]);
 
   const innerHandleClose = () => {
     handleClose();
-  }
-
-  
-
-  const gApps = async (selectedDate) => {
-    try {
-      const response = await userDetailService.getUserAppointments('getAppointment', cardid , fal_type, selectedDate);
-      setHoursList(response.data.hours);
-      appSetAppDetails(response.data.app_details);
-    } catch (error) {
-      console.error('Error fetching appointments:', error);
-    }
   };
 
-  const getAppointmentTimes = (appSelectedDate) => {
-    
-    setSelectedDate(appSelectedDate);
-    gApps(appSelectedDate);
-    
-    if (!hoursList) {
-      console.log('Randevu bulunamadı!');
-      return;
-    }
-  
-  };
+  useEffect(() => {
+    userDetailService.getUserAppointments('getAppointment', cardid, fal_type, selectedDate).then((response) => {
+      if (response.statusCode === 200) {
+        setAppDetails(response.data.app_details);
+        if (response.data.hours[0] === '') {
+          setHoursList([]);
+        }
+        else{
+          setHoursList(response.data.hours);
+        }
+        
+        console.log(response.data.hours);
+        return response;
+      } else {
+        toast.error(response.message);
+        return null;
+      }
+    });
+  }, [selectedDate, selectedHour, open]);
 
   const DateSelectPage = () => (
-
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -79,7 +66,7 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
             value={dayjs(selectedDate)}
             selected={selectedDate}
             ref={calendarRef}
-            onChange={(newValue) => getAppointmentTimes(dayjs(newValue).format('YYYY-MM-DD'))}
+            onChange={(newValue) => setSelectedDate(dayjs(newValue).format('YYYY-MM-DD'))}
             minDate={dayjs()}
           />
           <Box sx={{ display: 'flex', flexDirection: 'column', mt: 2 }}>
@@ -92,15 +79,22 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
                   Randevuya kapalıdır.
                 </Typography>
               )}
-              <RadioGroup value={selectedHour} onChange={(e) => setSelectedHour(e.target.value)} aria-labelledby="radio-group-label" defaultValue="female" name="radio-group">
-                {hoursList.length > 0 && hoursList.map((hour, index) => (
-                  <Box key={index} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <Radio value={dayjs(hour).format('HH:mm')} sx={{ display: 'flex' }} />
-                    <Typography variant="subtitle2" sx={{ ml: 1 }}>
-                      {dayjs(hour).locale('tr').format('HH:mm')}
-                    </Typography>
-                  </Box>
-                ))}
+              <RadioGroup
+                value={selectedHour}
+                onChange={(e) => setSelectedHour(e.target.value)}
+                aria-labelledby="radio-group-label"
+                defaultValue="female"
+                name="radio-group"
+              >
+                {hoursList.length > 0 &&
+                  hoursList.map((hour, index) => (
+                    <Box key={index} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                      <Radio value={hour} sx={{ display: 'flex' }} />
+                      <Typography variant="subtitle2" sx={{ ml: 1 }}>
+                        {hour}
+                      </Typography>
+                    </Box>
+                  ))}
               </RadioGroup>
             </Box>
           </Box>
@@ -113,7 +107,6 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
       </Box>
     </Box>
   );
-  
 
   const SuccessPage = () => (
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
@@ -126,19 +119,18 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
     </Box>
   );
 
-
   const GetFaltypeDesign = async (fal_type) => {
     const response = await FalTypes.GetFalTypeDesign(fal_type);
     if (response) {
-        return response;
+      return response;
     }
-  }
+  };
 
   const InformationPage = () => {
     const [formData, setFormData] = useState([]);
     const [loading, setLoading] = useState(true); // Yükleme durumunu ekleyin
     const formRef = useRef(null);
-  
+
     useEffect(() => {
       const fetchData = async () => {
         setLoading(true); // Yükleme başladığında true yap
@@ -157,27 +149,23 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           setLoading(false); // Yükleme tamamlandığında false yap
         }
       };
-  
+
       fetchData();
     }, [fal_type]); // Dependencileri unutmayın
-  
-    const handleSubmit = (answerData) => {
 
-      
-      const showMessage = answerData.some(element => element.value === null || element.value === "");
-      
-    
+    const handleSubmit = (answerData) => {
+      const showMessage = answerData.some((element) => element.value === null || element.value === '');
+
       if (showMessage) {
-        toast.error("Lütfen tüm alanları doldurun");
+        toast.error('Lütfen tüm alanları doldurun');
         return;
       }
-    
-      const filesToRead = answerData.filter(element => element.name.includes('camera_'));
+
+      const filesToRead = answerData.filter((element) => element.name.includes('camera_'));
       let filesRead = 0;
-      
-     
+
       const reader = new FileReader();
-      
+
       const processFile = (file, index) => {
         return new Promise((resolve, reject) => {
           reader.onloadend = () => {
@@ -192,28 +180,31 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           reader.readAsDataURL(file);
         });
       };
-    
+
       const readAllFiles = async () => {
         try {
-          if  (filesToRead.length === 0) {
+          if (filesToRead.length === 0) {
             submitForm();
             return;
           }
           for (let i = 0; i < filesToRead.length; i++) {
-            await processFile(filesToRead[i].value, answerData.findIndex(el => el === filesToRead[i]));
+            await processFile(
+              filesToRead[i].value,
+              answerData.findIndex((el) => el === filesToRead[i])
+            );
           }
         } catch (error) {
-          toast.error("Dosya okuma hatası!");
+          toast.error('Dosya okuma hatası!');
         }
       };
-    
+
       const submitForm = () => {
         console.log(appDetails);
         UserFals.insertUserFalRequest(
-          userId, 
-          JSON.stringify(formData), 
-          JSON.stringify(answerData), 
-          appDetails.user_id, // falcının idsi 
+          userId,
+          JSON.stringify(formData),
+          JSON.stringify(answerData),
+          appDetails.user_id, // falcının idsi
           appDetails.app_id,
           userId,
           dayjs(selectedDate).format('YYYY-MM-DD'),
@@ -230,12 +221,11 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
           }
         });
       };
-    
+
       // Start reading files
       readAllFiles();
     };
-    
-  
+
     return (
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
         {loading ? (
@@ -267,34 +257,30 @@ function AppDialog({handleClose  ,open, cardid , fal_type }) {
 
   const SetPage = (page) => {
     setActivePage(page);
+    console.log(appDetails);
   };
 
   return (
-    
     <Dialog open={open}>
-      
-      <DialogActions sx={{display : 'flex', flexDirection : 'row' , justifyContent : 'right'}}>
-        <Button sx={{borderRadius : 100 , width : 10, height : 24}} color='error' variant='contained' 
-          onClick={()=> innerHandleClose()}>X</Button>
+      <DialogActions sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'right' }}>
+        <Button sx={{ borderRadius: 100, width: 10, height: 24 }} color="error" variant="contained" onClick={() => innerHandleClose()}>
+          X
+        </Button>
       </DialogActions>
-      
+
       <LocalizationProvider dateAdapter={AdapterDayjs} locale={tr}>
         <>
-        
-        {activePage === 'dateSelectPage' && <DateSelectPage /> }
-        {activePage === 'informationPage' && <InformationPage />}
-        {activePage === 'successPage' && <SuccessPage />}
-        {!activePage.includes(activePage) && <Typography>Sayfa bulunamadı.</Typography>}
-       
-        </> 
+          {activePage === 'dateSelectPage' && <DateSelectPage />}
+          {activePage === 'informationPage' && <InformationPage />}
+          {activePage === 'successPage' && <SuccessPage />}
+          {!activePage.includes(activePage) && <Typography>Sayfa bulunamadı.</Typography>}
+        </>
       </LocalizationProvider>
-
     </Dialog>
-   
   );
 }
 
-export default function AppointmentDialog({ name, btnStyle, carduserid , fal_type }) {
+export default function AppointmentDialog({ name, btnStyle, carduserid, fal_type }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

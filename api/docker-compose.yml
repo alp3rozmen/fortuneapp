@@ -7,6 +7,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: fortuneteller
+      TZ: Europe/Istanbul
     ports:
       - "3306:3306"
     networks:

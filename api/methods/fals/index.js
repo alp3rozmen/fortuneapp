@@ -216,6 +216,9 @@ function FalEndPoints(app , connection) {
                 updated_at: new Date()
             });
             
+            if(fal_user_id === undefined || fal_user_id === 0) {
+                return res.status(200).json({ message: 'Fal kullanıcısı id gereklidir', status: 'error' });
+            }
             console.log('fal_id user idsi', fal_user_id);
             console.log('fal type', fal_type);
             
