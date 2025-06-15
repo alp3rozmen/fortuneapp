@@ -9,42 +9,60 @@ import MainCard from 'ui-component/cards/MainCard';
 import DataTable from 'ui-component/data-table';
 import { ReactFormGenerator } from 'react-form-builder2';
 import CustomDialog from 'ui-component/CustomDialog';
-
+import TarotCard from 'views/faltypes-design/custom_components/tarot-card';
 const WaitingFals = () => {
 
 
     const CustomShowDetails = (props) => {
+
+         const renderFormData = () => {
+              var formdata = JSON.parse(props.formdata);
+              var formanswer = JSON.parse(props.formanswer);
+        
+              switch (formdata[0].key) {
+                case 'TarotCard':
+                  return (
+                    <>
+                      <TarotCard title={'Seçilen Kartlar'} disabled={true} SelectedCardsFromApi={formanswer} />
+                    </>
+                  );
+                default:
+                  return (
+                    <ReactFormGenerator
+                      download_path=""
+                      back_action=""
+                      back_name="Back"
+                      answer_data={formanswer}
+                      form_action=""
+                      form_method="POST"
+                      data={formdata}
+                      hide_actions={true}
+                      read_only={true}
+                      variables={true}
+                    />
+                  );
+              }
+            };
+
+
         return (
             <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <CustomDialog
-                    buttons={
-                        [{
-                            id: 'okButton',
-                            name: 'Kapat',
-                            color: 'success',
-                            onClick: () => console.log('ok')
-                        }]
-                    }
-                    name={'Detayı Gör'} boxStyle={{ mr: 2, mb: 1 }} >
-                    <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-
-                            <ReactFormGenerator
-                                download_path=""
-                                back_action=""
-                                back_name="Back"
-                                answer_data={JSON.parse(props.formanswer)}
-                                form_action=""
-                                form_method="POST"
-                                data={JSON.parse(props.formdata)}
-                                hide_actions={true}
-                                read_only={true}
-                                variables={true}    
-                            />
-                    
-                        </Box>
-                    </Box>
-                </CustomDialog>
+                 <CustomDialog
+                          buttons={[
+                            {
+                              id: 'okButton',
+                              name: 'Kapat',
+                              color: 'success',
+                              onClick: () => console.log('ok')
+                            }
+                          ]}
+                          name={'Detay'}
+                          boxStyle={{ mr: 2, mb: 1 }}
+                        >
+                          <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>{renderFormData()}</Box>
+                          </Box>
+                        </CustomDialog>
 
                {props.comment &&     
                 <CustomDialog

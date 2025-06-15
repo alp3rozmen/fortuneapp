@@ -14,6 +14,8 @@ import { UserFals } from 'network/UserFals/UserFals.ts';
 import 'react-form-builder2/dist/app.css';
 import { toast } from 'react-toastify';
 import AuthContext from 'context/userContext.tsx';
+import TarotCard from 'views/faltypes-design/custom_components/tarot-card.js';
+
 
 function AppDialog({ handleClose, open, cardid, fal_type }) {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
@@ -126,35 +128,35 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
     }
   };
 
-  const InformationPage = () => {
-    const [formData, setFormData] = useState([]);
-    const [loading, setLoading] = useState(true); // Yükleme durumunu ekleyin
-    const formRef = useRef(null);
+  const renderFormData = (formData, pFormKey) => {
 
-    useEffect(() => {
-      const fetchData = async () => {
-        setLoading(true); // Yükleme başladığında true yap
-        try {
-          const response = await GetFaltypeDesign(fal_type);
-          if (response.status === 404) {
-            setLoading(false);
-            return;
+    const submitForm = (pAnswerData) => {
+
+        UserFals.insertUserFalRequest(
+          userId,
+          JSON.stringify(formData),
+          JSON.stringify(pAnswerData ? pAnswerData : answerData),
+          appDetails.user_id, // falcının idsi
+          appDetails.app_id,
+          userId,
+          dayjs(selectedDate).format('YYYY-MM-DD'),
+          dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
+          appDetails.start_hour,
+          appDetails.end_hour,
+          appDetails.fal_type
+        ).then((response) => {
+          if (response.status == 200) {
+            SetPage('successPage');
+            getUserInfo();
           } else {
-            const parsedJson = JSON.parse(response.data[0].formdata);
-            setFormData(parsedJson.task_data);
+            toast.error(response.message);
           }
-        } catch (error) {
-          console.error('Veri yükleme hatası:', error);
-        } finally {
-          setLoading(false); // Yükleme tamamlandığında false yap
-        }
+        });
       };
-
-      fetchData();
-    }, [fal_type]); // Dependencileri unutmayın
-
+  
     const handleSubmit = (answerData) => {
       const showMessage = answerData.some((element) => element.value === null || element.value === '');
+      
 
       if (showMessage) {
         toast.error('Lütfen tüm alanları doldurun');
@@ -198,56 +200,108 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
         }
       };
 
-      const submitForm = () => {
-        console.log(appDetails);
-        UserFals.insertUserFalRequest(
-          userId,
-          JSON.stringify(formData),
-          JSON.stringify(answerData),
-          appDetails.user_id, // falcının idsi
-          appDetails.app_id,
-          userId,
-          dayjs(selectedDate).format('YYYY-MM-DD'),
-          dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
-          appDetails.start_hour,
-          appDetails.end_hour,
-          appDetails.fal_type
-        ).then((response) => {
-          if (response.status == 200) {
-            SetPage('successPage');
-            getUserInfo();
-          } else {
-            toast.error(response.message);
-          }
-        });
-      };
+      
 
       // Start reading files
       readAllFiles();
     };
 
+    if (!formData || formData.length === 0) {
+      return <Typography variant="subtitle1">Form verisi bulunamadı.</Typography>;
+    }
+    var lgvSelectedInfo = null;
+    
+    const onSelectedChanged = (selected) => {
+      lgvSelectedInfo = selected;
+
+      if (lgvSelectedInfo.IsallCardsSelected) {
+        toast.error('Zaten 3 kart seçtiniz.');
+        return;
+      }
+    };
+
+    const SubmitTarotCard = () => {
+      if (!lgvSelectedInfo.IsallCardsSelected && lgvSelectedInfo.selectedCards.length < 3) {
+        toast.error('Lütfen 3 kart seçiniz.');
+        return;
+      }
+
+      submitForm(lgvSelectedInfo.selectedCards);      
+
+    }
+
+    if (formData.length > 0) {
+      switch(formData[0].key) {
+        case 'TarotCard':
+          return <>
+                  <TarotCard title={"Lütfen 3 Kart Seçiniz"} onChange={(selected) => onSelectedChanged(selected)}/>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                    <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('dateSelectPage')}>
+                      Geri
+                    </Button>
+                    <Button onClick={() => SubmitTarotCard()} variant="contained" sx={{ mt: 2 }}>
+                      İleri
+                    </Button>
+                  </Box>
+                </>;
+
+          default:
+          return <ReactFormGenerator
+                ref={pFormKey}
+                skip_validations={true}
+                onSubmit={(info) => handleSubmit(info)}
+                submitButton={
+                  <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                    <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('dateSelectPage')}>
+                      Geri
+                    </Button>
+                    <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                      İleri
+                    </Button>
+                  </Box>
+            }
+            hide_actions={false}
+            data={formData}
+          />;
+      }
+    }
+  };
+
+  const InformationPage = () => {
+    const [formData, setFormData] = useState([]);
+    const [loading, setLoading] = useState(true); // Yükleme durumunu ekleyin
+    const formRef = useRef(null);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true); // Yükleme başladığında true yap
+        try {
+          const response = await GetFaltypeDesign(fal_type);
+          if (response.status === 404) {
+            setLoading(false);
+            return;
+          } else {
+            const parsedJson = JSON.parse(response.data[0].formdata);
+            setFormData(parsedJson.task_data);
+          }
+        } catch (error) {
+          console.error('Veri yükleme hatası:', error);
+        } finally {
+          setLoading(false); // Yükleme tamamlandığında false yap
+        }
+      };
+
+      fetchData();
+    }, [fal_type]); // Dependencileri unutmayın
+
+    
+
     return (
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
         {loading ? (
           <Typography variant="subtitle1">Yükleniyor...</Typography>
-        ) : formData.length !== 0 ? (
-          <ReactFormGenerator
-            ref={formRef}
-            skip_validations={true}
-            onSubmit={(info) => handleSubmit(info)}
-            submitButton={
-              <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-                <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('dateSelectPage')}>
-                  Geri
-                </Button>
-                <Button type="submit" variant="contained" sx={{ mt: 2 }}>
-                  İleri
-                </Button>
-              </Box>
-            }
-            hide_actions={false}
-            data={formData}
-          />
+        ) : formData.length !== 0 ? (          
+          renderFormData(formData, formRef)
         ) : (
           <Typography variant="subtitle1">Yakında...</Typography>
         )}
