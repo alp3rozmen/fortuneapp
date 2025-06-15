@@ -460,16 +460,27 @@ var ReactForm = /*#__PURE__*/function (_React$Component) {
     key: "getContainerElement",
     value: function getContainerElement(item, Element) {
       var _this6 = this;
-
-      var controls = item.childItems.map(function (x) {
-        return x ? _this6.getInputElement(_this6.getDataById(x)) : /*#__PURE__*/_react["default"].createElement("div", null, "\xA0");
-      });
-      return /*#__PURE__*/_react["default"].createElement(Element, {
-        mutable: true,
-        key: "form_".concat(item.id),
-        data: item,
-        controls: controls
-      });
+      if (item.childItems != null) {
+          var controls = item.childItems.map(function (x) {
+          return x ? _this6.getInputElement(_this6.getDataById(x)) : /*#__PURE__*/_react["default"].createElement("div", null, "\xA0");
+        });
+        return /*#__PURE__*/_react["default"].createElement(Element, {
+          mutable: true,
+          key: "form_".concat(item.id),
+          data: item,
+          controls: controls
+        });  
+      }
+      else {
+        console.error("".concat(item.element, " does not have childItems defined"));
+        return /*#__PURE__*/_react["default"].createElement(Element, {
+          mutable: true,
+          key: "form_".concat(item.id),
+          data: item,
+          controls: null
+        });
+      }
+      
     }
   }, {
     key: "getSimpleElement",
@@ -533,6 +544,8 @@ var ReactForm = /*#__PURE__*/function (_React$Component) {
       var items = data_items.filter(function (x) {
         return !x.parentId;
       }).map(function (item) {
+
+        console.log('item', item);
         if (!item) return null;
 
         switch (item.element) {

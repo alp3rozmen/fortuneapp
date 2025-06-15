@@ -105,18 +105,18 @@ export default class FormElementsEdit extends React.Component {
       this.props.element.dirty = true;
     }
     
-    const this_checked = this.props.element.hasOwnProperty.call.call('required') ? this.props.element.required : false;
-    const this_read_only = this.props.element.hasOwnProperty.call.call('readOnly') ? this.props.element.readOnly : false;
-    const this_default_today = this.props.element.hasOwnProperty.call.call('defaultToday') ? this.props.element.defaultToday : false;
-    const this_show_time_select = this.props.element.hasOwnProperty.call.call('showTimeSelect') ? this.props.element.showTimeSelect : false;
-    const this_show_time_select_only = this.props.element.hasOwnProperty.call.call('showTimeSelectOnly') ? this.props.element.showTimeSelectOnly : false;
-    const this_show_time_input = this.props.element.hasOwnProperty.call.call('showTimeInput') ? this.props.element.showTimeInput : false;
-    const this_checked_inline = this.props.element.hasOwnProperty.call.call('inline') ? this.props.element.inline : false;
-    const this_checked_bold = this.props.element.hasOwnProperty.call.call('bold') ? this.props.element.bold : false;
-    const this_checked_italic = this.props.element.hasOwnProperty.call.call('italic') ? this.props.element.italic : false;
-    const this_checked_center = this.props.element.hasOwnProperty.call.call('center') ? this.props.element.center : false;
-    const this_checked_page_break = this.props.element.hasOwnProperty.call.call('pageBreakBefore') ? this.props.element.pageBreakBefore : false;
-    const this_checked_alternate_form = this.props.element.hasOwnProperty.call.call('alternateForm') ? this.props.element.alternateForm : false;
+    const this_checked = this.props.element.hasOwnProperty.call('required') ? this.props.element.required : false;
+    const this_read_only = this.props.element.hasOwnProperty.call('readOnly') ? this.props.element.readOnly : false;
+    const this_default_today = this.props.element.hasOwnProperty.call('defaultToday') ? this.props.element.defaultToday : false;
+    const this_show_time_select = this.props.element.hasOwnProperty.call('showTimeSelect') ? this.props.element.showTimeSelect : false;
+    const this_show_time_select_only = this.props.element.hasOwnProperty.call('showTimeSelectOnly') ? this.props.element.showTimeSelectOnly : false;
+    const this_show_time_input = this.props.element.hasOwnProperty.call('showTimeInput') ? this.props.element.showTimeInput : false;
+    const this_checked_inline = this.props.element.hasOwnProperty.call('inline') ? this.props.element.inline : false;
+    const this_checked_bold = this.props.element.hasOwnProperty.call('bold') ? this.props.element.bold : false;
+    const this_checked_italic = this.props.element.hasOwnProperty.call('italic') ? this.props.element.italic : false;
+    const this_checked_center = this.props.element.hasOwnProperty.call('center') ? this.props.element.center : false;
+    const this_checked_page_break = this.props.element.hasOwnProperty.call('pageBreakBefore') ? this.props.element.pageBreakBefore : false;
+    const this_checked_alternate_form = this.props.element.hasOwnProperty.call('alternateForm') ? this.props.element.alternateForm : false;
 
     const {
       canHavePageBreakBefore, canHaveAlternateForm, canHaveDisplayHorizontal, canHaveOptionCorrect, canHaveOptionValue,
@@ -135,7 +135,7 @@ export default class FormElementsEdit extends React.Component {
     if (this.props.element.hasOwnProperty.call('h6')) {
       editorState = this.convertFromHTML(this.props.element.h6);
     }
-
+    console.log(this.props.element);
     return (
       <div>
         <div className="clearfix">
@@ -420,7 +420,7 @@ export default class FormElementsEdit extends React.Component {
             </div>
           </div>
         }
-        { this.props.element.hasOwnProperty.call.call('options') &&
+        { this.props.element.hasOwnProperty.call('options') &&
           <DynamicOptionList showCorrectColumn={this.props.showCorrectColumn}
             canHaveOptionCorrect={canHaveOptionCorrect}
             canHaveOptionValue={canHaveOptionValue}
