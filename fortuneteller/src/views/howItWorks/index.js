@@ -49,7 +49,7 @@ function HowItWorks() {
         <div className="col-md-4 text-center mb-4">
           <h4>6. Kredi Yükleyin</h4>
           <p>
-            Fal hizmeti alabilmek için kredi yüklemeniz gerekmektedir. Lütfen kredi yüklemek için <a href="mailto:destek@fortuneteller.com">destek@fortuneteller.com</a> adresine e-posta gönderin.
+            Fal hizmeti alabilmek için kredi yüklemeniz gerekmektedir. Lütfen kredi yüklemek için <a href="mailto:alp3rozmen@gmail.com">alp3rozmen@gmail.com</a> adresine e-posta gönderin.
           </p>
         </div>
       </div>

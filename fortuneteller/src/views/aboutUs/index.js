@@ -40,7 +40,7 @@ function AboutUs() {
         <div className="col-md-6 mb-4">
           <h4>Bizimle İletişime Geçin</h4>
           <p>
-            Sorularınız ve önerileriniz için bizimle <a href="mailto:destek@fortuneteller.com">destek@fortuneteller.com</a> adresinden iletişime geçebilirsiniz. 
+            Sorularınız ve önerileriniz için bizimle <a href="mailto:alp3rozmen@gmail.com">alp3rozmen@gmail.com</a> adresinden iletişime geçebilirsiniz. 
             Size en kısa sürede geri dönüş yapmaktan memnuniyet duyarız.
           </p>
         </div>
