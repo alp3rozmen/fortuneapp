@@ -26,7 +26,7 @@ const pages = {
           title: 'Giriş Yap',
           type: 'item',
           url: '/pages/login/login3',
-          target: true,
+          target: false,
           icon: icons.IconKey
         },
         {

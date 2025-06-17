@@ -14,8 +14,11 @@ const FalTypesDesign = () => {
   const [faltypes, setFaltypes] = useState([]);
 
   useEffect(() => {
-    Registry.register('TarotCard', TarotCard);
-
+    
+    if (!Registry.get('TarotCard')) {
+      Registry.register('TarotCard', TarotCard);  
+    }
+  
     FalTypes.getAll().then((response) => {
       if (response) {
         setFaltypes(response.data);
