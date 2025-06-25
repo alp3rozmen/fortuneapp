@@ -174,7 +174,7 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
             answerData[index].value = reader.result;
             filesRead++;
             if (filesRead === filesToRead.length) {
-              submitForm();
+              submitForm(answerData);
             }
             resolve();
           };
@@ -186,7 +186,7 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
       const readAllFiles = async () => {
         try {
           if (filesToRead.length === 0) {
-            submitForm();
+            submitForm(answerData);
             return;
           }
           for (let i = 0; i < filesToRead.length; i++) {
