@@ -38,7 +38,7 @@ export const AuthContextProvider = ({ children }: any) => {
 
   const getUserInfo = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/getUserInfo", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/getUserInfo`, {
         method: "POST",
         headers: {
           authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -71,7 +71,7 @@ export const AuthContextProvider = ({ children }: any) => {
 
   const login = async (userName: string, password: string) => {
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",
