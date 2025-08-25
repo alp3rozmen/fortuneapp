@@ -60,6 +60,46 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
     });
   }, [selectedDate, selectedHour, open]);
 
+  useEffect(() => {
+  if (activePage !== 'informationPage') return;
+
+  const interval = setInterval(() => {
+    const nodeList = document.querySelectorAll('.image-upload-control');
+    const nodeList2 = document.querySelectorAll('.btn.btn-image-clear');   
+    if (nodeList.length === 0) return;
+    console.log(nodeList2);
+    nodeList.forEach((container) => {
+      const btn = container.querySelector('.btn.btn-default');
+      if (btn) {
+        btn.childNodes.forEach((node) => {
+          
+          if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('Upload Photo')) {
+            node.textContent = ' Resim Yükle';
+          }
+          
+          container.childNodes.forEach((child) => {
+            if (child.nodeType === Node.ELEMENT_NODE && child.textContent.includes('Select an image from your computer or device.')) {
+              child.textContent = ' Resim Yüklemek için bilgisayarınızdan veya cihazınızdan bir resim seçin.';
+            }
+          }); 
+
+
+        });
+      }
+      clearInterval(interval); // bulundu, durdur
+    });
+  }, 200); // 200ms'de bir kontrol et
+
+  // 5 saniye sonra hâlâ bulamadıysa durdur
+  const timeout = setTimeout(() => clearInterval(interval), 5000);
+
+  return () => {
+    clearInterval(interval);
+    clearTimeout(timeout);
+  };
+}, [activePage]);
+
+
   const DateSelectPage = () => (
     <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
@@ -252,10 +292,10 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
                 onSubmit={(info) => handleSubmit(info)}
                 submitButton={
                   <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-                    <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('dateSelectPage')}>
+                    <Button variant="contained" sx={{ mt: 12 }} onClick={() => SetPage('dateSelectPage')}>
                       Geri
                     </Button>
-                    <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+                    <Button type="submit" variant="contained" sx={{ mt: 12 }}>
                       İleri
                     </Button>
                   </Box>
