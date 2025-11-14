@@ -26,6 +26,7 @@ const HowItWorks = Loadable(lazy(() => import('views/howItWorks/index')));
 const AboutUs = Loadable(lazy(() => import('views/aboutUs/index')));
 const ZodiacEdit = Loadable(lazy(() => import('views/zodiac-edit')));
 const Horoscope = Loadable(lazy(() => import('views/horoscopes/index')));
+const AddBalance = Loadable(lazy(() => import('views/addbalance')));
 // ==============================|| MAIN ROUTING ||============================== //
 const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent, props = null}) => {
 
@@ -79,6 +80,10 @@ const MainRoutes = {
     {
       path: 'users/edit',
       element: <RoleBasedRoute roles={['3']} component={UserEdit} fallbackComponent={DashboardDefault} />,
+    },
+    {
+      path: 'addbalance',
+      element: <RoleBasedRoute roles={['3']} component={AddBalance} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'faltypes/edit',

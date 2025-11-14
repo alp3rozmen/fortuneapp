@@ -151,17 +151,11 @@ const ProfileSection = () => {
                           {userName}
                         </Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
                     </Stack>
-                    
-                    
                   </Box>
-                  <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 1 }}>
-                      
-                      
-                      
-                      
+                  <PerfectScrollbar style={{ height: '100%', }}>
+                    <Box sx={{ p: 0 }}>
+                                            
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
@@ -169,6 +163,15 @@ const ProfileSection = () => {
                         >
                          
                           <ListItemText primary={<Typography variant="body2">Hesap Ayarları</Typography>} />
+                        </ListItemButton>
+
+                        <ListItemButton
+                          sx={{ borderRadius: `${customization.borderRadius}px` }}
+                          selected={selectedIndex === 1}
+                          onClick={(event) => handleListItemClick(event, 1, '/addbalance')}
+                        >
+                         
+                          <ListItemText primary={<Typography variant="body2">Bakiye Yükle</Typography>} />
                         </ListItemButton>
                       
                         <ListItemButton
