@@ -23,13 +23,13 @@ const AccountSettings = () => {
   });
 
   const UpdateProfilePicture = async (file) => {
-  
+
     // if (file.type !== 'image/png') {
     //   toast.error('Lütfen resim dosyası yalnızca png uzantılı olacak şekilde yükleyin');
     //   return
     // }
 
-    
+
     reader.onload = (e) => {
       userDetailService.UpdateUserProfilePicture({
         fileBase64: e.target.result,
@@ -48,67 +48,67 @@ const AccountSettings = () => {
     reader.readAsDataURL(file);
   }
 
-return (
-  <MainCard title="Hesap Ayarları">
-    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
-      <Box
-        sx={{
-          display: 'inline-flex',
-          flexDirection: 'column',
-          gap: 1,
-          p: 2,
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography textAlign={'center'} variant="caption">Profil Resmi</Typography>
-        <Avatar sx={{ width: 100, height: 100 }} src={userProfilePicture} />
-        <Button component="label" variant="outlined">Değiştir<VisuallyHiddenInput onChange={(e) => UpdateProfilePicture(e.target.files[0])} accept="image/*" type="file" /></Button>
-      </Box>
+  return (
+    <MainCard title="Hesap Ayarları">
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1 }}>
+        <Box
+          sx={{
+            display: 'inline-flex',
+            flexDirection: 'column',
+            gap: 1,
+            p: 2,
+            backgroundColor: 'white',
+            borderRadius: '10px',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography textAlign={'center'} variant="caption">Profil Resmi</Typography>
+          <Avatar sx={{ width: 100, height: 100 }} src={userProfilePicture} />
+          <Button component="label" variant="outlined">Değiştir<VisuallyHiddenInput onChange={(e) => UpdateProfilePicture(e.target.files[0])} accept="image/*" type="file" /></Button>
+        </Box>
 
-      <Box
-        sx={{
-          ml: 2,
-          display: 'flex',
-          flexGrow: 1,
-          flexDirection: 'column',
-          gap: 1,
-          p: 2,
-          backgroundColor: 'white',
-          borderRadius: '10px'
-        }}
-      >
-        <Typography textAlign={'start'} variant="caption">Kullanıcı Bilgileri</Typography>
+        <Box
+          sx={{
+            ml: { xs: 0, md: 2 },
+            display: 'flex',
+            flexGrow: 1,
+            flexDirection: 'column',
+            gap: 1,
+            p: 2,
+            backgroundColor: 'white',
+            borderRadius: '10px'
+          }}
+        >
+          <Typography textAlign={'start'} variant="caption">Kullanıcı Bilgileri</Typography>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', gap: 1 }}>
-          {[
-            { label: 'Kullanıcı Adı', value: userName },
-            { label: 'Rolü', value: role === '1' ? 'User' : role === '2' ? 'Yorumcu' : 'Admin' },
-            { label: 'Email Adresi', value: email },
-            { label: 'Bakiye', value: balance },
-          ].map((info, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                backgroundColor: '#dcdcdc',
-                borderRadius: '10px',
-                p: 1
-              }}
-            >
-              <Typography sx={{ flex: 1 }} variant="overline">{info.label}</Typography>
-              <Typography sx={{ flex: 0.1 }} variant="overline">:</Typography>
-              <Typography sx={{ flex: 2, fontWeight: 'bold' }} variant="overline">{info.value}</Typography>
-            </Box>
-          ))}
+          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', gap: 1 }}>
+            {[
+              { label: 'Kullanıcı Adı', value: userName },
+              { label: 'Rolü', value: role === '1' ? 'User' : role === '2' ? 'Yorumcu' : 'Admin' },
+              { label: 'Email Adresi', value: email },
+              { label: 'Bakiye', value: balance },
+            ].map((info, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  backgroundColor: '#dcdcdc',
+                  borderRadius: '10px',
+                  p: 1
+                }}
+              >
+                <Typography sx={{ flex: 1 }} variant="overline">{info.label}</Typography>
+                <Typography sx={{ flex: 0.1 }} variant="overline">:</Typography>
+                <Typography sx={{ flex: 2, fontWeight: 'bold' }} variant="overline">{info.value}</Typography>
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
-    </Box>
-  </MainCard>
-);
+    </MainCard>
+  );
 };
 
 export default AccountSettings;

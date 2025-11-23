@@ -84,7 +84,7 @@ export default function DataTable({customButtons ,customButtonHeader = '', showA
                             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 {rowNames.map((name, i) => (
                                     <TableCell key={name} align="center">
-                                        {iso8601Regex.test(row[name]) && dayjs(row[name]).isValid() && i !== 0 ? dayjs(row[name]).locale('tr').format('DD MMMM YYYY') : row[name]}
+                                        {iso8601Regex.test(row[name]) && dayjs(row[name]).isValid() && i !== 0 ? dayjs(row[name]).locale('tr').format('DD MMMM YYYY HH:mm:ss') : row[name]}
                                     </TableCell>
                                 ))}
                                 {showAdminButtons &&

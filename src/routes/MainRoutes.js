@@ -27,6 +27,8 @@ const AboutUs = Loadable(lazy(() => import('views/aboutUs/index')));
 const ZodiacEdit = Loadable(lazy(() => import('views/zodiac-edit')));
 const Horoscope = Loadable(lazy(() => import('views/horoscopes/index')));
 const AddBalance = Loadable(lazy(() => import('views/addbalance')));
+const SystemSettings = Loadable(lazy(() => import('views/system-settings')));
+const Payments = Loadable(lazy(() => import('views/payments')));
 // ==============================|| MAIN ROUTING ||============================== //
 const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent, props = null}) => {
 
@@ -96,6 +98,14 @@ const MainRoutes = {
     {
       path: 'faltypes/design',
       element: <RoleBasedRoute roles={['3']} component={FaltypesDesign} fallbackComponent={DashboardDefault} />,
+    },
+    {
+      path: 'systemsettings',
+      element: <RoleBasedRoute roles={['3']} component={SystemSettings} fallbackComponent={DashboardDefault} />,
+    },
+    {
+      path: 'payments',
+      element: <RoleBasedRoute roles={['3']} component={Payments} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'waitingFals',

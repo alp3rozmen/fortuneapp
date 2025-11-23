@@ -1,7 +1,7 @@
 // material-ui
 
 // project imports
-import { Box,  TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useEffect, useState } from 'react';
 import DataTable from 'ui-component/data-table';
@@ -115,7 +115,7 @@ const FaltypesEdit = () => {
                         }]
                     }
                     name={'Bakım Türü Ekle'} boxStyle={{ mr: 2, mb: 1 }} >
-                    <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                    <Box sx={{ p: 2, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                             <TextField
                                 onChange={(e) => setName(e.target.value)}
@@ -136,7 +136,7 @@ const FaltypesEdit = () => {
                         handleUpdateClick={(params) => SetUpdateTextFromParam(params)}
                         dialogChildrens={
                             <>
-                                <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                <Box sx={{ p: 2, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center' }}>
                                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                         <TextField
                                             value={updateText}
@@ -159,7 +159,7 @@ const FaltypesEdit = () => {
                             name: 'İptal',
                             color: 'error',
                             onClick: () => {
-                                
+
                             }
 
                         }]

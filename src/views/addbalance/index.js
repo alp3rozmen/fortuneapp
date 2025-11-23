@@ -1,15 +1,101 @@
-import { Avatar, Button, Box, Typography, Input, InputBase } from "@mui/material";
+import { Button, Box, Typography, InputBase } from "@mui/material";
 import MainCard from "ui-component/cards/MainCard";
 import AuthContext from "context/userContext.tsx";
 import { useContext, useState } from "react";
-import { styled } from '@mui/material/styles';
+import { axiosBearerInstance } from "network/axiosInstance.ts";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { userDetailService } from "network/user_details/user_detail_service.ts";
-
+import DataTable from "ui-component/data-table";
 const AddBalance = () => {
-    const { userName, email, role, balance, userId, getUserInfo, userProfilePicture } = useContext(AuthContext);
+
+    const { userId,email } = useContext(AuthContext);
     const [amount, setAmount] = useState(null)
     const [loading, setLoading] = useState(false);
+    const [payments, setPayments] = useState([]);
+    const [paymentInfo, setPaymentInfo] = useState({
+        ibanAddress: '',
+        bankName: '',
+        receiverName: '',
+        receiverSurname: '',
+    });
+
+    const addPaymentRequest = async () => {
+        try {
+            const responseData = await axiosBearerInstance.post('/addPaymentRequest', {
+                userid: userId,
+                amount: amount,
+                type: '1'
+            });
+
+            if (responseData.data.message) {
+                toast.success(responseData.data.message);
+                fetchUserPaymentInfo();
+                return responseData.data;
+            }
+        } catch (error) {
+            console.error("There was an error adding the payment request!", error);
+            if (error.response.data.error) {
+                toast.error(error.response.data.error);
+            }
+            else {
+                toast.error("Bakiye yükleme isteği gönderilemedi, lütfen tekrar deneyiniz.");
+            }
+            return null;
+        }
+    };
+
+    const fetchUserPaymentInfo = async () => {
+        try {
+            const responseData = await axiosBearerInstance.post('/getUserPayments', {
+                userid: userId,
+            });
+            if (responseData.data.statusCode == 200) {
+                setPayments(responseData.data.data);
+            } else {
+                toast.error("Ödeme talepleri alınamadı, lütfen tekrar deneyiniz.");
+            }
+        } catch (error) {
+            console.error("There was an error fetching the user payments!", error);
+            toast.error("Ödeme talepleri alınamadı, lütfen tekrar deneyiniz.");
+        }
+    };
+
+
+
+    useEffect(() => {
+        const fetchPaymentInfo = async () => {
+            const answer = await getPaymentInfo();
+
+            if (answer && answer.data) {
+                setPaymentInfo({
+                    ibanAddress: answer.data.ibanAdress,
+                    bankName: answer.data.bankname,
+                    receiverName: answer.data.receivername,
+                    receiverSurname: answer.data.receiversurname,
+                });
+            }
+        };
+
+        fetchUserPaymentInfo();
+        fetchPaymentInfo();
+    }, []);
+
+
+    const getPaymentInfo = async () => {
+        try {
+            const responseData = await axiosBearerInstance.post('/getPaymentInfo');
+            if (responseData.data.statusCode == 200) {
+                return responseData.data;
+            } else {
+                toast.error("Ödeme bilgileri alınamadı, lütfen tekrar deneyiniz.");
+                return null;
+            }
+        } catch (error) {
+            console.error("There was an error fetching the payment info!", error);
+            toast.error("Ödeme bilgileri alınamadı, lütfen tekrar deneyiniz.");
+            return null;
+        }
+    };
 
     const handleChangeAmount = (e) => {
 
@@ -28,15 +114,16 @@ const AddBalance = () => {
 
         setLoading(true);
         try {
-            const response = await userDetailService.addBalanceRequest({
-                userid: userId,
-                amount: amount
-            });
+            const response = addPaymentRequest(userId, amount);
 
             if (response) {
-                toast.success("Bakiye yükleme isteğiniz başarıyla gönderildi.");
                 setAmount(0);
+
             } else {
+                if (response.error) {
+                    toast.error(response.error);
+                    return;
+                }
                 toast.error("Bir hata oluştu, lütfen tekrar deneyiniz.");
             }
         } catch (error) {
@@ -66,10 +153,10 @@ const AddBalance = () => {
 
                         <Typography textAlign={'center'} variant="title">Gönderim Bilgileri</Typography>
                         {[
-                            { label: 'Iban Adresi', value: userName },
-                            { label: 'Adı', value: role === '1' ? 'User' : role === '2' ? 'Yorumcu' : 'Admin' },
-                            { label: 'Soyadı', value: email },
-                            { label: 'Banka', value: balance },
+                            { label: 'Iban Adresi', value: paymentInfo.ibanAddress },
+                            { label: 'Adı', value: paymentInfo.receiverName },
+                            { label: 'Soyadı', value: paymentInfo.receiverSurname },
+                            { label: 'Banka', value: paymentInfo.bankName },
                             { label: 'Açıklama', value: email },
                         ].map((info, index) => (
                             <Box
@@ -104,7 +191,7 @@ const AddBalance = () => {
                             <Button variant="outlined" onClick={handleAddBalance} disabled={loading}>
                                 {loading ? "Gönderiliyor..." : "Bakiye Yükleme İsteği Gönder"}
                             </Button> :
-                            <Typography variant="caption" color="red">Lütfen 10000'den az bir miktar giriniz</Typography>
+                            <Typography variant="caption" color="red">Lütfen 10000 &apos;den az bir miktar giriniz</Typography>
                         }
 
                     </Box>
@@ -114,6 +201,18 @@ const AddBalance = () => {
                         Lütfen doğru bilgileri girdiğinizden emin olunuz.
                     </Typography>
                 </Box>
+
+
+            </Box>
+
+            <Box>
+                <DataTable
+                    title="Ödeme Taleplerim"
+                    rows={payments}
+                    rowsPerPage={5}
+                    rowNames={['amount', 'statusText', 'created_at']}
+                    rowHeaders={['Talep Edilen Kredi', 'Durum', 'Gönderme Zamanı']}
+                />
             </Box>
         </MainCard>
     );

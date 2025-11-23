@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, ButtonBase, Typography} from '@mui/material';
+import { Avatar, Box, ButtonBase, Typography } from '@mui/material';
 
 // project imports
 import LogoSection from '../LogoSection';
@@ -17,13 +17,13 @@ import { IconMenu2 } from '@tabler/icons-react';
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
-  const { isLogin , balance} = useContext(AuthContext);
+  const { isLogin, balance } = useContext(AuthContext);
   const theme = useTheme();
 
   return (
-    <Box sx={{ alignContent: 'center', border: '1px solid #E0E0E0', borderRadius: '10px' ,backgroundColor: '#f5f5f5' ,width: '100%', display: 'flex', alignItems: 'center' ,justifyContent: 'space-between' }}>
+    <Box sx={{ alignContent: 'center', border: '1px solid #E0E0E0', borderRadius: '10px', backgroundColor: '#f5f5f5', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       {/* logo & toggler button */}
-      
+
       <Box
         sx={{
           justifyContent: 'space-evenly',
@@ -35,11 +35,11 @@ const Header = ({ handleLeftDrawerToggle }) => {
           }
         }}
       >
-      
-        <Box component="span" sx={{display: { xs: 'none', md: 'flex' } }}>
+
+        <Box component="span" sx={{ display: { xs: 'none', md: 'flex' } }}>
           <LogoSection />
         </Box>
-        
+
         <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
           <Avatar
             variant="rounded"
@@ -63,24 +63,25 @@ const Header = ({ handleLeftDrawerToggle }) => {
       </Box>
 
       {/* header search */}
-      
+
       {/* <SearchSection /> */}
-     
+
 
       {/* notification & profile */}
-      
-     
-{/*       
+
+
+      {/*       
       <Box sx={{flex: 1,display: 'flex', justifyContent: 'end', gap: 2,p: 1, alignItems: 'center' }}>
         <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Giriş Yap</Link>
         <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Kayıt Ol</Link>
       </Box> */}
 
-      {isLogin&& <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Typography variant="subtitle1" sx={{ mr: 1 }}>Kredi : {balance} </Typography>
+      {isLogin && <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 1, md: 0 } }}>
+        <Typography variant="subtitle1" sx={{ mr: 1, display: { xs: 'none', sm: 'block' } }}>Kredi : {balance} </Typography>
+        <Typography variant="subtitle2" sx={{ mr: 1, display: { xs: 'block', sm: 'none' } }}>{balance}</Typography>
         {/* <NotificationSection /> */}
-      <ProfileSection /></Box>}
-      
+        <ProfileSection /></Box>}
+
     </Box>
   );
 };

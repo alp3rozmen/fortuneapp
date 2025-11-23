@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 
 const UserEdit = () => {
 
-  
+
   const [selectedValue, setSelectedValue] = useState('');
   const [selectedChangeFt, setSelectedChangeFt] = useState('');
   const [selectedChangePrice, setSelectedChangePrice] = useState('');
@@ -33,14 +33,14 @@ const UserEdit = () => {
   const [appStarttime, setAppStarttime] = useState('');
   const [appEndtime, setAppEndtime] = useState('');
   const [appInterval, setAppInterval] = useState('');
-  
+
   useEffect(() => {
     fetchUsers().then((response) => {
       if (response) {
         var users = response;
         setUsers(users);
       }
-      
+
     });
 
   }, []);
@@ -116,7 +116,7 @@ const UserEdit = () => {
     return response;
   };
 
- 
+
 
 
   const fetchAddUserFalType = async () => {
@@ -146,14 +146,14 @@ const UserEdit = () => {
     setAppointmentDetails(filteredData);
 
     setSelectedValue(value);
-    
-      users.find((data) => {
-        if (data.username === value) {
-          setSelectedUser(data);
-          setShowProperties(true);
-        }
-      })  
-    
+
+    users.find((data) => {
+      if (data.username === value) {
+        setSelectedUser(data);
+        setShowProperties(true);
+      }
+    })
+
     setAppointmentDetails(filteredData);
     setSelectedValue(value);
   };
@@ -263,7 +263,7 @@ const UserEdit = () => {
 
 
         {showProperties &&
-          <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, alignContent: 'center', textAlign: 'center' }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, mt: 2, alignContent: 'center', textAlign: 'center', gap: 1 }}>
 
             <CustomDialog
               handleClickOpenOut={() => fetchUserNotHaveFalTypes(selectedUser.id)}
@@ -276,7 +276,7 @@ const UserEdit = () => {
                     color: 'success',
                     onClick: () => {
                       fetchAddUserFalType().then((response) => {
-                        
+
                         if (response.data.status === '200') {
                           toast.success(response.data.message);
                           selectedOnChange(selectedValue);
@@ -294,7 +294,7 @@ const UserEdit = () => {
                     name: 'İptal',
                     color: 'error',
                     onClick: () => {
-                     
+
                     }
                   }
                   ]
@@ -362,7 +362,7 @@ const UserEdit = () => {
                   name: 'İptal',
                   color: 'error',
                   onClick: () => {
-                    
+
                   }
                 }
                 ]

@@ -15,7 +15,7 @@ import {
   ListItemText,
   Paper,
   Popper,
-  Stack,  
+  Stack,
   Typography
 } from '@mui/material';
 
@@ -35,8 +35,8 @@ const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
-  const {  userName, logout , userProfilePicture} = useContext(AuthContext);
-  
+  const { role, userName, logout, userProfilePicture } = useContext(AuthContext);
+
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
 
@@ -96,7 +96,7 @@ const ProfileSection = () => {
           },
           '& .MuiChip-label': {
             lineHeight: 0
-          } 
+          }
         }}
         icon={
           <Avatar
@@ -155,36 +155,57 @@ const ProfileSection = () => {
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', }}>
                     <Box sx={{ p: 0 }}>
-                                            
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 0}
-                          onClick={(event) => handleListItemClick(event, 0, '/account')}
-                        >
-                         
-                          <ListItemText primary={<Typography variant="body2">Hesap Ayarları</Typography>} />
-                        </ListItemButton>
 
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 1}
-                          onClick={(event) => handleListItemClick(event, 1, '/addbalance')}
-                        >
-                         
-                          <ListItemText primary={<Typography variant="body2">Bakiye Yükle</Typography>} />
-                        </ListItemButton>
-                      
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 4}
-                          onClick={handleLogout}
-                        >
-                          <ListItemIcon>
-                            <IconLogout stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Çıkış Yap</Typography>} />
-                        </ListItemButton>
-                      
+                      <ListItemButton
+                        sx={{ borderRadius: `${customization.borderRadius}px` }}
+                        selected={selectedIndex === 0}
+                        onClick={(event) => handleListItemClick(event, 0, '/account')}
+                      >
+
+                        <ListItemText primary={<Typography variant="body2">Hesap Ayarları</Typography>} />
+                      </ListItemButton>
+
+                      <ListItemButton
+                        sx={{ borderRadius: `${customization.borderRadius}px` }}
+                        selected={selectedIndex === 1}
+                        onClick={(event) => handleListItemClick(event, 1, '/addbalance')}
+                      >
+
+                        <ListItemText primary={<Typography variant="body2">Bakiye Yükle</Typography>} />
+                      </ListItemButton>
+
+                      {role === '3' && (
+                        <>
+                          <ListItemButton
+                            sx={{ borderRadius: `${customization.borderRadius}px` }}
+                            selected={selectedIndex === 2}
+                            onClick={(event) => handleListItemClick(event, 2, '/systemsettings')}
+                          >
+
+                            <ListItemText primary={<Typography variant="body2">Sistem Ayarları</Typography>} />
+                          </ListItemButton>
+                          <ListItemButton
+                            sx={{ borderRadius: `${customization.borderRadius}px` }}
+                            selected={selectedIndex === 3}
+                            onClick={(event) => handleListItemClick(event, 3, '/payments')}
+                          >
+
+                            <ListItemText primary={<Typography variant="body2">Ödemeler</Typography>} />
+                          </ListItemButton>
+                        </>
+                      )}
+
+                      <ListItemButton
+                        sx={{ borderRadius: `${customization.borderRadius}px` }}
+                        selected={selectedIndex === 4}
+                        onClick={handleLogout}
+                      >
+                        <ListItemIcon>
+                          <IconLogout stroke={1.5} size="1.3rem" />
+                        </ListItemIcon>
+                        <ListItemText primary={<Typography variant="body2">Çıkış Yap</Typography>} />
+                      </ListItemButton>
+
                     </Box>
                   </PerfectScrollbar>
                 </MainCard>

@@ -61,7 +61,7 @@ const PersonalWaitingFals = () => {
     };
 
     return (
-      <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+      <Box sx={{ p: 2, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center', gap: 1 }}>
         <CustomDialog
           buttons={[
             {
@@ -74,7 +74,7 @@ const PersonalWaitingFals = () => {
           name={'Detay'}
           boxStyle={{ mr: 2, mb: 1 }}
         >
-          <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Box sx={{ p: 2, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>{renderFormData()}</Box>
           </Box>
         </CustomDialog>
@@ -99,7 +99,7 @@ const PersonalWaitingFals = () => {
                 label="Yorum"
                 multiline
                 rows={4}
-                sx={{ width: 500 }}
+                sx={{ width: { xs: '100%', sm: 500 } }}
               />
               <Button onClick={() => updateFalState()} variant="contained" sx={{ mt: 2 }}>
                 Yorumla

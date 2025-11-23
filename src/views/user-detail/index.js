@@ -1,9 +1,9 @@
 // material-ui
 
 // project imports
-import {UserdetailModel , UserCommentModel} from '../../model/user_details/index.ts';
+import { UserdetailModel, UserCommentModel } from '../../model/user_details/index.ts';
 import { userDetailService } from 'network/user_details/user_detail_service.ts';
-import {Button, Box, Card, Avatar, Typography } from '@mui/material';
+import { Button, Box, Card, Avatar, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState } from 'react';
@@ -25,13 +25,13 @@ const UserDetail = () => {
   const [userDetail, setUserDetail] = useState({});
   const [types, setTypes] = useState([]);
   const [comments, setComments] = useState([]);
-  
-  const {isLogin, balance} = useContext(AuthContext);
+
+  const { isLogin, balance } = useContext(AuthContext);
 
   useEffect(() => {
- 
+
     const fetchUserDetails = async () => {
-      const response = await userDetailService.getByUsername('users/:user_name', username,UserdetailModel );
+      const response = await userDetailService.getByUsername('users/:user_name', username, UserdetailModel);
       setUserDetail(response.data[0]);
       fetchUserTypes(response.data[0].user_id);
       fetchUserComments(response.data[0].user_id);
@@ -55,13 +55,13 @@ const UserDetail = () => {
   };
 
   return (
-    <MainCard sx ={{ mt: 2 }}>
+    <MainCard sx={{ mt: 2 }}>
 
-      <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', flexDirection: 'row' }}>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column' }}>
+      <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', flexDirection: { xs: 'column', md: 'row' } }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
           <CircleIcon sx={{ color: 'green' }} fontSize='small' />
           <Typography mb={2} variant="h4" align="center">{userDetail.username}</Typography>
-          <Avatar title={userDetail.username} src={userDetail.profile_image} sx={{ width: 200, height: 200 }} />
+          <Avatar title={userDetail.username} src={userDetail.profile_image} sx={{ width: { xs: 150, md: 200 }, height: { xs: 150, md: 200 } }} />
 
           {/* <Typography variant="subtitle1" mt={2} align="center">150 <People /></Typography>
           <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -71,11 +71,11 @@ const UserDetail = () => {
             <StarIcon color='warning' fontSize='small' />
             <StarIcon color='warning' fontSize='small' />(110)
           </Box> */}
-    
+
           {/* Randevu buraya eklenecek */}
 
         </Box>
-        <Card sx={{ flexBasis: 'min-content', ml: 2, p: 1, flexGrow: 1, display: 'flex', justifyContent: 'start', flexDirection: 'column', borderColor: '#000', borderWidth: 1, borderRadius: '10px' }}>
+        <Card sx={{ flexBasis: 'min-content', ml: { xs: 0, md: 2 }, mt: { xs: 2, md: 0 }, p: 1, flexGrow: 1, display: 'flex', justifyContent: 'start', flexDirection: 'column', borderColor: '#000', borderWidth: 1, borderRadius: '10px' }}>
           <Box>
             <Card sx={{ p: 1, m: 1, backgroundColor: '#f5f5f5' }}>
               <Typography variant="subtitle1" >Hakkında</Typography>
@@ -87,36 +87,37 @@ const UserDetail = () => {
             <Card sx={{ p: 1, m: 1, backgroundColor: '#f5f5f5' }}>
               <Typography variant="subtitle1" >Bakımlar</Typography>
             </Card>
-            {types.map((types , index) => (
-              <Box key={index} sx={{display: 'flex', flexDirection: 'row', p: 1, m: 1 }}>
-                  <CircleRounded />
-                  <Typography sx={{flex:1, flexDirection: 'column', display: 'flex' }} variant="button" >{types.name } </Typography>
-                  <IconCoin  />
-                  <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="button" >{types.cost} Kredi</Typography>
-               
-               
-                
-                  {!isLogin ? 
-                      <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Lütfen Giriş Yapınız</Button> :
-                       
-            
-                      Number(balance) < Number(types.cost)  ? <Button disabled sx={{ width: 230, boxShadow: 3 , borderRadius: 3, backgroundColor: 'white', color  : 'black', display: 'flex', mr: 2, mt: 0.5}} >Yetersiz Kredi</Button> :
-                      
-                      
-                      <AppointmentDialog 
-                                btnStyle={{
-                                width: 230,
-                                boxShadow: 3 ,
-                                borderRadius: 3,
-                                backgroundColor: 'white',
-                                color  : 'black',
-                                display: 'flex', 
-                                mr: 2, 
-                                mt: 0.5}} name={'Fal baktır'} open={false} fal_type={types.id} carduserid={types.user_details_id} /> 
-                              
-                  }                  
-                                    
-              </Box>    
+            {types.map((types, index) => (
+              <Box key={index} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, p: 1, m: 1, gap: 1 }}>
+                <CircleRounded />
+                <Typography sx={{ flex: 1, flexDirection: 'column', display: 'flex' }} variant="button" >{types.name} </Typography>
+                <IconCoin />
+                <Typography sx={{ flex: 1, flexDirection: 'column', display: 'flex' }} variant="button" >{types.cost} Kredi</Typography>
+
+
+
+                {!isLogin ?
+                  <Button disabled sx={{ width: 230, boxShadow: 3, borderRadius: 3, backgroundColor: 'white', color: 'black', display: 'flex', mr: 2, mt: 0.5 }} >Lütfen Giriş Yapınız</Button> :
+
+
+                  Number(balance) < Number(types.cost) ? <Button disabled sx={{ width: 230, boxShadow: 3, borderRadius: 3, backgroundColor: 'white', color: 'black', display: 'flex', mr: 2, mt: 0.5 }} >Yetersiz Kredi</Button> :
+
+
+                    <AppointmentDialog
+                      btnStyle={{
+                        width: 230,
+                        boxShadow: 3,
+                        borderRadius: 3,
+                        backgroundColor: 'white',
+                        color: 'black',
+                        display: 'flex',
+                        mr: 2,
+                        mt: 0.5
+                      }} name={'Fal baktır'} open={false} fal_type={types.id} carduserid={types.user_details_id} />
+
+                }
+
+              </Box>
             ))}
           </Box>
           <Box>
@@ -125,25 +126,25 @@ const UserDetail = () => {
             </Card>
             <Box sx={{ p: 1, m: 1 }}>
               {
-                comments.map((comment , index) => (
-                  
-                  <Card key={index} sx={{ display: 'flex', flexDirection: 'Column', p: 1, m: 1 , backgroundColor: '#f5f5f5' }}>
-                    <Box sx={{display: 'flex', flex:1, alignItems: 'center', flexDirection: 'row' }}>
+                comments.map((comment, index) => (
+
+                  <Card key={index} sx={{ display: 'flex', flexDirection: 'Column', p: 1, m: 1, backgroundColor: '#f5f5f5' }}>
+                    <Box sx={{ display: 'flex', flex: 1, alignItems: 'center', flexDirection: 'row' }}>
                       <CalendarMonth />
-                      <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }}  variant="inherit" >{dayjs(comment.created_at).locale(tr).format('DD MMMM YYYY')}</Typography>
-                        
+                      <Typography sx={{ flex: 1, flexDirection: 'column', display: 'flex' }} variant="inherit" >{dayjs(comment.created_at).locale(tr).format('DD MMMM YYYY')}</Typography>
+
                     </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'row', p: 1, m: 1 }}>
-                      <Typography sx={{flex:1, flexDirection: 'column' ,display: 'flex' }} variant="inherit" >{comment.comment} </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', p: 1, m: 1 }}>
+                      <Typography sx={{ flex: 1, flexDirection: 'column', display: 'flex' }} variant="inherit" >{comment.comment} </Typography>
                     </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'row' }}>
-                    {renderStarts(comment.comment_stars)}
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                      {renderStarts(comment.comment_stars)}
                     </Box>
                   </Card>
                 ))
               }
             </Box>
-            
+
           </Box>
 
         </Card>
