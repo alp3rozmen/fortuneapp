@@ -9,9 +9,10 @@ import { userDetailService } from "network/user_details/user_detail_service.ts";
 const AddBalance = () => {
     const { userName, email, role, balance, userId, getUserInfo, userProfilePicture } = useContext(AuthContext);
     const [amount, setAmount] = useState(null)
+    const [loading, setLoading] = useState(false);
 
     const handleChangeAmount = (e) => {
-        
+
         if (e.target.value > 10000) {
             setAmount(10000);
             return;
@@ -19,13 +20,39 @@ const AddBalance = () => {
         setAmount(e.target.value);
     }
 
+    const handleAddBalance = async () => {
+        if (!amount || amount <= 0 || amount > 10000) {
+            toast.error("Lütfen geçerli bir miktar giriniz.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await userDetailService.addBalanceRequest({
+                userid: userId,
+                amount: amount
+            });
+
+            if (response) {
+                toast.success("Bakiye yükleme isteğiniz başarıyla gönderildi.");
+                setAmount(0);
+            } else {
+                toast.error("Bir hata oluştu, lütfen tekrar deneyiniz.");
+            }
+        } catch (error) {
+            toast.error("Bir hata oluştu: " + error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <MainCard title="Bakiye Yükle">
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1 }}>
 
                 <Box
                     sx={{
-                        ml: 2,
+                        ml: { xs: 0, md: 2 },
                         display: 'flex',
                         flexGrow: 1,
                         flexDirection: 'column',
@@ -73,14 +100,16 @@ const AddBalance = () => {
                             style={{ border: '2px solid #007bff', borderRadius: '8px', padding: '8px', outline: 'none' }}
                             disableUnderline
                         />
-                        { amount > 0 && amount <= 10000  ?
-                          <Button variant="outlined">Bakiye Yükleme İsteği Gönder</Button> :
-                          <Typography variant="caption" color="red">Lütfen 10000'den az bir miktar giriniz</Typography>
+                        {amount > 0 && amount <= 10000 ?
+                            <Button variant="outlined" onClick={handleAddBalance} disabled={loading}>
+                                {loading ? "Gönderiliyor..." : "Bakiye Yükleme İsteği Gönder"}
+                            </Button> :
+                            <Typography variant="caption" color="red">Lütfen 10000'den az bir miktar giriniz</Typography>
                         }
-                       
+
                     </Box>
                     <Typography variant="caption">Sistemimizde 1 Bakiye 1 Türk Lİrası Olarak geçmektedir</Typography>
-                    <Typography style={{backgroundColor : 'red' ,padding : 10}} variant="h4">Not: Bakiye yükleme işlemleri manuel olarak yapılmaktadır.
+                    <Typography style={{ backgroundColor: 'red', padding: 10 }} variant="h4">Not: Bakiye yükleme işlemleri manuel olarak yapılmaktadır.
                         Yükleme talebiniz incelendikten sonra onaylanırsa bakiyeniz hesabınıza yansıtılacaktır.
                         Lütfen doğru bilgileri girdiğinizden emin olunuz.
                     </Typography>
