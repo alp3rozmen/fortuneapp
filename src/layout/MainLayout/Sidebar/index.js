@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box,  Drawer,  useMediaQuery } from '@mui/material';
+import { Box, Drawer, useMediaQuery } from '@mui/material';
 
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
@@ -21,8 +21,8 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
   const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
   const drawer = (
-    <Box sx={{ height: '100%', overflow: 'hidden' , borderRadius: '10px', border: '1px solid #E0E0E0',m : 1 }}>
-      <Box sx={{  display: { xs: 'block', md: 'none' } }}>
+    <Box sx={{ height: '100%', overflow: 'hidden' }}>
+      <Box sx={{ display: { xs: 'block', md: 'none' } }}>
         <Box sx={{ display: 'flex', p: 2, mx: 'auto' }}>
           <LogoSection />
         </Box>
@@ -68,9 +68,10 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
         sx={{
           '& .MuiDrawer-paper': {
             width: drawerWidth,
-            background: theme.palette.background.default,
+            background: '#ffffff',
             color: theme.palette.text.primary,
-            borderRight: 'none',
+            borderRight: '1px solid rgba(124, 58, 237, 0.08)',
+            boxShadow: '2px 0 8px rgba(0, 0, 0, 0.04)',
             [theme.breakpoints.up('md')]: {
               top: '88px'
             }

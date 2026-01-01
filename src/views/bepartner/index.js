@@ -19,8 +19,15 @@ function BePartner() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Form gönderildiğinde yapılacak işlemler burada olacak.
-    console.log('Form Data:', formData);
+    alert('Başvurunuz alındı! Teşekkürler.');
+    // Formu sıfırla
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      expertise: '',
+      message: ''
+    });
   };
 
   return (

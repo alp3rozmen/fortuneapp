@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { Box, Typography, Radio, RadioGroup, DialogActions } from '@mui/material';
+import { Box, Typography, Radio, RadioGroup, DialogActions, CircularProgress } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import tr from 'dayjs/locale/tr';
@@ -15,7 +15,6 @@ import 'react-form-builder2/dist/app.css';
 import { toast } from 'react-toastify';
 import AuthContext from 'context/userContext.tsx';
 import TarotCard from 'views/faltypes-design/custom_components/tarot-card.js';
-
 
 function AppDialog({ handleClose, open, cardid, fal_type }) {
   const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
@@ -47,10 +46,10 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
         if (response.data.hours[0] === '') {
           setHoursList([]);
         }
-        else{
+        else {
           setHoursList(response.data.hours);
         }
-        
+
         console.log(response.data.hours);
         return response;
       } else {
@@ -61,43 +60,43 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
   }, [selectedDate, selectedHour, open]);
 
   useEffect(() => {
-  if (activePage !== 'informationPage') return;
+    if (activePage !== 'informationPage') return;
 
-  const interval = setInterval(() => {
-    const nodeList = document.querySelectorAll('.image-upload-control');
-    const nodeList2 = document.querySelectorAll('.btn.btn-image-clear');   
-    if (nodeList.length === 0) return;
-    console.log(nodeList2);
-    nodeList.forEach((container) => {
-      const btn = container.querySelector('.btn.btn-default');
-      if (btn) {
-        btn.childNodes.forEach((node) => {
-          
-          if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('Upload Photo')) {
-            node.textContent = ' Resim Yükle';
-          }
-          
-          container.childNodes.forEach((child) => {
-            if (child.nodeType === Node.ELEMENT_NODE && child.textContent.includes('Select an image from your computer or device.')) {
-              child.textContent = ' Resim Yüklemek için bilgisayarınızdan veya cihazınızdan bir resim seçin.';
+    const interval = setInterval(() => {
+      const nodeList = document.querySelectorAll('.image-upload-control');
+      const nodeList2 = document.querySelectorAll('.btn.btn-image-clear');
+      if (nodeList.length === 0) return;
+      console.log(nodeList2);
+      nodeList.forEach((container) => {
+        const btn = container.querySelector('.btn.btn-default');
+        if (btn) {
+          btn.childNodes.forEach((node) => {
+
+            if (node.nodeType === Node.TEXT_NODE && node.textContent.includes('Upload Photo')) {
+              node.textContent = ' Resim Yükle';
             }
-          }); 
+
+            container.childNodes.forEach((child) => {
+              if (child.nodeType === Node.ELEMENT_NODE && child.textContent.includes('Select an image from your computer or device.')) {
+                child.textContent = ' Resim Yüklemek için bilgisayarınızdan veya cihazınızdan bir resim seçin.';
+              }
+            });
 
 
-        });
-      }
-      clearInterval(interval); // bulundu, durdur
-    });
-  }, 200); // 200ms'de bir kontrol et
+          });
+        }
+        clearInterval(interval); // bulundu, durdur
+      });
+    }, 200); // 200ms'de bir kontrol et
 
-  // 5 saniye sonra hâlâ bulamadıysa durdur
-  const timeout = setTimeout(() => clearInterval(interval), 5000);
+    // 5 saniye sonra hâlâ bulamadıysa durdur
+    const timeout = setTimeout(() => clearInterval(interval), 5000);
 
-  return () => {
-    clearInterval(interval);
-    clearTimeout(timeout);
-  };
-}, [activePage]);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [activePage]);
 
 
   const DateSelectPage = () => (
@@ -172,31 +171,31 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
 
     const submitForm = (pAnswerData) => {
 
-        UserFals.insertUserFalRequest(
-          userId,
-          JSON.stringify(formData),
-          JSON.stringify(pAnswerData ? pAnswerData : answerData),
-          appDetails.user_id, // falcının idsi
-          appDetails.app_id,
-          userId,
-          dayjs(selectedDate).format('YYYY-MM-DD'),
-          dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
-          appDetails.start_hour,
-          appDetails.end_hour,
-          appDetails.fal_type
-        ).then((response) => {
-          if (response.status == 200) {
-            SetPage('successPage');
-            getUserInfo();
-          } else {
-            toast.error(response.message);
-          }
-        });
-      };
-  
+      UserFals.insertUserFalRequest(
+        userId,
+        JSON.stringify(formData),
+        JSON.stringify(pAnswerData ? pAnswerData : answerData),
+        appDetails.user_id, // falcının idsi
+        appDetails.app_id,
+        userId,
+        dayjs(selectedDate).format('YYYY-MM-DD'),
+        dayjs(selectedDate + selectedHour).format('YYYY-MM-DD HH:mm:ss'),
+        appDetails.start_hour,
+        appDetails.end_hour,
+        appDetails.fal_type
+      ).then((response) => {
+        if (response.status == 200) {
+          SetPage('successPage');
+          getUserInfo();
+        } else {
+          toast.error(response.message);
+        }
+      });
+    };
+
     const handleSubmit = (answerData) => {
       const showMessage = answerData.some((element) => element.value === null || element.value === '');
-      
+
 
       if (showMessage) {
         toast.error('Lütfen tüm alanları doldurun');
@@ -240,7 +239,7 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
         }
       };
 
-      
+
 
       // Start reading files
       readAllFiles();
@@ -250,7 +249,7 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
       return <Typography variant="subtitle1">Form verisi bulunamadı.</Typography>;
     }
     var lgvSelectedInfo = null;
-    
+
     const onSelectedChanged = (selected) => {
       lgvSelectedInfo = selected;
 
@@ -266,39 +265,39 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
         return;
       }
 
-      submitForm(lgvSelectedInfo.selectedCards);      
+      submitForm(lgvSelectedInfo.selectedCards);
 
     }
 
     if (formData.length > 0) {
-      switch(formData[0].key) {
+      switch (formData[0].key) {
         case 'TarotCard':
           return <>
-                  <TarotCard title={"Lütfen 3 Kart Seçiniz"} onChange={(selected) => onSelectedChanged(selected)}/>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-                    <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('dateSelectPage')}>
-                      Geri
-                    </Button>
-                    <Button onClick={() => SubmitTarotCard()} variant="contained" sx={{ mt: 2 }}>
-                      İleri
-                    </Button>
-                  </Box>
-                </>;
+            <TarotCard title={"Lütfen 3 Kart Seçiniz"} onChange={(selected) => onSelectedChanged(selected)} />
+            <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+              <Button variant="contained" sx={{ mt: 2 }} onClick={() => SetPage('dateSelectPage')}>
+                Geri
+              </Button>
+              <Button onClick={() => SubmitTarotCard()} variant="contained" sx={{ mt: 2 }}>
+                İleri
+              </Button>
+            </Box>
+          </>;
 
-          default:
+        default:
           return <ReactFormGenerator
-                ref={pFormKey}
-                skip_validations={true}
-                onSubmit={(info) => handleSubmit(info)}
-                submitButton={
-                  <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-                    <Button variant="contained" sx={{ mt: 12 }} onClick={() => SetPage('dateSelectPage')}>
-                      Geri
-                    </Button>
-                    <Button type="submit" variant="contained" sx={{ mt: 12 }}>
-                      İleri
-                    </Button>
-                  </Box>
+            ref={pFormKey}
+            skip_validations={true}
+            onSubmit={(info) => handleSubmit(info)}
+            submitButton={
+              <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                <Button variant="contained" sx={{ mt: 12 }} onClick={() => SetPage('dateSelectPage')}>
+                  Geri
+                </Button>
+                <Button type="submit" variant="contained" sx={{ mt: 12 }}>
+                  İleri
+                </Button>
+              </Box>
             }
             hide_actions={false}
             data={formData}
@@ -334,13 +333,27 @@ function AppDialog({ handleClose, open, cardid, fal_type }) {
       fetchData();
     }, [fal_type]); // Dependencileri unutmayın
 
-    
+
 
     return (
       <Box sx={{ display: 'flex', p: 2, flex: 1, flexDirection: 'column' }}>
         {loading ? (
-          <Typography variant="subtitle1">Yükleniyor...</Typography>
-        ) : formData.length !== 0 ? (          
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 2,
+            }}
+          >
+            <CircularProgress />
+            <Typography variant="subtitle1" color="text.secondary">
+              Yükleniyor...
+            </Typography>
+          </Box>
+        ) : formData.length !== 0 ? (
           renderFormData(formData, formRef)
         ) : (
           <Typography variant="subtitle1">Yakında...</Typography>

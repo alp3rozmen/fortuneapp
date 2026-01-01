@@ -26,28 +26,28 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && pr
     'margin',
     open
       ? {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen
-        }
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen
+      }
       : {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen
-        }
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      }
   ),
   [theme.breakpoints.up('md')]: {
     marginLeft: open ? 0 : -(drawerWidth - 20),
-    width: `calc(100% - ${drawerWidth}px)`
+    width: `calc(100% - ${drawerWidth}px)`,
+    padding: '24px'
   },
   [theme.breakpoints.down('md')]: {
-    marginLeft: '20px',
-    width: `calc(100% - ${drawerWidth}px)`,
-    padding: '16px'
+    marginLeft: 0,
+    width: '100%',
+    padding: '20px 16px'
   },
   [theme.breakpoints.down('sm')]: {
-    marginLeft: '10px',
-    width: `calc(100% - ${drawerWidth}px)`,
-    padding: '16px',
-    marginRight: '10px'
+    marginLeft: 0,
+    width: '100%',
+    padding: '16px 12px'
   }
 }));
 
@@ -64,7 +64,7 @@ const MainLayout = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex'  }}>
+    <Box sx={{ display: 'flex', backgroundColor: '#fafbff', minHeight: '100vh' }}>
       <CssBaseline />
       {/* header */}
       <AppBar
@@ -73,8 +73,10 @@ const MainLayout = () => {
         color="inherit"
         elevation={0}
         sx={{
-          bgcolor: theme.palette.background.default,
-          transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
+          bgcolor: 'background.paper',
+          transition: leftDrawerOpened ? theme.transitions.create('width') : 'none',
+          borderBottom: '1px solid',
+          borderColor: 'divider'
         }}
       >
         <Toolbar>
@@ -83,9 +85,9 @@ const MainLayout = () => {
       </AppBar>
 
       {/* drawer */}
-      
-        <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
-      
+
+      <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
+
       {/* main content */}
       <Main theme={theme} open={leftDrawerOpened}>
         {/* breadcrumb */}

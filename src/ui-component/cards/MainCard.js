@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
+
 import { Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 
 // constant
@@ -30,7 +30,7 @@ const MainCard = forwardRef(
     },
     ref
   ) => {
-    const theme = useTheme();
+
 
     return (
       <Card
@@ -38,9 +38,13 @@ const MainCard = forwardRef(
         {...others}
         sx={{
           border: border ? '1px solid' : 'none',
-          borderColor: theme.palette.primary[200] + 25,
+          borderColor: 'rgba(124, 58, 237, 0.1)',
+          borderRadius: '16px',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           ':hover': {
-            boxShadow: boxShadow ? shadow || '0 2px 14px 0 rgb(32 40 45 / 8%)' : 'inherit'
+            boxShadow: boxShadow ? shadow || '0 8px 24px rgba(124, 58, 237, 0.12)' : '0 4px 12px rgba(0, 0, 0, 0.08)',
+            transform: 'translateY(-2px)'
           },
           ...sx
         }}

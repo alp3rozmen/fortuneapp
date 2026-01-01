@@ -1,3 +1,5 @@
+import { CircularProgress, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import React, { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,7 +22,7 @@ export const AuthContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    
+
     if (token) {
       // Token varsa, kullanıcı bilgilerini al
       getUserInfo().then(() => {
@@ -157,7 +159,19 @@ export const AuthContextProvider = ({ children }: any) => {
         userProfilePicture,
       }}
     >
-      {!isLoading ? children : <div>Yükleniyor...</div>} {/* Yükleniyor göstergesi */}
+      {!isLoading ? children :
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+            <CircularProgress />
+            <Typography variant="h6" color="text.secondary">
+              Yükleniyor...
+            </Typography>
+          </Box>
+        </Box>
+
+
+      } {/* Yükleniyor göstergesi */}
     </AuthContext.Provider>
   );
 };

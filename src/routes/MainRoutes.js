@@ -30,7 +30,7 @@ const AddBalance = Loadable(lazy(() => import('views/addbalance')));
 const SystemSettings = Loadable(lazy(() => import('views/system-settings')));
 const Payments = Loadable(lazy(() => import('views/payments')));
 // ==============================|| MAIN ROUTING ||============================== //
-const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent, props = null}) => {
+const RoleBasedRoute = ({ roles, component: Component, fallbackComponent: FallbackComponent, props = null }) => {
 
   const { role } = useContext(AuthContext);
 
@@ -49,7 +49,7 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <RoleBasedRoute roles={['1','2', '3', '']} component={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={DashboardDefault} />,
     },
     {
       path: 'fals/coffee',
@@ -92,8 +92,8 @@ const MainRoutes = {
       element: <RoleBasedRoute roles={['3']} component={FaltypesEdit} fallbackComponent={DashboardDefault} />,
     },
     {
-      path : 'zodiac/edit',
-      element : <RoleBasedRoute roles={['3']} component={ZodiacEdit} fallbackComponent={DashboardDefault} />,
+      path: 'zodiac/edit',
+      element: <RoleBasedRoute roles={['3']} component={ZodiacEdit} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'faltypes/design',
@@ -109,7 +109,7 @@ const MainRoutes = {
     },
     {
       path: 'waitingFals',
-      element: <RoleBasedRoute roles={['1','2','3']} component={WaitingFals} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3']} component={WaitingFals} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'personal/appointments',
@@ -117,65 +117,65 @@ const MainRoutes = {
     },
     {
       path: 'bePartner',
-      element: <RoleBasedRoute roles={['1', '2', '3' ,'']} component={BePartner} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={BePartner} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'howwork',
-      element: <RoleBasedRoute roles={['1', '2', '3' ,'']} component={HowItWorks} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={HowItWorks} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'about',
-      element: <RoleBasedRoute roles={['1', '2', '3' ,'']} component={AboutUs} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} component={AboutUs} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'koc',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 1}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 1 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'boga',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 2}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 2 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'ikizler',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 3}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 3 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'yengec',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 4}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 4 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'aslan',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 5}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 5 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'basak',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 6}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 6 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'terazi',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 7}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 7 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'akrep',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 8}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 8 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'yay',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 9}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 9 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'oglak',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 10}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 10 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'kova',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 11}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 11 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'balik',
-      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{id : 12}} component={Horoscope} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3', '']} props={{ id: 12 }} component={Horoscope} fallbackComponent={DashboardDefault} />,
     },
-    
+
   ]
 };
 

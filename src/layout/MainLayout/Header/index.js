@@ -21,7 +21,13 @@ const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ alignContent: 'center', border: '1px solid #E0E0E0', borderRadius: '10px', backgroundColor: '#f5f5f5', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Box sx={{
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      py: 1
+    }}>
       {/* logo & toggler button */}
 
       <Box
@@ -30,6 +36,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
           width: 228,
           height: 65,
           display: 'flex',
+          alignItems: 'center',
           [theme.breakpoints.down('md')]: {
             width: 'auto'
           }
@@ -47,17 +54,17 @@ const Header = ({ handleLeftDrawerToggle }) => {
               ...theme.typography.commonAvatar,
               ...theme.typography.mediumAvatar,
               transition: 'all .2s ease-in-out',
-              background: theme.palette.secondary.light,
-              color: theme.palette.secondary.dark,
+              background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)',
+              color: '#fff',
               '&:hover': {
-                background: theme.palette.secondary.dark,
-                color: theme.palette.secondary.light
+                background: 'linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%)',
+                transform: 'scale(1.05)'
               }
             }}
             onClick={handleLeftDrawerToggle}
             color="inherit"
           >
-            <IconMenu2 stroke={1} size="1rem" />
+            <IconMenu2 stroke={1.5} size="1.2rem" />
           </Avatar>
         </ButtonBase>
       </Box>
@@ -76,9 +83,25 @@ const Header = ({ handleLeftDrawerToggle }) => {
         <Link style={{color: 'white' ,borderRadius: '10px', padding: '10px', border: '1px', backgroundColor: 'blue', textDecoration: 'none', fontFamily: 'Poppins', fontSize: '16px' }} to={'/'}>Kayıt Ol</Link>
       </Box> */}
 
-      {isLogin && <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 1, md: 0 } }}>
-        <Typography variant="subtitle1" sx={{ mr: 1, display: { xs: 'none', sm: 'block' } }}>Kredi : {balance} </Typography>
-        <Typography variant="subtitle2" sx={{ mr: 1, display: { xs: 'block', sm: 'none' } }}>{balance}</Typography>
+      {isLogin && <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mr: { xs: 1, md: 0 } }}>
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          background: 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)',
+          color: '#fff',
+          px: 2,
+          py: 1,
+          borderRadius: '12px',
+          boxShadow: '0 4px 12px rgba(124, 58, 237, 0.2)'
+        }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, display: { xs: 'none', sm: 'block' } }}>
+            Kredi: {balance}
+          </Typography>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, display: { xs: 'block', sm: 'none' } }}>
+            {balance}
+          </Typography>
+        </Box>
         {/* <NotificationSection /> */}
         <ProfileSection /></Box>}
 
