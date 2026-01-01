@@ -73,7 +73,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
             borderRight: '1px solid rgba(124, 58, 237, 0.08)',
             boxShadow: '2px 0 8px rgba(0, 0, 0, 0.04)',
             [theme.breakpoints.up('md')]: {
-              top: '88px'
+              top: '115px'
             }
           }
         }}

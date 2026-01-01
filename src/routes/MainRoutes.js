@@ -85,7 +85,7 @@ const MainRoutes = {
     },
     {
       path: 'addbalance',
-      element: <RoleBasedRoute roles={['3']} component={AddBalance} fallbackComponent={DashboardDefault} />,
+      element: <RoleBasedRoute roles={['1', '2', '3']} component={AddBalance} fallbackComponent={DashboardDefault} />,
     },
     {
       path: 'faltypes/edit',
